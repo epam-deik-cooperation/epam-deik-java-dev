@@ -8,12 +8,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class GenericCliProcessStepDefs {
 
     private static final int OUTPUT_TIMEOUT = 30000;
+    private static final String jarFile = "../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar";
 
     private ProcessUnderTest cliProcess;
 
@@ -23,6 +26,9 @@ public class GenericCliProcessStepDefs {
 
     @Given("the application is started")
     public void applicationStarted() throws IOException, InterruptedException {
+        if (!(new File(jarFile)).isFile()){
+            throw new FileNotFoundException("The path " + jarFile + " does not exist. It should be your built JAR file.");
+        }
         cliProcess.run("java -jar -Dspring.profiles.active=ci ../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar");
     }
 
