@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Currency;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -30,8 +29,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.getAmount(), equalTo(369.3));
-        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
+        assertThat(result.how_much(), equalTo(369.3));
+        assertThat(result.what(), equalTo(HUF_CURRENCY));
     }
 
     @Test
@@ -44,8 +43,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.getAmount(), equalTo(121.0));
-        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
+        assertThat(result.how_much(), equalTo(121.0));
+        assertThat(result.what(), equalTo(HUF_CURRENCY));
     }
 
     @Test
@@ -54,8 +53,11 @@ public class MoneyIT {
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
-        // When - Then
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd));
+        // When
+        Money result = underTest.add(moneyToAdd);
+
+        // Then
+        assertThat(result, nullValue());
     }
 
 
@@ -93,8 +95,11 @@ public class MoneyIT {
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
 
-        // When - Then
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith));
+        // When
+        Integer result = underTest.compareTo(moneyToCompareWith);
+
+        // Then
+        assertThat(result, nullValue());
     }
 
 }
