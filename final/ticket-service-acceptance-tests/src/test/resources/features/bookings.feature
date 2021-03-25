@@ -9,12 +9,12 @@ Feature: allows users to book tickets for screenings, and show booking history
     And the user types the "create room Pedersoli 20 10" command
     And the user types the "create room Girotti 10 10" command
     And the user types the "create movie Sátántangó drama 450" command
-    And the user types the "create movie \"Spirited Away\" aminmation 125" command
+    And the user types the "create movie \"Spirited Away\" animation 125" command
     And the user types the "create screening \"Spirited Away\" Girotti \"2021-03-15 10:00\"" command
     And the user types the "create screening Sátántangó Pedersoli \"2021-03-15 10:45\"" command
     And the user types the "sign out" command
 
-  @required
+  @grade4-requirement
   Scenario: an authenticated user can book a ticket for a screening
     Given the user types the "sign in sanyi asdQWE123" command
     When the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5) (5,6)" command
@@ -24,7 +24,7 @@ Feature: allows users to book tickets for screenings, and show booking history
     And the next line of the output is "Your previous bookings are"
     And the next line of the output is "Seats (5,5), (5,6) on Sátántangó in room Pedersoli starting at 2021-03-15 10:45 for 3000 HUF"
 
-  @required
+  @grade4-requirement
   Scenario: an authenticated user can not book a ticket if at least one of the seats is already taken
     Given the user types the "sign in sanyi asdQWE123" command
     And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5)" command
@@ -36,7 +36,7 @@ Feature: allows users to book tickets for screenings, and show booking history
     Then the next line of the output is "Signed in with account 'laci'"
     And the next line of the output is "You have not booked any tickets yet"
 
-  @required
+  @grade5-requirement
   Scenario: the price of the ticket in the history should not change if pricing changes after the booking
     Given the user types the "sign in sanyi asdQWE123" command
     And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5)" command

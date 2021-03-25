@@ -14,19 +14,19 @@ Feature: allows creating pricing components and assigning them to rooms, movies 
     And the user types the "create screening \"Pulp Fiction\" Girotti \"2021-03-14 16:00\"" command
     And the user types the "sign out" command
 
-  @required
+  @grade2-requirement
   Scenario: a default per seat per screening price is defined to be 1500 HUF and is used in the calculation of the price of each seat
     When the user types the "show price for Sátántangó Pedersoli \"2021-03-15 10:45\" (10,5)" command
     Then the next line of the output is "The price for this seat is 1500 HUF"
 
-  @required
+  @grade5-requirement
   Scenario: the admin user can change the default per seat per screening price
     Given the user types the "sign in privileged admin admin" command
     When the user types the "update default price 1000 HUF" command
     And the user types the "show price for Sátántangó Pedersoli \"2021-03-15 10:45\" (10,5)" command
     Then the next line of the output is "The price for this seat is 1000 HUF"
 
-  @optional
+  @grade5-requirement
   Scenario: the admin user can create price component and assign it to a movie
     Given the user types the "sign in privileged admin admin" command
     When the user types the "create price component additionalFeeForSatantango 100 HUF" command
@@ -36,7 +36,7 @@ Feature: allows creating pricing components and assigning them to rooms, movies 
     When the user types the "show price for \"Spirited Away\" Pedersoli \"2021-03-14 16:00\" (10,5)" command
     Then the next line of the output is "The price for this seat is 1500 HUF"
 
-  @optional
+  @grade5-requirement
   Scenario: the admin user can create price component and assign it to a room
     Given the user types the "sign in privileged admin admin" command
     When the user types the "create price component additionalFeeForPedersoli 100 HUF" command
@@ -46,7 +46,7 @@ Feature: allows creating pricing components and assigning them to rooms, movies 
     When the user types the "show price for \"Pulp Fiction\" Girotti \"2021-03-14 16:00\" (5,5)" command
     Then the next line of the output is "The price for this seat is 1500 HUF"
 
-  @optional
+  @grade5-requirement
   Scenario: the admin user can create price component and assign it to a screening
     Given the user types the "sign in privileged admin admin" command
     When the user types the "create price component additionalFeeForPedersoli 100 HUF" command

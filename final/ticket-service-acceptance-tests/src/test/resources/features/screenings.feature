@@ -9,7 +9,7 @@ Feature: allows creating, deleting and listing screenings
     And the user types the "create movie \"Spirited Away\" aminmation 125" command
     And the user types the "sign out" command
 
-  @required
+  @grade2-requirement
   Scenario: The admin user can create and query screenings
     Given the user types the "sign in privileged admin admin" command
     When the user types the "create screening Sátántangó Pedersoli \"2021-03-15 10:45\"" command
@@ -18,7 +18,7 @@ Feature: allows creating, deleting and listing screenings
     Then the next line of the output is "Spirited Away (animation, 125 minutes), screened in room Pedersoli, at 2021-03-14 16:00"
     And the next line of the output is "Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 10:45"
 
-  @required
+  @grade2-requirement
   Scenario: The admin can not create overlapping screenings in the same room
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create screening Sátántangó Pedersoli 2021-03-15 10:45" command
@@ -27,7 +27,7 @@ Feature: allows creating, deleting and listing screenings
     When the user types the "list screenings" command
     Then the next line of the output is "Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 10:45"
 
-  @required
+  @grade2-requirement
   Scenario: The admin can create overlapping screenings in different rooms
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create screening Sátántangó Pedersoli 2021-03-15 10:45" command
@@ -37,35 +37,25 @@ Feature: allows creating, deleting and listing screenings
     Then the next line of the output is "Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 10:45"
     And the next line of the output is "Spirited Away (animation, 125 minutes), screened in room Girotti, at 2021-03-15 10:50"
 
-  @optional
-  Scenario: The admin can set up breaks after the screenings
+  @grade2-requirement
+  Scenario: The admin can not create screenings during a 10 minute long breaks after another screening in the same room
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create screening Sátántangó Pedersoli 2021-03-15 11:00" command
-    When the user types the "set break 10" command
-    And the user types the "get break" command
-    Then the next line of the output is "The current minimal mandatory break between screenings is 10 minutes"
-
-  @optional
-  Scenario: The admin can not create screenings during the break after another screening in the same room
-    Given the user types the "sign in privileged admin admin" command
-    And the user types the "create screening Sátántangó Pedersoli 2021-03-15 11:00" command
-    And the user types the "set break 10" command
     When the user types the "create screening \"Spirited Away\" Pedersoli \"2021-03-15 18:39\"" command
     Then the next line of the output is "This would start in the break period after another screening in this room"
     When the user types the "list screenings" command
     Then the next line of the output is "Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 10:45"
 
-  @optional
+  @grade2-requirement
   Scenario: The admin can create screenings even if there is a break after a screening in a different room
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create screening Sátántangó Pedersoli 2021-03-15 11:00" command
-    And the user types the "set break 10" command
     When the user types the "create screening \"Spirited Away\" Girotti \"2021-03-15 18:39\"" command
     And the user types the "list screenings" command
     Then the next line of the output is "Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 11:00"
     And the next line of the output is "Spirited Away (animation, 125 minutes), screened in room Girotti, at 2021-03-15 18:39"
 
-  @required
+  @grade2-requirement
   Scenario: The admin user can delete screenings
     Given the user types the "sign in privileged admin admin" command
     And  the user types the "create screening \"Spirited Away\" Pedersoli \"2021-03-14 16:00\"" command
