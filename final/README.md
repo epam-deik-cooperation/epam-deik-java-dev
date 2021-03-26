@@ -258,7 +258,6 @@ feltételeken túl a következők szükségesek:
 * Az alkalmazás által használt adatbázis Spring profilok segítségével módosítható.
     * Alapértelmezetten az alkalmazás egy olyan adatbázist használ, amely az alkalmazás futásai között is megőrzi az állapotát
     * A `ci` profil esetén az alkalmazás beágyazott in-memory adatbázist használ 
-    * TODO: Update `com.training.epam.ticketservice.at.ProcessUnderTest` to use the profile.
 * Az `mvn clean verify -p requirements-grade3` sikeresen lefut 
 a `ticket-service-parent` projekten. Ehhez a kettes érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
