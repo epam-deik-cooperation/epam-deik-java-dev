@@ -23,8 +23,8 @@ public class GenericCliProcessStepDefs {
     }
 
     @Given("the application is started")
-    public void applicationStarted() throws IOException {
-        cliProcess.run("java -jar ../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar");
+    public void applicationStarted() throws IOException, InterruptedException {
+        cliProcess.run("java -jar -Dspring.profiles.active=ci ../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar");
     }
 
     @Given("the prompt containing {string} is printed")
@@ -44,7 +44,7 @@ public class GenericCliProcessStepDefs {
     }
 
     @After
-    public void cleanup() throws IOException {
+    public void cleanup() {
         cliProcess.close();
     }
 }

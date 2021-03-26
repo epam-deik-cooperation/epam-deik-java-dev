@@ -1,7 +1,15 @@
 package com.training.epam.ticketservice.at;
 
-import java.io.*;
-import java.util.concurrent.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,25 +19,30 @@ import com.google.common.util.concurrent.SimpleTimeLimiter;
 public class ProcessUnderTest implements AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessUnderTest.class);
+    private static final int JVM_STARTUP_FAILURE_WAIT_TIME = 150;
 
     private Process process;
     private BufferedReader output;
     private Writer input;
 
-    public void run(String command) throws IOException {
+    public void run(String command) throws IOException, InterruptedException {
         if (this.process != null && process.isAlive()) {
             return;
         }
         process = Runtime.getRuntime().exec(command);
         output = new BufferedReader(new InputStreamReader(process.getInputStream()));
         input = new OutputStreamWriter(process.getOutputStream());
+        Thread.sleep(JVM_STARTUP_FAILURE_WAIT_TIME);
+        verifyProcessIsRunning();
     }
 
     public void waitForOutput(String expectedOutput, long timeout) throws InterruptedException, ExecutionException, TimeoutException {
+        verifyProcessIsRunning();
         runWithTimeout(() -> readOutputUntil(expectedOutput), timeout);
     }
 
     public String readNextLine(long timeout) throws InterruptedException, ExecutionException, TimeoutException {
+        verifyProcessIsRunning();
         return runWithTimeout(() -> output.readLine(), timeout);
     }
 
@@ -38,9 +51,11 @@ public class ProcessUnderTest implements AutoCloseable {
     public void close() {
         process.destroy();
     }
+
     public void writeOnInput(String command) throws IOException {
+        verifyProcessIsRunning();
         clearOutput(100);
-        input.write(command+System.lineSeparator());
+        input.write(command + System.lineSeparator());
         input.flush();
     }
 
@@ -59,7 +74,7 @@ public class ProcessUnderTest implements AutoCloseable {
         String actualString = "";
         do {
             actualString += (char) output.read();
-            if (actualString.length()>expectedOutput.length()) {
+            if (actualString.length() > expectedOutput.length()) {
                 actualString = actualString.substring(1);
             }
         } while (!actualString.equals(expectedOutput));
@@ -69,5 +84,11 @@ public class ProcessUnderTest implements AutoCloseable {
     private <T> T runWithTimeout(Callable<T> callable, long timeout) throws InterruptedException, ExecutionException, TimeoutException {
         SimpleTimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
         return timeLimiter.callWithTimeout(callable, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    private void verifyProcessIsRunning() {
+        if (this.process == null || !process.isAlive()) {
+            throw new AssertionError("The service is not running.");
+        }
     }
 }
