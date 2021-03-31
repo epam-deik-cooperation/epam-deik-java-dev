@@ -2,7 +2,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.epam.training.ticketservice</groupId>
     <artifactId>ticket-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -70,7 +69,7 @@
                     <suppressionsLocation>${checkstyle-config-dir}/suppressions.xml</suppressionsLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
-                    <failsOnError>${requirements.fail-build-on-checkstyle-error}</failsOnError>
+                    <failOnViolation>${requirements.fail-build-on-checkstyle-error}</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
                     <linkXRef>false</linkXRef>
                 </configuration>
@@ -132,8 +131,4 @@
         </plugins>
     </build>
 
-    <!--
-    TODO: Add checkstyle validation using Google's ruleset. Do not fail the build in case of errors.
-    TODO: Add JaCoCo verify on line coverage > .4, branch coverage > .4 . Not meeting this fails the build.
-    -->
 </project>
