@@ -17,7 +17,7 @@ Feature: allows users to book tickets for screenings, and show booking history
   @grade4-requirement
   Scenario: an authenticated user can book a ticket for a screening
     Given the user types the "sign in sanyi asdQWE123" command
-    When the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5) (5,6)" command
+    When the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" \"5,5 5,6\"" command
     Then the next line of the output is "Seats booked: (5,5), (5,6); the price for this booking is 3000 HUF"
     When the user types the "describe account" command
     Then the next line of the output is "Signed in with account 'sanyi'"
@@ -27,10 +27,10 @@ Feature: allows users to book tickets for screenings, and show booking history
   @grade4-requirement
   Scenario: an authenticated user can not book a ticket if at least one of the seats is already taken
     Given the user types the "sign in sanyi asdQWE123" command
-    And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5)" command
+    And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" \"5,5\"" command
     And the user types the "sign out" command
     And the user types the "sign in laci asdQWE123" command
-    When the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5) (5,6)" command
+    When the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" \"5,5 5,6\"" command
     Then the next line of the output is "Seat (5,5) is already taken"
     When the user types the "describe account" command
     Then the next line of the output is "Signed in with account 'laci'"
@@ -39,13 +39,13 @@ Feature: allows users to book tickets for screenings, and show booking history
   @grade5-requirement
   Scenario: the price of the ticket in the history should not change if pricing changes after the booking
     Given the user types the "sign in sanyi asdQWE123" command
-    And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" (5,5)" command
+    And the user types the "book Sátántangó Pedersoli \"2021-03-15 10:45\" \"5,5\"" command
     And the user types the "sign out" command
     And the user types the "sign in privileged admin admin" command
-    And the user types the "update default price 5000 HUF" command
+    And the user types the "update base price 5000" command
     And the user types the "sign out" command
     And the user types the "sign in sanyi asdQWE123" command
     When the user types the "describe account" command
     Then the next line of the output is "Signed in with account 'sanyi'"
     And the next line of the output is "Your previous bookings are"
-    And the next line of the output is "Seats (5,5), (5,6) on Sátántangó in room Pedersoli starting at 2021-03-15 10:45 for 3000 HUF"
+    And the next line of the output is "Seats (5,5) on Sátántangó in room Pedersoli starting at 2021-03-15 10:45 for 1500 HUF"

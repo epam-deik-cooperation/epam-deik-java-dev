@@ -23,6 +23,7 @@ Feature: allows creating movie descriptions
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create movie Sátántangó drama 450" command
     When the user types the "delete movie Sátántangó" command
+    And the user types the "list movies" command
     Then the next line of the output is "There are no movies at the moment"
 
   @grade2-requirement

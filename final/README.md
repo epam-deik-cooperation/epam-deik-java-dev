@@ -329,11 +329,11 @@ Seats <a vetítésre foglalt ülések listája, ", "-el elválasztva, egy-egy ü
 * A következő parancs lehetőséget biztosít egy már meglévő vetítésre, egy vagy több ülőhelyre
 jegyet foglalni.
 ```
-book <film címe> <terem neve> <vetítés kezdetének ideje YYYY-MM-DD hh:mm formátumban> <a lefoglalandó ülőhelyek listája, szóközzel elválasztva, egy-egy ülőhely "(<sor>,<oszlop>)" formátumú> 
+book <film címe> <terem neve> <vetítés kezdetének ideje YYYY-MM-DD hh:mm formátumban> <a lefoglalandó ülőhelyek listája, szóközzel elválasztva, egy-egy ülőhely "<sor>,<oszlop>" formátumú> 
 ```
 Például:
 ```
-book Sátántangó Pedersoli "2021-03-15 10:45" (5,5) (5,6)
+book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
 ```
 * A foglalás sikertelen akkor, ha 
     * A megjelölt ülőhelyek közül legalább egy már foglalt. Ekkor a parancs kimenete
@@ -368,14 +368,14 @@ feltételeken túl a következők szükségesek:
 
 ##### Árazással kapcsolatos funkcionalitás
 
-###### Az alapértelmezett ár megváltoztatása
+###### Az alapár megváltoztatása
 * Egy foglalás alapára 1500 HUF / ülőhely / vetítés. 
 A foglalás ára (/ülőhely/vetítés) kiszámítható a foglalás alapárának 
 és a foglalásra vonatkozó árkomponensek összegzésével. Az árkomponensek
 leírását lásd később. 
 * A következő parancs a foglalás alapárának megváltoztatását teszi lehetővé
 ```
-update default price <új alapértelmezett ár> HUF
+update base price <új alapár>
 ```
 * A parancs adminisztrációs parancs, így csak bejelentkezett 
 adminisztrátor felhasználó számára elérhető.
@@ -386,12 +386,12 @@ adminisztrátor felhasználó számára elérhető.
 kerül felhasználásra.
 
 ###### Új árkomponens létrehozása
-* Egy árkomponens egy pozitív vagy negatív fix összeg, amely az alapértelmezett árhoz adódik hozzá.
+* Egy árkomponens egy pozitív vagy negatív fix összeg, amely az alapárhoz adódik hozzá.
 Ennek segítségével vállnak megvalósíthatóvá teremhez, filmhez vagy vetítéshez használható felárak
 vagy kedvezmények.
 * A következő parancs használható az árkomponensek létrehozásához:
 ```
-create price component <árkomponens neve> <árkomponens összege> HUF
+create price component <árkomponens neve> <árkomponens összege>
 ```
 * Az árkomponens neve azonosítja az árkomponenst
 * A parancs adminisztrációs parancs, így csak bejelentkezett 
@@ -434,11 +434,11 @@ adminisztrátor felhasználó számára elérhető.
 ###### Foglalás árának lekérdezése
 * A következő parancs lehetővé teszi azt, hogy lekérdezhessük egy foglalás árát anélkül, hogy a foglalás megtörténne
 ```
-show price for <film címe> <terem neve> <vetítés kezdetének dátuma YYYY-MM-DD hh:mm formátumban> <ülőhelyek listája szóközzel elvállasztva, az egyes ülőhelyek "(<sor>,<oszlop>)" formátumúak>
+show price for <film címe> <terem neve> <vetítés kezdetének dátuma YYYY-MM-DD hh:mm formátumban> <ülőhelyek listája szóközzel elvállasztva, az egyes ülőhelyek "<sor>,<oszlop>" formátumúak>
 ```
 Például:
 ```
-show price for Sátántangó Pedersoli "2021-03-15 10:45" (10,5) (11,5)
+show price for Sátántangó Pedersoli "2021-03-15 10:45" "10,5 11,5"
 ```
 * A parancs kimenete:
 ```

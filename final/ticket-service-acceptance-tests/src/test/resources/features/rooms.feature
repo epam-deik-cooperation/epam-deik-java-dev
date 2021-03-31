@@ -24,6 +24,7 @@ Feature: allow creating, reading, updating and deleting rooms where the screenin
     Given the user types the "sign in privileged admin admin" command
     And the user types the "create room Pedersoli 20 10" command
     When the user types the "delete room Pedersoli" command
+    And the user types the 'list rooms' command
     Then the next line of the output is "There are no rooms at the moment"
 
   @grade2-requirement

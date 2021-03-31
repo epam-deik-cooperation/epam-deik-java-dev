@@ -54,7 +54,7 @@ public class ProcessUnderTest implements AutoCloseable {
 
     public void writeOnInput(String command) throws IOException {
         verifyProcessIsRunning();
-        clearOutput(100);
+        clearOutput(250);
         input.write(command + System.lineSeparator());
         input.flush();
     }
