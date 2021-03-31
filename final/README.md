@@ -35,11 +35,11 @@ a _Spirited Away_ című film létrehozására használható.
 create movie "Sprited Away" animation 125
 ```
 
-##### Admin accounttal kapcsolatos paranccsok
+##### Admin accounttal kapcsolatos parancsok
 
 ###### Admin account és bejelentkezés
 
-* Az alkalmazás indításakor létezik egy adminisztrátor account-nak.
+* Az alkalmazás indításakor létezik egy adminisztrátor account.
     * A felhasználónév legyen 'admin', a jelszó szintén 'admin'.
 * A következő parancs lehetőséget nyújt az adminisztátornak arra, hogy 
 bejelentkezzen
@@ -50,13 +50,12 @@ sign in privileged <felhasználónév> <jelszó>
 ```
 Login failed due to incorrect credentials
 ```
-* Sikeres bejelentkezés esetén a parancs kimenete esetén hozzáférhetővé
+* Sikeres bejelentkezés esetén hozzáférhetővé
 vállnak az adminisztrációs parancsok (lásd később)
 
 ###### Az adminisztrátor ki tud jelentkezni
 
-* A következő parancs lehetőséget nyújt ad adminisztrátornak arra,
-hogy kijelentkezzen.
+* A következő parancs segítségével az adminisztrátor ki tud jelentkezni
 ```
 sign out
 ```
@@ -65,7 +64,7 @@ amíg az adminisztrátor felhasználó újra be nem jelentkezik.
 
 ###### Az adminisztrátor account információi lekérdezhetőek
 
-* A következő paranccsal lekérdezhető az éppen bejelntkezett
+* A következő paranccsal lekérdezhető az éppen bejelentkezett
 account típusa és állapota.
 ```
 describe account
@@ -196,8 +195,8 @@ időpontban létrehozható a következőképpen:
 create screening "Spirited Away" Pedersoli "2021-03-14 16:00"
 ```
 * Nem hozható létre a vetítés akkor, ha:
-    * A vetítés időtartama (azaz a <vetítés kezdete> és a <vetítés kezdete> + <a film hossza> közötti időtartam) bele esik
-    egy másik, azonos teremben történő másik vetítés időtartamával. A kimenet ebben az esetben:
+    * A vetítés időtartama bele esik egy másik, azonos teremben történő másik vetítés időtartamába. 
+    A kimenet ebben az esetben:
     ```
     There is an overlapping screening
     ``` 
@@ -258,8 +257,8 @@ feltételeken túl a következők szükségesek:
 * Az alkalmazás által használt adatbázis Spring profilok segítségével módosítható.
     * Alapértelmezetten az alkalmazás egy olyan adatbázist használ, amely az alkalmazás futásai között is megőrzi az állapotát
     * A `ci` profil esetén az alkalmazás beágyazott in-memory adatbázist használ 
-* Az `mvn clean verify -p requirements-grade3` sikeresen lefut 
-a `ticket-service-parent` projekten. Ehhez a kettes érdemjegy eléréséhez szükséges 
+* Az `mvn clean verify -p requirements-grade4` sikeresen lefut 
+a `ticket-service-parent` projekten. Ehhez a hármas érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
     * Legalább 50%-os unit teszt branch és line coverage az egész `ticket-service` modulra vonatkoztatva.
     * A `@grade4-requirements` tag-gel megjelölt acceptance tesztekben leírt követelményeknek megfelelő alkalmazás.
@@ -308,11 +307,11 @@ You have not booked any tickets yet
 ```
 * A parancs kimenete bejelentkezett, nem adminisztrátor felhasználó esetén, ha már foglalt
 jegyet:
-```
-Signed in with account '<felhasználónév>'
-Your previous bookings are
-Seats <a vetítésre foglalt ülések listája, ", "-el elválasztva, egy-egy ülés "(<sor>,<oszlop>) formátumú> on <film címe> in room <terem neve> starting at <vetítés kezdetének ideje YYYY-MM-DD hh:mm formátumban> for <a foglalás ára> HUF
-```
+    ```
+    Signed in with account '<felhasználónév>'
+    Your previous bookings are
+    Seats <a vetítésre foglalt ülések listája, ", "-el elválasztva, egy-egy ülés "(<sor>,<oszlop>) formátumú> on <film címe> in room <terem neve> starting at <vetítés kezdetének ideje YYYY-MM-DD hh:mm formátumban> for <a foglalás ára> HUF
+    ```
     * Minden már meglévő foglaláshoz létezik egy, a foglalást leíró sor a fenti formátumban.
     * A foglalásra vonatkozó szabályokról (pl. az ár kiszámítása) bővebben olvashatsz a következő szekciókban.
     * Például:
@@ -326,7 +325,7 @@ Seats <a vetítésre foglalt ülések listája, ", "-el elválasztva, egy-egy ü
 ##### Jegyfoglalás
 
 ###### Foglalás létrehozása
-* A következő parancs lehetőséget biztosít egy már meglévő vetítésre, egy vagy több ülőhelyre
+* A következő parancs lehetőséget biztosít egy már meglévő vetítésre egy vagy több ülőhelyre
 jegyet foglalni.
 ```
 book <film címe> <terem neve> <vetítés kezdetének ideje YYYY-MM-DD hh:mm formátumban> <a lefoglalandó ülőhelyek listája, szóközzel elválasztva, egy-egy ülőhely "<sor>,<oszlop>" formátumú> 
@@ -347,9 +346,9 @@ book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
     ```
     ahol az ülőhely a listában megadottak közül az első olyan, amely nem foglalható a hiba miatt.
 * Amennyiben a foglalás sikeres, a parancs kimenete a következő
-```
-Seats booked: <a lefoglalt ülőhelyek listája, ", "-el elválasztva, egy-egy ülőhely "(<sor>,<oszlop>)" formátumú>; the price for this booking is <a jegy ára> HUF 
-```
+    ```
+    Seats booked: <a lefoglalt ülőhelyek listája, ", "-el elválasztva, egy-egy ülőhely "(<sor>,<oszlop>)" formátumú>; the price for this booking is <a jegy ára> HUF 
+    ```
     * A jegy ára 1500 HUF / ülőhely / vetítés. Az ötös érdemjegyhez tartozó követelményekben 
     további szabályok kerülnek bevezetésre.
 * Ez a parancs csak bejelentkezett, nem adminisztrátor felhasználóknak elérhető
@@ -358,7 +357,7 @@ Seats booked: <a lefoglalt ülőhelyek listája, ", "-el elválasztva, egy-egy �
 #### Általános követelmények a forráskóddal és az alkalmazással kapcsolatban
 
 * A négyes érdemjegy eléréséhez tartozó összes követelmény teljesül
-* Az `mvn clean verify -p requirements-grade3` sikeresen lefut 
+* Az `mvn clean verify -p requirements-grade5` sikeresen lefut 
 a `ticket-service-parent` projekten. Ehhez a négyes érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
     * Legalább 70%-os unit teszt branch és line coverage az egész `ticket-service` modulra vonatkoztatva.
@@ -380,7 +379,7 @@ update base price <új alapár>
 * A parancs adminisztrációs parancs, így csak bejelentkezett 
 adminisztrátor felhasználó számára elérhető.
 * A parancs nem változtathatja meg a már meglévő foglalások árát. 
-    * Note: ezek a `describe account` paranccsal kérhetőek 
+    * ezek a `describe account` paranccsal kérhetőek 
     le az éppen bejelentkezett felhasználóhoz.
 * A parancs hatására az új foglalások árának számításakor már az új alapár
 kerül felhasználásra.
@@ -399,7 +398,7 @@ adminisztrátor felhasználó számára elérhető.
 
 ###### Árkomponens teremhez történő csatolása
 * A következő parancs lehetővé teszi egy létező árkomponens egy létező teremhez történő csatolását.
-Miután megtörtént, a teremben történő összes vetítés esetén az ára tartalmazza az árkomponenst.
+Miután megtörtént, a teremben történő összes vetítés ára tartalmazza az árkomponenst.
     * Például ha egy vetítésre, két ülőhelyre szeretnénk jegyet foglalni, amely csak az 1500 Ft/ülőhely/vetítés 
     alapárat tartalmazza, akkor a foglalás teljes ára 2 * 1500 Ft, azaz 3000 Ft. Amennyiben ahhoz a teremhez,
     ahol a vetítés történik csatolva van egy 500 Ft-s árkomponens, akkor a fenti foglalás ára
