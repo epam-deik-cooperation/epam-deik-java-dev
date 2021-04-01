@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.epam.training.ticketservice</groupId>
+    <artifactId>ticket-service-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+    </properties>
+
+    <modules>
+        <module>ticket-service</module>
+        <module>ticket-service-acceptance-tests</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>requirements-grade2</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <requirements.fail-build-on-checkstyle-error>false</requirements.fail-build-on-checkstyle-error>
+                <requirements.jacoco-line-coverage>0.4</requirements.jacoco-line-coverage>
+                <requirements.jacoco-branch-coverage>0.4</requirements.jacoco-branch-coverage>
+                <requirements.cucumber-tags>@grade2-requirement</requirements.cucumber-tags>
+            </properties>
+        </profile>
+        <profile>
+            <id>requirements-grade3</id>
+            <properties>
+                <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
+                <requirements.jacoco-line-coverage>0.4</requirements.jacoco-line-coverage>
+                <requirements.jacoco-branch-coverage>0.4</requirements.jacoco-branch-coverage>
+                <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement</requirements.cucumber-tags>
+            </properties>
+        </profile>
+        <profile>
+            <id>requirements-grade4</id>
+            <properties>
+                <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
+                <requirements.jacoco-line-coverage>0.5</requirements.jacoco-line-coverage>
+                <requirements.jacoco-branch-coverage>0.5</requirements.jacoco-branch-coverage>
+                <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement or @grade4-requirement
+                </requirements.cucumber-tags>
+            </properties>
+        </profile>
+        <profile>
+            <id>requirements-grade5</id>
+            <properties>
+                <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
+                <requirements.jacoco-line-coverage>0.7</requirements.jacoco-line-coverage>
+                <requirements.jacoco-branch-coverage>0.7</requirements.jacoco-branch-coverage>
+                <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement or @grade4-requirement or
+                    @grade5-requirement
+                </requirements.cucumber-tags>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
