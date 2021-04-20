@@ -10,7 +10,7 @@ személyzete és látogatói számára.
 futtatható JAR-t kell létrehoznia
 * Amennyiben az alkalmazás indulása sokáig (>=15 másodperc) tart, `TimeoutException`-t kaphatunk a
 tesztek futtatása során. Ugyanezt a kivételt kapjuk akkor is, amikor a teszt egy adott kimenetre
-(pl. prompt megjelenése vagy egy adott sor kiírása) vár, de nem kapunk kimenetet vagy csak a várnak nem
+(pl. prompt megjelenése vagy egy adott sor kiírása) vár, de nem kapunk kimenetet vagy csak a vártnak nem
 megfelelő kimenetet kapunk. Miután megbizonyosodtunk arról, hogy az alkalmazásunk jól működik, 
 érdemes a `GenericCliProcessStepDefs` osztály `OUTPUT_TIMEOUT` értékét növelni. Így a teszt hosszabb ideig
 tud várakozni arra, hogy az alkalmazás elinduljon és megjelenjen a prompt a kimeneten.
