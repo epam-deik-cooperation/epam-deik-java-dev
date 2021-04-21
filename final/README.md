@@ -4,6 +4,30 @@ Egy interaktív, parancssori alkalmazást fogsz elkészíteni, amely
 adminisztrációs és információs felületként fog működni egy filmszínház
 személyzete és látogatói számára. 
 
+## Hasznos információ az acceptance tesztek futtatása kapcsán
+
+* A ticket-service projekt package goal-jának egy `ticket-service-0.0.1-SNAPSHOT.jar` nevű, 
+futtatható JAR-t kell létrehoznia
+* Amennyiben az alkalmazás indulása sokáig (>=15 másodperc) tart, `TimeoutException`-t kaphatunk a
+tesztek futtatása során. Ugyanezt a kivételt kapjuk akkor is, amikor a teszt egy adott kimenetre
+(pl. prompt megjelenése vagy egy adott sor kiírása) vár, de nem kapunk kimenetet vagy csak a vártnak nem
+megfelelő kimenetet kapunk. Miután megbizonyosodtunk arról, hogy az alkalmazásunk jól működik, 
+érdemes a `GenericCliProcessStepDefs` osztály `OUTPUT_TIMEOUT` értékét növelni. Így a teszt hosszabb ideig
+tud várakozni arra, hogy az alkalmazás elinduljon és megjelenjen a prompt a kimeneten.
+* A tesztek gyakran az egyes parancsokat követő kiementre asszertálnak. Azért, hogy csak a parancs
+beírása után következő kimenetet tudja vizsgálni, sok teszt a parancs elküldése előtt kiolvassa az összes
+rendelkezésre álló kimenetet. Sajnos azonban előfordulhat olyan eset, hogy a program túl lassan produkál
+kimenetet, amely így azután kerül kiírásra, hogy a teszt már elvégezte az előbb leírt "takarítást". Ezt elkerülendő
+a teszt egy rövid ideig várakozik, mielőtt kiolvasná a kimenetet, hogy az alkalmazásnak legyen ideje kiírnia mindent.
+Amennyiben azt látjuk a várt kimenet és a kapott kimenet összehasonlítása során, hogy a kapott kimenet például
+promptot vagy az előző parancs kimenetét tartalmazza, ez a várakozási idő nem elég hosszú. Ilyenkor érdemes megnövelni
+a `ProcessUnderTest` osztály `DELAY_BEFORE_CLEANING_PROCESS_OUTPUT` konstansának értékét.
+* A Spring Shell többféle, többé-kevésbé okos parancssort tud adni, amelyek támogatják például az automatikus kiegészítést,
+a history-t vagy a syntax highlighting-ot. Sajnos ezek a "haladó" funkciók problémát okoznak az acceptance tesztek futása során,
+ezek kapcsán láthatunk például olyat, hogy a kapott kimenetben megjelenik maga a parancs. Hogy ezt elkerüljük, érdemes
+rákényszeríteni a Spring Shell-t arra, hogy egy "buta" parancssort adjon, amelynek a legegyszerűbb módja az, ha a
+teszteket az IntelliJ-n belül futtatjuk.  
+
 ## Az alkalmazással kapcsolatos követelmények:
 
 ### Követelmények a kettes jegyhez:
