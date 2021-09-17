@@ -29,8 +29,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(369.3));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        assertThat(result.getValue(), equalTo(369.3));
+        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
     }
 
     @Test
@@ -43,8 +43,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(121.0));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        assertThat(result.getValue(), equalTo(121.0));
+        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
     }
 
     @Test
