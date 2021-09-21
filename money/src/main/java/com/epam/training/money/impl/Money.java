@@ -1,56 +1,60 @@
 package com.epam.training.money.impl;
 
 import java.util.Currency;
+import java.util.Optional;
 
 public class Money {
 
-    /**
-     * val
-     */
-    public double val;
-    public Currency c;
+    public static final String HUF = "HUF";
+    public static final String USD = "USD";
+    public static final double HUF_TO_USD_RATIO = 0.0034;
+    public static final double USD_TO_HUF_RATIO = 249.3;
 
-    /**
-     * Constructor for money
-     * @param dValue double value
-     * @param c c
-     */
-    public Money(double dValue, Currency c) {
-        this.val = dValue;
-        this.c = c;
+    private double value;
+    private Currency currency;
+
+    public Money(double dValue, Currency currency) {
+        this.value = dValue;
+        this.currency = currency;
     }
 
-    public double how_much() {
-        return val;
+    public double getValue() {
+        return value;
     }
 
-    public Currency what() {
-        return c;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public Money add(Money moneyzToGiveMeh) {
-        // Convert
-        if (!this.c.equals(moneyzToGiveMeh.what())) { // If the two currency does not match
-            if (this.what().equals(Currency.getInstance("USD")) && moneyzToGiveMeh.what().equals(Currency.getInstance("HUF")))
-                moneyzToGiveMeh = new Money(moneyzToGiveMeh.val *0.0034, Currency.getInstance("USD"));
-            else if (this.what().equals(Currency.getInstance("HUF")) && moneyzToGiveMeh.what().equals(Currency.getInstance("USD")))
-                moneyzToGiveMeh = new Money(moneyzToGiveMeh.val *249.3, Currency.getInstance("HUF"));
-//            else if (this.what().equals(Currency.getInstance("ASD")) && moneyzToGiveMeh.what().equals(Currency.getInstance("USD")))
-//                moneyzToGiveMeh = new Money(moneyzToGiveMeh.val *249.3, Currency.getInstance("ASD"));
-            else return null;
-        }
-        this.val += moneyzToGiveMeh.how_much(); // Add value of the parameter to this.val
+    public Money add(Money moneyToGive) {
+        moneyToGive = convertMoney(moneyToGive).orElse(null);
+        if (moneyToGive == null)
+            return null;
+        this.value += moneyToGive.getValue();
         return this;
     }
 
-    public Integer compareTo(Money m) {
-        if (!this.c.equals(m.what())) {
-            if (this.what().equals(Currency.getInstance("USD")) && m.what().equals(Currency.getInstance("HUF")))
-                m = new Money(m.val*0.0034, Currency.getInstance("USD"));
-            else if (this.what().equals(Currency.getInstance("HUF")) && m.what().equals(Currency.getInstance("USD")))
-                m = new Money(m.val*249.3, Currency.getInstance("HUF"));
-            else return null;
+    private Optional<Money> convertMoney(Money money) {
+        if (!this.currency.equals(money.getCurrency())) {
+            if (this.getCurrency().equals(Currency.getInstance(USD))
+                    && money.getCurrency().equals(Currency.getInstance(HUF))) {
+                return Optional.of(new Money(money.value * HUF_TO_USD_RATIO, Currency.getInstance(USD)));
+            }
+            else if (this.getCurrency().equals(Currency.getInstance(HUF))
+                    && money.getCurrency().equals(Currency.getInstance(USD))) {
+                return  Optional.of(new Money(money.value * USD_TO_HUF_RATIO, Currency.getInstance(HUF)));
+            }
+            else
+                return Optional.empty();
         }
-        return Double.compare(this.how_much(), m.how_much());
+        return Optional.of(money);
+    }
+
+    public Integer compareTo(Money m) {
+        m = convertMoney(m).orElse(null);
+        if (m == null) {
+            return null;
+        }
+        return Double.compare(this.getValue(), m.getValue());
     }
 }
