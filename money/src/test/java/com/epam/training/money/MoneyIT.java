@@ -7,17 +7,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Currency;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.epam.training.money.impl.Money;
+import com.epam.training.money.exception.UnknownConversionRateException;
+import com.epam.training.money.impl.StaticMonetaryValueConversionService;
 
 public class MoneyIT {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
     private static final Currency GBP_CURRENCY = Currency.getInstance("GBP");
+
+    private final StaticMonetaryValueConversionService valueConversionService = new StaticMonetaryValueConversionService();
 
     @Test
     public void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
@@ -26,7 +30,7 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, USD_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd);
+        Money result = underTest.add(moneyToAdd, valueConversionService);
 
         // Then
         assertThat(result.getValue(), equalTo(369.3));
@@ -40,7 +44,7 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, HUF_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd);
+        Money result = underTest.add(moneyToAdd, valueConversionService);
 
         // Then
         assertThat(result.getValue(), equalTo(121.0));
@@ -48,16 +52,13 @@ public class MoneyIT {
     }
 
     @Test
-    public void testAddReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testAddThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
-        // When
-        Money result = underTest.add(moneyToAdd);
-
-        // Then
-        assertThat(result, nullValue());
+        // When - Then
+        Assertions.assertThrows(UnknownConversionRateException.class, () -> underTest.add(moneyToAdd, valueConversionService));
     }
 
 
@@ -69,7 +70,7 @@ public class MoneyIT {
         Money moneyToCompareWith = new Money(secondValue, USD_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
+        Integer result = underTest.compareTo(moneyToCompareWith, valueConversionService);
 
         // Then
         assertThat(signum(result), equalTo(expectedSignum));
@@ -83,23 +84,20 @@ public class MoneyIT {
         Money moneyToCompareWith = new Money(secondValue, HUF_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
+        Integer result = underTest.compareTo(moneyToCompareWith, valueConversionService);
 
         // Then
         assertThat(signum(result), equalTo(expectedSignum));
     }
 
     @Test
-    public void testCompareToReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testCompareToThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
 
-        // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
-
-        // Then
-        assertThat(result, nullValue());
+        // When - Then
+        Assertions.assertThrows(UnknownConversionRateException.class, () -> underTest.compareTo(moneyToCompareWith, valueConversionService));
     }
 
 }
