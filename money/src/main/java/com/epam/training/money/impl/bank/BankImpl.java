@@ -1,10 +1,13 @@
-package com.epam.training.money.impl;
+package com.epam.training.money.impl.bank;
 
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-public class Bank {
+import com.epam.training.money.model.Bank;
+
+public class BankImpl implements Bank {
 
     private static final Currency HUF_INSTANCE = Currency.getInstance("HUF");
     private static final Currency USD_INSTANCE = Currency.getInstance("USD");
@@ -13,13 +16,15 @@ public class Bank {
 
     Map<CurrencyPair, Double> exchangeRate;
 
-    public Bank() {
+    public BankImpl() {
         exchangeRate = new HashMap<>();
         exchangeRate.put(new CurrencyPair(HUF_INSTANCE, USD_INSTANCE), HUF_TO_USD_EXCHANGE_RATE);
         exchangeRate.put(new CurrencyPair(USD_INSTANCE, HUF_INSTANCE), USD_TO_HUF_EXCHANGE_RATE);
     }
 
-    public Double getRate(CurrencyPair currencyPair) {
-        return this.exchangeRate.get(currencyPair);
+    public Optional<Double> getRate(CurrencyPair currencyPair) {
+        return (currencyPair.getCurrencyFrom().equals(currencyPair.getCurrencyTo()))
+            ? Optional.of(1D)
+            : Optional.ofNullable(this.exchangeRate.get(currencyPair));
     }
 }

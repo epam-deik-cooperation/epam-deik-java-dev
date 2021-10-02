@@ -1,16 +1,24 @@
-package com.epam.training.money.impl;
+package com.epam.training.money.impl.bank;
 
 import java.util.Currency;
 import java.util.Objects;
 
 public class CurrencyPair {
 
-    public Currency currencyFrom;
-    public Currency currencyTo;
+    private final Currency currencyFrom;
+    private final Currency currencyTo;
 
     public CurrencyPair(Currency currencyFrom, Currency currencyTo) {
         this.currencyFrom = currencyFrom;
         this.currencyTo = currencyTo;
+    }
+
+    public Currency getCurrencyFrom() {
+        return currencyFrom;
+    }
+
+    public Currency getCurrencyTo() {
+        return currencyTo;
     }
 
     @Override
