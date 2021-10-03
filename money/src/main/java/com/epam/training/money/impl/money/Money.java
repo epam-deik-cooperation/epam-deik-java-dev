@@ -1,6 +1,7 @@
 package com.epam.training.money.impl.money;
 
 import java.util.Currency;
+import java.util.Objects;
 
 import com.epam.training.money.impl.bank.BankImpl;
 import com.epam.training.money.impl.bank.CurrencyPair;
@@ -31,6 +32,8 @@ public class Money {
     }
 
     public Money convert(Currency currencyTo, BankImpl bankImpl) {
+        Objects.requireNonNull(currencyTo, "currencyTo is a mandatory parameter");
+        Objects.requireNonNull(bankImpl, "bankImpl is a mandatory parameter");
         CurrencyPair myCurrencyPair = new CurrencyPair(this.getCurrency(), currencyTo);
 
         Double exchangeRate = bankImpl.getRate(myCurrencyPair).orElseThrow(() ->
@@ -38,5 +41,28 @@ public class Money {
         );
 
         return new Money(this.value * exchangeRate, currencyTo);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Money money = (Money) o;
+        return Double.compare(money.value, value) == 0 && Objects.equals(currency, money.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, currency);
+    }
+
+    @Override
+    public String toString() {
+        return "Money{" +
+            "value=" + value +
+            ", currency=" + currency +
+            '}';
     }
 }
