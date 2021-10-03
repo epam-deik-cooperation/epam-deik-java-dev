@@ -1,6 +1,7 @@
 package com.epam.training.money;
 
 import java.util.Currency;
+import java.util.Objects;
 
 public final class Money {
 
@@ -28,6 +29,31 @@ public final class Money {
     public int compareTo(Money convertedMoneyToCompare, MonetaryValueConversionService valueConversionService) {
         convertedMoneyToCompare = convertMoney(convertedMoneyToCompare, valueConversionService);
         return Double.compare(this.getValue(), convertedMoneyToCompare.getValue());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Money money = (Money) o;
+        return Double.compare(money.value, value) == 0 && currency.equals(money.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, currency);
+    }
+
+    @Override
+    public String toString() {
+        return "Money{" +
+                "value=" + value +
+                ", currency=" + currency +
+                '}';
     }
 
     private Money convertMoney(Money moneyToConvert, MonetaryValueConversionService valueConversionService) {

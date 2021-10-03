@@ -2,11 +2,9 @@ package com.epam.training.money.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Currency;
 import java.util.stream.Stream;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,67 +26,60 @@ class IdenticalConversionRateTest {
     @Test
     public void testCanConvertShouldReturnTrueWhenGivenIdenticalCurrencies() {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
         // When
         final boolean actual = underTest.canConvert(USD_CURRENCY, USD_CURRENCY);
         // Then
-        Assertions.assertTrue(actual);
-        MatcherAssert.assertThat("Currencies should be identical!", actual, CoreMatchers.is(true));
+        assertTrue(actual);
     }
 
     @Test
     public void testCanConvertShouldReturnFalseWhenGivenDifferentCurrencies() {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
         // When
         final boolean actual = underTest.canConvert(USD_CURRENCY, HUF_CURRENCY);
         // Then
-        Assertions.assertFalse(actual);
-        MatcherAssert.assertThat(actual, CoreMatchers.is(false));
+        assertFalse(actual);
     }
 
     @Test
     public void testCanConvertShouldReturnFalseWhenGivenTargetCurrencyIsNull() {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
         // When
         final boolean actual = underTest.canConvert(USD_CURRENCY, null);
         // Then
         assertFalse(actual);
-        MatcherAssert.assertThat(actual, CoreMatchers.is(false));
     }
 
     @Test
     public void testCanConvertShouldThrowNullPointerExceptionWhenGivenOriginalCurrencyIsNull() {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
-        // When - Then
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.canConvert(null, null));
+        // When
+        final boolean actual = underTest.canConvert(null, null);
+        // Then
+        assertFalse(actual);
     }
 
     @Test
-    void testConvertShouldReturnGivenValue() {
+    public void testConvertShouldReturnGivenValue() {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
         final double value = 9.2;
         // When
         final double actual = underTest.convert(value);
         // Then
         assertEquals(actual, value);
-        MatcherAssert.assertThat(actual, CoreMatchers.equalTo(value));
     }
 
-    //    @Disabled
+    /* All of the other test methods which test the {@link IdenticalConversionRate#canConvert} method
+     * can be replaced by this parameterized test because it covers same test cases.
+     */
     @ParameterizedTest
     @MethodSource("canConvertParameters")
-    void testCanConvert(final Currency from, final Currency target, final boolean expectedResult) {
+    public void testCanConvert(final Currency from, final Currency target, final boolean expectedResult) {
         // Given
-        //        final ConversionRate underTest = new IdenticalConversionRate();
         // When
         final boolean actual = underTest.canConvert(from, target);
         // Then
         assertEquals(actual, expectedResult);
-        MatcherAssert.assertThat(actual, CoreMatchers.equalTo(expectedResult));
     }
 
     private static Stream<Arguments> canConvertParameters() {
