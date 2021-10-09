@@ -1,4 +1,4 @@
-package com.epam.training.money.impl.exception;
+package com.epam.training.finance.exception;
 
 import java.util.Currency;
 

@@ -1,11 +1,12 @@
-package com.epam.training.money.impl.bank;
+package com.epam.training.finance.bank.impl;
 
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.epam.training.money.model.Bank;
+import com.epam.training.finance.bank.Bank;
+import com.epam.training.finance.bank.model.CurrencyPair;
 
 public class BankImpl implements Bank {
 
@@ -14,7 +15,7 @@ public class BankImpl implements Bank {
     private static final double HUF_TO_USD_EXCHANGE_RATE = 0.0034;
     private static final double USD_TO_HUF_EXCHANGE_RATE = 249.3;
 
-    Map<CurrencyPair, Double> exchangeRate;
+    private final Map<CurrencyPair, Double> exchangeRate;
 
     public BankImpl() {
         exchangeRate = new HashMap<>();
@@ -23,7 +24,7 @@ public class BankImpl implements Bank {
     }
 
     public Optional<Double> getRate(CurrencyPair currencyPair) {
-        return (currencyPair.getCurrencyFrom().equals(currencyPair.getCurrencyTo()))
+        return currencyPair.getCurrencyFrom().equals(currencyPair.getCurrencyTo())
             ? Optional.of(1D)
             : Optional.ofNullable(this.exchangeRate.get(currencyPair));
     }
