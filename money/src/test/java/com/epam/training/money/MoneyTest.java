@@ -1,6 +1,7 @@
 package com.epam.training.money;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import java.util.Currency;
@@ -23,7 +24,7 @@ public class MoneyTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         underTest = new Money(USD_VALUE, USD_CURRENCY);
     }
 
