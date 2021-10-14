@@ -1,12 +1,12 @@
-package com.epam.training.finance.bank.impl;
+package com.epam.training.webshop.finance.bank.impl;
 
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.epam.training.finance.bank.Bank;
-import com.epam.training.finance.bank.model.CurrencyPair;
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 
 public class BankImpl implements Bank {
 

@@ -1,4 +1,4 @@
-package com.epam.training.finance.bank.model;
+package com.epam.training.webshop.finance.bank.model;
 
 import java.util.Currency;
 import java.util.Objects;

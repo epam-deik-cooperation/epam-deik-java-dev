@@ -1,9 +1,9 @@
-package com.epam.training.finance.money.comparator;
+package com.epam.training.webshop.finance.money.comparator;
 
 import java.util.Comparator;
 
-import com.epam.training.finance.bank.impl.BankImpl;
-import com.epam.training.finance.money.Money;
+import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.money.Money;
 
 public class MoneyComparator implements Comparator<Money> {
     private final BankImpl bankImpl;

@@ -1,11 +1,11 @@
-package com.epam.training.finance.money;
+package com.epam.training.webshop.finance.money;
 
 import java.util.Currency;
 import java.util.Objects;
 
-import com.epam.training.finance.bank.impl.BankImpl;
-import com.epam.training.finance.bank.model.CurrencyPair;
-import com.epam.training.finance.exception.UnknownCurrencyConversionException;
+import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
 
 public class Money {
 

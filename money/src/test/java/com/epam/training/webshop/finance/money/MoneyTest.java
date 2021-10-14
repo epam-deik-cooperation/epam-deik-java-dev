@@ -1,4 +1,4 @@
-package com.epam.training.finance.money;
+package com.epam.training.webshop.finance.money;
 
 import static org.mockito.Mockito.verify;
 
@@ -11,9 +11,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
-import com.epam.training.finance.bank.impl.BankImpl;
-import com.epam.training.finance.bank.model.CurrencyPair;
-import com.epam.training.finance.exception.UnknownCurrencyConversionException;
+import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
 
 class MoneyTest {
 
@@ -197,14 +197,16 @@ class MoneyTest {
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
-    // TODO do this test with the class as an example to parameterized test
-    @Test
-    public void testMultiplyShouldReturnsExpectedResultWhenTheMultiplierIsAValidNumber() {
+    @ParameterizedTest
+    @CsvSource({"300,1","0,0","-300,-1","150,0.5"})
+    public void testMultiplyShouldReturnsExpectedResultWhenTheMultiplierIsAValidNumber(double expectedValue, double multiplier) {
         // Given
-
+        Money underTest = new Money(300, USD_CURRENCY);
+        Money expected = new Money(expectedValue, USD_CURRENCY);
         // When
-
+        Money actual = underTest.multiply(multiplier);
         // Then
+        Assertions.assertEquals(expected, actual);
     }
 
     @ParameterizedTest

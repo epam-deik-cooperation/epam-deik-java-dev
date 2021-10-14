@@ -1,4 +1,4 @@
-package com.epam.training.finance;
+package com.epam.training.webshop.finance;
 
 import static java.lang.Integer.signum;
 
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.epam.training.finance.bank.impl.BankImpl;
-import com.epam.training.finance.exception.UnknownCurrencyConversionException;
-import com.epam.training.finance.money.Money;
-import com.epam.training.finance.money.comparator.MoneyComparator;
+import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
+import com.epam.training.webshop.finance.money.Money;
+import com.epam.training.webshop.finance.money.comparator.MoneyComparator;
 
 public class MoneyIT {
 

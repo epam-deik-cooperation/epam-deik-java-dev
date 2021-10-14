@@ -1,4 +1,4 @@
-package com.epam.training.finance.bank.impl;
+package com.epam.training.webshop.finance.bank.impl;
 
 import java.util.Currency;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.epam.training.finance.bank.model.CurrencyPair;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 
 class BankImplTest {
 
