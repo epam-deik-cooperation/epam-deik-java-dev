@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "movies")
@@ -18,9 +15,12 @@ import javax.persistence.Table;
 @AllArgsConstructor
 public class Movie {
 
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    private Long id;
+
+    @Column(name = "title", unique = true)
     private String title;
 
     @Column(name = "length")
