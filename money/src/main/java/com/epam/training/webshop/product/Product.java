@@ -1,8 +1,7 @@
 package com.epam.training.webshop.product;
 
-import java.util.Objects;
-
 import com.epam.training.webshop.finance.money.Money;
+import java.util.Objects;
 
 public class Product {
 

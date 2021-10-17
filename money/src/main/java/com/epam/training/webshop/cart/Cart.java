@@ -1,40 +1,38 @@
 package com.epam.training.webshop.cart;
 
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.money.Money;
+import com.epam.training.webshop.product.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
-import com.epam.training.webshop.finance.bank.impl.BankImpl;
-import com.epam.training.webshop.finance.money.Money;
-import com.epam.training.webshop.product.Product;
-
 public class Cart {
 
     private final List<Product> productList;
-    private final BankImpl bank;
+    private final Bank bank;
 
-    public static Cart of(BankImpl bank, Product... products) {
-        return new Cart(bank, Arrays.asList(products));
-    }
-
-    public Cart(BankImpl bank) {
+    public Cart(Bank bank) {
         this(bank, new ArrayList<>());
     }
 
-    Cart(BankImpl bank, List<Product> productList) {
+    Cart(Bank bank, List<Product> productList) {
         this.bank = bank;
         this.productList = productList;
+    }
+
+    public static Cart of(Bank bank, Product... products) {
+        return new Cart(bank, Arrays.asList(products));
     }
 
     public void add(Product product) {
         productList.add(product);
     }
 
-    public Money getAggregatedNetPrice(Currency targetCurrency) {
-        Money aggregatedPrice = new Money(0, targetCurrency);
-
+    public Money getAggregatedNetPrice() {
+        Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
         for (Product product : productList) {
             aggregatedPrice = aggregatedPrice.add(product.getNetPrice(), bank);
         }

@@ -2,18 +2,16 @@ package com.epam.training.webshop.finance.money;
 
 import static org.mockito.Mockito.verify;
 
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
 import java.util.Currency;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-
-import com.epam.training.webshop.finance.bank.impl.BankImpl;
-import com.epam.training.webshop.finance.bank.model.CurrencyPair;
-import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
 
 class MoneyTest {
 
@@ -23,37 +21,35 @@ class MoneyTest {
     private static final CurrencyPair HUF_TO_USD_CURRENCY_PAIR = new CurrencyPair(HUF_CURRENCY, USD_CURRENCY);
     private static final CurrencyPair HUF_TO_GBP_CURRENCY_PAIR = new CurrencyPair(HUF_CURRENCY, GBP_CURRENCY);
     private static final CurrencyPair USD_TO_HUF_CURRENCY_PAIR = new CurrencyPair(USD_CURRENCY, HUF_CURRENCY);
-    private static final CurrencyPair GBP_TO_HUF_CURRENCY_PAIR = new CurrencyPair(GBP_CURRENCY, HUF_CURRENCY);
     private static final String HUF_CURRENCY_STRING = "HUF";
 
     @Test
     public void testConvertShouldReturnCorrectResultWhenExchangeRateExists() {
-
-        //Given
+        // Given
         Money underTest = new Money(300, HUF_CURRENCY);
         Money expected = new Money(600, USD_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
-        Mockito.when(mockBank.getRate(HUF_TO_USD_CURRENCY_PAIR)).thenReturn(Optional.of(2.0));
-        //When
+        Bank mockBank = Mockito.mock(Bank.class);
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_USD_CURRENCY_PAIR)).thenReturn(Optional.of(2.0));
+        // When
         Money result = underTest.convert(USD_CURRENCY, mockBank);
 
-        //Then
+        // Then
         Assertions.assertEquals(expected, result);
-        verify(mockBank).getRate(HUF_TO_USD_CURRENCY_PAIR);
+        verify(mockBank).getExchangeRate(HUF_TO_USD_CURRENCY_PAIR);
     }
 
     @Test
     public void testConvertShouldThrowExceptionWhenExchangeRateDoesNotExist() {
         // Given
         Money money = new Money(1, HUF_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
-        Mockito.when(mockBank.getRate(HUF_TO_GBP_CURRENCY_PAIR)).thenReturn(Optional.empty());
+        Bank mockBank = Mockito.mock(Bank.class);
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_GBP_CURRENCY_PAIR)).thenReturn(Optional.empty());
 
         // When
         Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> money.convert(GBP_CURRENCY, mockBank));
 
         // Then
-        Mockito.verify(mockBank).getRate(HUF_TO_GBP_CURRENCY_PAIR);
+        Mockito.verify(mockBank).getExchangeRate(HUF_TO_GBP_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
@@ -61,7 +57,7 @@ class MoneyTest {
     public void testConvertShouldThrowNullPointerExceptionWhenCurrencyParameterIsNull() {
         // Given
         Money money = new Money(1, HUF_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
 
         // When
         Assertions.assertThrows(NullPointerException.class, () -> money.convert((Currency) null, mockBank));
@@ -81,15 +77,15 @@ class MoneyTest {
         // Given
         Money underTest = new Money(3, USD_CURRENCY);
         Money expected = new Money(6, HUF_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
-        Mockito.when(mockBank.getRate(USD_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(2D));
+        Bank mockBank = Mockito.mock(Bank.class);
+        Mockito.when(mockBank.getExchangeRate(USD_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(2D));
 
         // When
         Money actual = underTest.convert(HUF_CURRENCY_STRING, mockBank);
 
         // Then
         Assertions.assertEquals(expected, actual);
-        Mockito.verify(mockBank).getRate(USD_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank).getExchangeRate(USD_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
@@ -97,7 +93,7 @@ class MoneyTest {
     public void testConvertWithStringParameterShouldThrowNullPointerExceptionWhenCurrencyParameterIsNull() {
         // Given
         Money underTest = new Money(3, USD_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
 
         // When - Then
         Assertions.assertThrows(NullPointerException.class, () -> underTest.convert((String) null, mockBank));
@@ -107,7 +103,7 @@ class MoneyTest {
     public void testConvertWithStringParameterShouldThrowExceptionWhenCurrencyParameterIsInvalid() {
         // Given
         Money underTest = new Money(3, USD_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
 
         // When - Then
         Assertions.assertThrows(IllegalArgumentException.class, () -> underTest.convert("", mockBank));
@@ -118,7 +114,7 @@ class MoneyTest {
         // Given
         Money underTest = new Money(120, USD_CURRENCY);
         Money expected = new Money(369.3, USD_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
         Money moneyToAdd = Mockito.mock(Money.class);
         Mockito.when(moneyToAdd.convert(USD_CURRENCY, mockBank)).thenReturn(new Money(249.3, HUF_CURRENCY));
 
@@ -146,7 +142,7 @@ class MoneyTest {
     public void testAddShouldThrowNullPointerExceptionWhenMoneyToAddParameterIsNull() {
         // Given
         Money money = new Money(1, HUF_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
 
         // When
         Assertions.assertThrows(NullPointerException.class, () -> money.add(null, mockBank));
@@ -160,10 +156,10 @@ class MoneyTest {
         // Given
         Money underTest = new Money(120, USD_CURRENCY);
         Money expected = new Money(-129.3, USD_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
         Money moneyToSubtract = Mockito.mock(Money.class);
         Mockito.when(moneyToSubtract.convert(USD_CURRENCY, mockBank)).thenReturn(new Money(249.3, HUF_CURRENCY));
-        Mockito.when(mockBank.getRate(HUF_TO_USD_CURRENCY_PAIR)).thenReturn(Optional.of(249.3));
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_USD_CURRENCY_PAIR)).thenReturn(Optional.of(249.3));
 
         // When
         Money actual = underTest.subtract(moneyToSubtract, mockBank);
@@ -188,7 +184,7 @@ class MoneyTest {
     public void testSubtractShouldThrowNullPointerExceptionWhenMoneyToSubtractParameterIsNull() {
         // Given
         Money money = new Money(1, HUF_CURRENCY);
-        BankImpl mockBank = Mockito.mock(BankImpl.class);
+        Bank mockBank = Mockito.mock(Bank.class);
 
         // When
         Assertions.assertThrows(NullPointerException.class, () -> money.subtract(null, mockBank));
@@ -198,7 +194,7 @@ class MoneyTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"300,1","0,0","-300,-1","150,0.5"})
+    @CsvSource({"300,1", "0,0", "-300,-1", "150,0.5"})
     public void testMultiplyShouldReturnsExpectedResultWhenTheMultiplierIsAValidNumber(double expectedValue, double multiplier) {
         // Given
         Money underTest = new Money(300, USD_CURRENCY);
@@ -235,5 +231,4 @@ class MoneyTest {
         // Then
         Assertions.assertEquals(expected, actual);
     }
-
 }

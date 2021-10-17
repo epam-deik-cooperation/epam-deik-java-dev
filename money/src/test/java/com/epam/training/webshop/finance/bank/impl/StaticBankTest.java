@@ -1,14 +1,13 @@
 package com.epam.training.webshop.finance.bank.impl;
 
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 import java.util.Currency;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.epam.training.webshop.finance.bank.model.CurrencyPair;
-
-class BankImplTest {
+class StaticBankTest {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
@@ -16,7 +15,7 @@ class BankImplTest {
     private static final CurrencyPair USD_TO_HUF_CURRENCY_PAIR = new CurrencyPair(USD_CURRENCY, HUF_CURRENCY);
     private static final CurrencyPair USD_TO_GBP_CURRENCY_PAIR = new CurrencyPair(USD_CURRENCY, GBP_CURRENCY);
 
-    private final BankImpl underTest = new BankImpl();
+    private final Bank underTest = new StaticBank();
 
     @Test
     public void testGetRateShouldReturnCorrectResultWhenExchangeRateExists() {
@@ -24,7 +23,7 @@ class BankImplTest {
         Double expected = 249.3;
 
         // When
-        Double result = underTest.getRate(USD_TO_HUF_CURRENCY_PAIR).get();
+        Double result = underTest.getExchangeRate(USD_TO_HUF_CURRENCY_PAIR).get();
 
         // Then
         Assertions.assertEquals(expected, result);
@@ -36,7 +35,7 @@ class BankImplTest {
         Optional<Double> expected = Optional.empty();
 
         // When
-        Optional<Double> result = underTest.getRate(USD_TO_GBP_CURRENCY_PAIR);
+        Optional<Double> result = underTest.getExchangeRate(USD_TO_GBP_CURRENCY_PAIR);
 
         // Then
         Assertions.assertEquals(expected, result);
@@ -46,14 +45,14 @@ class BankImplTest {
     public void testGetRateShouldThrowNullPointerExceptionWhenCurrencyPairParameterIsNull() {
         // Given
         // When - Then
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.getRate(null));
+        Assertions.assertThrows(NullPointerException.class, () -> underTest.getExchangeRate(null));
     }
 
     @Test
     public void testGetRateShouldThrowNullPointerExceptionWhenFromCurrencyIsNull() {
         // Given
         // When - Then
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.getRate(new CurrencyPair(null, USD_CURRENCY)));
+        Assertions.assertThrows(NullPointerException.class, () -> underTest.getExchangeRate(new CurrencyPair(null, USD_CURRENCY)));
     }
 
     @Test
@@ -62,10 +61,9 @@ class BankImplTest {
         Optional<Double> expected = Optional.empty();
 
         // When
-        Optional<Double> result = underTest.getRate(new CurrencyPair(USD_CURRENCY, null));
+        Optional<Double> result = underTest.getExchangeRate(new CurrencyPair(USD_CURRENCY, null));
 
         // Then
         Assertions.assertEquals(expected, result);
     }
-
 }

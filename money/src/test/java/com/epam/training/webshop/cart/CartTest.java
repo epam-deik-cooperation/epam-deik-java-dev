@@ -1,16 +1,14 @@
 package com.epam.training.webshop.cart;
 
-import java.util.Currency;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.bank.Bank;
 import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 import com.epam.training.webshop.finance.money.Money;
 import com.epam.training.webshop.product.Product;
+import java.util.Currency;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class CartTest {
 
@@ -22,7 +20,7 @@ class CartTest {
     private static final Product TEST_PRODUCT_BREAD = new Product("kenyér", new Money(600, HUF_CURRENCY));
     private static final Product TEST_PRODUCT_CHOCOLATE = new Product("csoki", new Money(1.5, USD_CURRENCY));
 
-    private final BankImpl mockBank = Mockito.mock(BankImpl.class);
+    private final Bank mockBank = Mockito.mock(Bank.class);
 
     @Test
     public void testAddShouldStoreProductWhenAddingProductToTheCart() {
@@ -44,7 +42,7 @@ class CartTest {
         Money zero = new Money(0D, HUF_CURRENCY);
 
         // When
-        Money actual = underTest.getAggregatedNetPrice(HUF_CURRENCY);
+        Money actual = underTest.getAggregatedNetPrice();
 
         // Then
         Assertions.assertEquals(zero, actual);
@@ -54,16 +52,16 @@ class CartTest {
     public void testGetAggregatedNetPriceShouldReturnCorrectPriceWhenOneItemInTheCart() {
         // Given
         Cart underTest = Cart.of(mockBank, TEST_PRODUCT_MILK);
-        Mockito.when(mockBank.getRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
         // could be named expected instead of fiveHundred
-        Money fiveHundred = new Money(500, Currency.getInstance("HUF"));
+        Money fiveHundred = new Money(500, HUF_CURRENCY);
 
         // When
-        Money actual = underTest.getAggregatedNetPrice(HUF_CURRENCY);
+        Money actual = underTest.getAggregatedNetPrice();
 
         // Then
         Assertions.assertEquals(fiveHundred, actual);
-        Mockito.verify(mockBank).getRate(HUF_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank).getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
@@ -71,15 +69,15 @@ class CartTest {
     public void testGetAggregatedNetPriceShouldReturnCorrectPriceWhenTwoItemsInTheCart() {
         // Given
         Cart underTest = Cart.of(mockBank, TEST_PRODUCT_MILK, TEST_PRODUCT_BREAD);
-        Mockito.when(mockBank.getRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
         Money expected = new Money(1100, HUF_CURRENCY);
 
         // When
-        Money actual = underTest.getAggregatedNetPrice(HUF_CURRENCY);
+        Money actual = underTest.getAggregatedNetPrice();
 
         // Then
         Assertions.assertEquals(expected, actual);
-        Mockito.verify(mockBank, Mockito.times(2)).getRate(HUF_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank, Mockito.times(2)).getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
@@ -87,17 +85,17 @@ class CartTest {
     public void testGetAggregatedNetPriceShouldReturnACorrectPriceWhenTwoItemsInTheCartWithDifferentCurrencies() {
         // Given
         Cart underTest = Cart.of(mockBank, TEST_PRODUCT_MILK, TEST_PRODUCT_CHOCOLATE);
-        Mockito.when(mockBank.getRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
-        Mockito.when(mockBank.getRate(USD_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(300D));
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
+        Mockito.when(mockBank.getExchangeRate(USD_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(300D));
         Money expected = new Money(950, HUF_CURRENCY);
 
         // When
-        Money actual = underTest.getAggregatedNetPrice(HUF_CURRENCY);
+        Money actual = underTest.getAggregatedNetPrice();
 
         // Then
         Assertions.assertEquals(expected, actual);
-        Mockito.verify(mockBank).getRate(HUF_TO_HUF_CURRENCY_PAIR);
-        Mockito.verify(mockBank).getRate(USD_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank).getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank).getExchangeRate(USD_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
 
@@ -105,17 +103,15 @@ class CartTest {
     public void testGetAggregatedNetPriceShouldReturnACorrectPriceWhenItemIsDuplicatedInTheCart() {
         // Given
         Cart underTest = Cart.of(mockBank, TEST_PRODUCT_MILK, TEST_PRODUCT_MILK);
-        Mockito.when(mockBank.getRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
+        Mockito.when(mockBank.getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR)).thenReturn(Optional.of(1D));
         Money expected = new Money(1000, HUF_CURRENCY);
 
         // When
-        Money actual = underTest.getAggregatedNetPrice(HUF_CURRENCY);
+        Money actual = underTest.getAggregatedNetPrice();
 
         // Then
         Assertions.assertEquals(expected, actual);
-        Mockito.verify(mockBank, Mockito.times(2)).getRate(HUF_TO_HUF_CURRENCY_PAIR);
+        Mockito.verify(mockBank, Mockito.times(2)).getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
     }
-
-
 }

@@ -1,11 +1,10 @@
 package com.epam.training.webshop.finance.money;
 
-import java.util.Currency;
-import java.util.Objects;
-
-import com.epam.training.webshop.finance.bank.impl.BankImpl;
+import com.epam.training.webshop.finance.bank.Bank;
 import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
+import java.util.Currency;
+import java.util.Objects;
 
 public class Money {
 
@@ -25,17 +24,17 @@ public class Money {
         return currency;
     }
 
-    public Money add(Money moneyToAdd, BankImpl bankImpl) {
+    public Money add(Money moneyToAdd, Bank bank) {
         Objects.requireNonNull(moneyToAdd, "MoneyToAdd is a mandatory parameter");
-        moneyToAdd = moneyToAdd.convert(this.getCurrency(), bankImpl);
+        moneyToAdd = moneyToAdd.convert(this.getCurrency(), bank);
         double newValue = this.value + moneyToAdd.getValue();
         return new Money(newValue, this.currency);
     }
 
-    public Money subtract(Money moneyToSubtract, BankImpl bankImpl) {
+    public Money subtract(Money moneyToSubtract, Bank bank) {
         Objects.requireNonNull(moneyToSubtract, "MoneyToSubtract is a mandatory parameter");
-        Objects.requireNonNull(bankImpl, "bankImpl is a mandatory parameter");
-        Money convertedMoney = moneyToSubtract.convert(this.currency, bankImpl);
+        Objects.requireNonNull(bank, "bankImpl is a mandatory parameter");
+        Money convertedMoney = moneyToSubtract.convert(this.currency, bank);
         return new Money(this.value - convertedMoney.getValue(), this.currency);
     }
 
@@ -47,19 +46,16 @@ public class Money {
         return new Money(this.value / divider, this.currency);
     }
 
-    public Money convert(String currencyTo, BankImpl bankImpl) {
-        return convert(Currency.getInstance(currencyTo), bankImpl);
+    public Money convert(String currencyTo, Bank bank) {
+        return convert(Currency.getInstance(currencyTo), bank);
     }
 
-    public Money convert(Currency currencyTo, BankImpl bankImpl) {
+    public Money convert(Currency currencyTo, Bank bank) {
         Objects.requireNonNull(currencyTo, "currencyTo is a mandatory parameter");
-        Objects.requireNonNull(bankImpl, "bankImpl is a mandatory parameter");
+        Objects.requireNonNull(bank, "bankImpl is a mandatory parameter");
         CurrencyPair myCurrencyPair = new CurrencyPair(this.getCurrency(), currencyTo);
-
-        Double exchangeRate = bankImpl.getRate(myCurrencyPair).orElseThrow(() ->
-            new UnknownCurrencyConversionException(myCurrencyPair.getCurrencyFrom(), myCurrencyPair.getCurrencyTo())
-        );
-
+        Double exchangeRate = bank.getExchangeRate(myCurrencyPair).orElseThrow(() ->
+            new UnknownCurrencyConversionException(myCurrencyPair.getCurrencyFrom(), myCurrencyPair.getCurrencyTo()));
         return new Money(this.value * exchangeRate, currencyTo);
     }
 

@@ -2,27 +2,24 @@ package com.epam.training.webshop.finance;
 
 import static java.lang.Integer.signum;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.bank.impl.StaticBank;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
+import com.epam.training.webshop.finance.money.Money;
+import com.epam.training.webshop.finance.money.comparator.MoneyComparator;
 import java.util.Currency;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import com.epam.training.webshop.finance.bank.impl.BankImpl;
-import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
-import com.epam.training.webshop.finance.money.Money;
-import com.epam.training.webshop.finance.money.comparator.MoneyComparator;
 
 public class MoneyIT {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
     private static final Currency GBP_CURRENCY = Currency.getInstance("GBP");
-    private final BankImpl bankImpl = new BankImpl();
+
+    private final Bank bank = new StaticBank();
 
     @Test
     public void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
@@ -31,11 +28,11 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, USD_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd, bankImpl);
+        Money result = underTest.add(moneyToAdd, bank);
 
         // Then
-        assertThat(result.getValue(), equalTo(369.3));
-        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
+        Assertions.assertEquals(369.3, result.getValue());
+        Assertions.assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
@@ -45,11 +42,11 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, HUF_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd, bankImpl);
+        Money result = underTest.add(moneyToAdd, bank);
 
         // Then
-        assertThat(result.getValue(), equalTo(121.0));
-        assertThat(result.getCurrency(), equalTo(HUF_CURRENCY));
+        Assertions.assertEquals(121.0, result.getValue());
+        Assertions.assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
@@ -59,7 +56,7 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
         // When - Then
-        Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> underTest.add(moneyToAdd, bankImpl));
+        Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> underTest.add(moneyToAdd, bank));
     }
 
 
@@ -71,11 +68,11 @@ public class MoneyIT {
         Money moneyToCompareWith = new Money(secondValue, USD_CURRENCY);
 
         // When
-        MoneyComparator moneyComparator = new MoneyComparator(bankImpl);
+        MoneyComparator moneyComparator = new MoneyComparator(bank);
         int result = moneyComparator.compare(underTest, moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        Assertions.assertEquals(expectedSignum, signum(result));
     }
 
     @ParameterizedTest
@@ -84,12 +81,12 @@ public class MoneyIT {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, HUF_CURRENCY);
-        MoneyComparator moneyComparator = new MoneyComparator(bankImpl);
+        MoneyComparator moneyComparator = new MoneyComparator(bank);
         // When
         int result = moneyComparator.compare(underTest, moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        Assertions.assertEquals(expectedSignum, signum(result));
     }
 
     @Test
@@ -97,9 +94,8 @@ public class MoneyIT {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
-        MoneyComparator moneyComparator = new MoneyComparator(bankImpl);
+        MoneyComparator moneyComparator = new MoneyComparator(bank);
         // When - Then
         Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> moneyComparator.compare(underTest, moneyToCompareWith));
     }
-
 }

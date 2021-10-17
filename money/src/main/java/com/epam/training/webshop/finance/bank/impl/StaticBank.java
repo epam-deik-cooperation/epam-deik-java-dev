@@ -1,14 +1,13 @@
 package com.epam.training.webshop.finance.bank.impl;
 
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.epam.training.webshop.finance.bank.Bank;
-import com.epam.training.webshop.finance.bank.model.CurrencyPair;
-
-public class BankImpl implements Bank {
+public class StaticBank implements Bank {
 
     private static final Currency HUF_INSTANCE = Currency.getInstance("HUF");
     private static final Currency USD_INSTANCE = Currency.getInstance("USD");
@@ -17,13 +16,14 @@ public class BankImpl implements Bank {
 
     private final Map<CurrencyPair, Double> exchangeRate;
 
-    public BankImpl() {
+    public StaticBank() {
         exchangeRate = new HashMap<>();
         exchangeRate.put(new CurrencyPair(HUF_INSTANCE, USD_INSTANCE), HUF_TO_USD_EXCHANGE_RATE);
         exchangeRate.put(new CurrencyPair(USD_INSTANCE, HUF_INSTANCE), USD_TO_HUF_EXCHANGE_RATE);
     }
 
-    public Optional<Double> getRate(CurrencyPair currencyPair) {
+    @Override
+    public Optional<Double> getExchangeRate(CurrencyPair currencyPair) {
         return currencyPair.getCurrencyFrom().equals(currencyPair.getCurrencyTo())
             ? Optional.of(1D)
             : Optional.ofNullable(this.exchangeRate.get(currencyPair));
