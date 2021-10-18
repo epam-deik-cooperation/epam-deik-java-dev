@@ -1,20 +1,32 @@
 package com.epam.training.webshop;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.epam.training.webshop.domain.grossprice.impl.GrossPriceCalculatorDecorator;
+import com.epam.training.webshop.domain.order.Cart;
+import com.epam.training.webshop.domain.order.impl.CartImpl;
+import com.epam.training.webshop.domain.order.model.Product;
+import com.epam.training.webshop.domain.order.model.impl.SimpleProduct;
+import com.epam.training.webshop.repository.OrderRepository;
 import java.util.Collections;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 class ShoppingCartTest {
 
-    private ShoppingCart underTest;
+    private Cart underTest;
+
+    @Mock
+    private GrossPriceCalculatorDecorator grossPriceCalculatorDecorator;
+    @Mock
+    private OrderRepository orderRepository;
 
     @BeforeEach
     public void setUp() {
-        underTest = new ShoppingCart();
+        MockitoAnnotations.openMocks(this);
+        underTest = new CartImpl(orderRepository, grossPriceCalculatorDecorator);
     }
 
     @Test
@@ -23,7 +35,7 @@ class ShoppingCartTest {
         List<Product> expectedResult = Collections.emptyList();
 
         // When
-        List<Product> actualResult = underTest.listProduct();
+        List<Product> actualResult = underTest.getProductsFromBasket();
 
         // Then
         assertEquals(expectedResult, actualResult);
@@ -32,13 +44,13 @@ class ShoppingCartTest {
     @Test
     public void testListProductShouldReturnTheListOfProductsWhenNotEmpty() {
         // Given
-        Product product = new Product();
+        Product product = new SimpleProduct("Zöld alma", 100);
         List<Product> expectedResult = Collections.singletonList(product);
 
         underTest.addProduct(product);
 
         // When
-        List<Product> actualResult = underTest.listProduct();
+        List<Product> actualResult = underTest.getProductsFromBasket();
 
         // Then
         assertEquals(expectedResult, actualResult);
