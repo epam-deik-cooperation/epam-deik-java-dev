@@ -11,17 +11,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
+
     private final MovieRepository movieRepository;
+
     private final static String MOVIE_NOT_FOUND = "Movie with given title not found.";
 
 
     public List<Movie> getAllMovies() {
-            return movieRepository.findAll();
+        return movieRepository.findAll();
     }
 
     public void createMovie(Movie newMovie) {
-            movieRepository.save(newMovie);
-        }
+        movieRepository.save(newMovie);
+    }
 
     public void updateMovie(Movie movieToUpdate) throws NotFoundException {
         if (movieRepository.existsByTitle(movieToUpdate.getTitle())) {

@@ -54,7 +54,6 @@ public class MovieServiceTest {
 
         //Given
 
-
         //When
         movieService.createMovie(testMovie);
 
