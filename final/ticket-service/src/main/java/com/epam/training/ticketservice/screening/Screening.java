@@ -4,17 +4,20 @@ import com.epam.training.ticketservice.movie.Movie;
 
 import com.epam.training.ticketservice.room.Room;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "screenings")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class Screening {
 
     @Id
@@ -22,7 +25,7 @@ public class Screening {
     private Long id;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "movie_id", referencedColumnName = "id")

@@ -23,7 +23,7 @@ public class RoomServiceTest {
     private RoomRepository roomRepository;
 
     @InjectMocks
-    RoomService roomService;
+    private RoomService roomService;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +35,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testGetAllMoviesShouldReturnListOfMovies() {
+    public void testGetAllRoomsShouldReturnListOfRooms() {
 
         //Given
         List<Room> expectedList = List.of(testRoom);
@@ -49,7 +49,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testCreateMovie() {
+    public void testCreateRoom() {
 
         //Given
 
@@ -61,7 +61,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testUpdateMovie() throws NotFoundException {
+    public void testUpdateRoom() throws NotFoundException {
 
         //Given
 
@@ -77,7 +77,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testUpdateMovieShouldThrowNotFoundExceptionWhenExistByTitleReturnsFalse() {
+    public void testUpdateRoomShouldThrowNotFoundExceptionWhenExistByNameReturnsFalse() {
 
         //Given
 
@@ -93,7 +93,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testDeleteMovie() throws NotFoundException {
+    public void testDeleteRoom() throws NotFoundException {
 
         //Given
 
@@ -107,7 +107,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testDeleteMovieShouldThrowNotFoundExceptionWhenExistByTitleReturnsFalse() {
+    public void testDeleteRoomShouldThrowNotFoundExceptionWhenExistByNameReturnsFalse() {
 
         //Given
 
