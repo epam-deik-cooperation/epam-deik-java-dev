@@ -25,15 +25,25 @@ public class ScreeningService {
     }
 
     private boolean validateScreening(Screening screening) {
-        return screeningRepository.findAll()
+
+        boolean isAnyScreeningInRoom = screeningRepository.findAll()
                 .stream()
                 .filter(x -> x.getRoom().equals(screening.getRoom()))
-                .map(y -> isDateAvailable(y.getDate(),
-                        y.getDate().plusMinutes(y.getMovie().getLength()),
-                        screening.getDate(),
-                        screening.getDate().plusMinutes(screening.getMovie().getLength())))
-                .filter(boolValue -> boolValue)
-                .findFirst().orElse(false);
+                .findAny().isEmpty();
+
+        if (isAnyScreeningInRoom) {
+            return true;
+        } else {
+            return screeningRepository.findAll()
+                    .stream()
+                    .filter(x -> x.getRoom().equals(screening.getRoom()))
+                    .map(y -> isDateAvailable(y.getDate(),
+                            y.getDate().plusMinutes(y.getMovie().getLength()),
+                            screening.getDate(),
+                            screening.getDate().plusMinutes(screening.getMovie().getLength())))
+                    .filter(boolValue -> boolValue)
+                    .findFirst().orElse(false);
+        }
     }
 
     public List<Screening> getAllScreenings() {

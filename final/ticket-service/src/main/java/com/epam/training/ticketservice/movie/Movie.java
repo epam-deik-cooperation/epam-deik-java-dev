@@ -30,5 +30,4 @@ public class Movie {
     private String genre;
 
 
-
 }

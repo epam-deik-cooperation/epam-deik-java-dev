@@ -19,4 +19,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     void deleteByName(String name);
 
     boolean existsByName(String name);
+
+    Room findByName(String name);
 }

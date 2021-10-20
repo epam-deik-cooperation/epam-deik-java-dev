@@ -3,7 +3,7 @@ package com.epam.training.ticketservice.screening;
 import com.epam.training.ticketservice.movie.Movie;
 import com.epam.training.ticketservice.room.Room;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -109,6 +110,20 @@ public class ScreeningServiceTest {
     }
 
     @Test
+    public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() {
+
+        // Given
+
+
+        // When
+        when(screeningRepository.findAll()).thenReturn(Collections.emptyList());
+        screeningService.createScreening(testScreening);
+
+        // Then
+        verify(screeningRepository, times(1)).save(testScreening);
+    }
+
+    @Test
     public void testDeleteScreening() throws NotFoundException {
 
         //Given
@@ -139,7 +154,7 @@ public class ScreeningServiceTest {
         //Then
         assertThrows(NotFoundException.class,
                 () -> screeningService.deleteScreening(testScreening.getMovie().getTitle(),
-                testScreening.getRoom().getName(), testScreening.getDate()));
+                        testScreening.getRoom().getName(), testScreening.getDate()));
 
         verify(screeningRepository, times(0))
                 .deleteByMovie_TitleAndRoom_NameAndDate(anyString(), anyString(), any(LocalDateTime.class));

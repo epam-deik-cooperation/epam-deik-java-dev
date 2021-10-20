@@ -73,8 +73,8 @@ public class MovieServiceTest {
 
         //Then
         verify(movieRepository, times(1)).update(testMovie.getTitle(),
-                                                                        testMovie.getGenre(),
-                                                                        testMovie.getLength());
+                testMovie.getGenre(),
+                testMovie.getLength());
     }
 
     @Test
@@ -89,8 +89,8 @@ public class MovieServiceTest {
         //Then
         assertThrows(NotFoundException.class, () -> movieService.updateMovie(testMovie));
         verify(movieRepository, times(0)).update(testMovie.getTitle(),
-                                                                        testMovie.getGenre(),
-                                                                        testMovie.getLength());
+                testMovie.getGenre(),
+                testMovie.getLength());
     }
 
     @Test
