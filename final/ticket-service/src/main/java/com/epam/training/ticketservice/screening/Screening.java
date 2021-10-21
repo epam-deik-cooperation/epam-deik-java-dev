@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "screenings")
@@ -36,6 +37,9 @@ public class Screening {
 
     @Override
     public String toString() {
-        return movie + ", screened in room " + room.getName() + ", at " + date;
+        return movie +
+                ", screened in room " +
+                room.getName() + ", at " +
+                date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

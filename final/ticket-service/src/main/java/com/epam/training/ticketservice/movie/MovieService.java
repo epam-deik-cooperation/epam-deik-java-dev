@@ -24,7 +24,7 @@ public class MovieService {
     }
 
     public void createMovie(Movie newMovie) throws AlreadyExistsException {
-        if (!movieRepository.existsByTitle(newMovie.getTitle())) {
+        if (!movieRepository.existsByTitleContainingIgnoreCase(newMovie.getTitle())) {
             movieRepository.save(newMovie);
         } else {
             throw new AlreadyExistsException(MOVIE_ALREADY_EXIST);
@@ -32,7 +32,7 @@ public class MovieService {
     }
 
     public void updateMovie(Movie movieToUpdate) throws NotFoundException {
-        if (movieRepository.existsByTitle(movieToUpdate.getTitle())) {
+        if (movieRepository.existsByTitleContainingIgnoreCase(movieToUpdate.getTitle())) {
             movieRepository.update(movieToUpdate.getTitle(), movieToUpdate.getGenre(), movieToUpdate.getLength());
         } else {
             throw new NotFoundException(MOVIE_NOT_FOUND);
@@ -40,15 +40,15 @@ public class MovieService {
     }
 
     public void deleteMovie(String movieTitle) throws NotFoundException {
-        if (movieRepository.existsByTitle(movieTitle)) {
-            movieRepository.deleteByTitle(movieTitle);
+        if (movieRepository.existsByTitleContainingIgnoreCase(movieTitle)) {
+            movieRepository.deleteByTitleContainingIgnoreCase(movieTitle);
         } else {
             throw new NotFoundException(MOVIE_NOT_FOUND);
         }
     }
 
     public Movie findByTitle(String title) {
-        return movieRepository.findByTitle(title);
+        return movieRepository.findByTitleContainingIgnoreCase(title);
     }
 
 

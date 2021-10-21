@@ -48,13 +48,12 @@ public class MovieCommands {
 
     @ShellMethod(value = "format: delete movie title", key = "delete movie")
     public String delete(String title) {
-
         try {
             movieService.deleteMovie(title);
         } catch (NotFoundException e) {
             return e.getMessage();
         }
-        return String.format("Successfully deleted movie '%s", title);
+        return String.format("Successfully deleted movie '%s'", title);
     }
 
     @ShellMethod(value = "list movies", key = "list movies")

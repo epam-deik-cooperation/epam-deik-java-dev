@@ -131,14 +131,14 @@ public class ScreeningServiceTest {
 
 
         //When
-        when(screeningRepository.existsByMovie_TitleAndRoom_NameAndDate(anyString(), anyString(), any(LocalDateTime.class)))
+        when(screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class)))
                 .thenReturn(true);
         screeningService.deleteScreening(testScreening.getMovie().getTitle(),
                 testScreening.getRoom().getName(), testScreening.getDate());
 
         //Then
         verify(screeningRepository, times(1))
-                .deleteByMovie_TitleAndRoom_NameAndDate(anyString(), anyString(), any(LocalDateTime.class));
+                .deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class));
     }
 
 
@@ -149,7 +149,7 @@ public class ScreeningServiceTest {
 
 
         //When
-        when(screeningRepository.existsByMovie_TitleAndRoom_NameAndDate(anyString(), anyString(), any(LocalDateTime.class)))
+        when(screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class)))
                 .thenReturn(false);
 
         //Then
@@ -158,7 +158,7 @@ public class ScreeningServiceTest {
                         testScreening.getRoom().getName(), testScreening.getDate()));
 
         verify(screeningRepository, times(0))
-                .deleteByMovie_TitleAndRoom_NameAndDate(anyString(), anyString(), any(LocalDateTime.class));
+                .deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class));
     }
 
 }

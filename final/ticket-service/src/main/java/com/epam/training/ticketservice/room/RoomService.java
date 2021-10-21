@@ -21,7 +21,7 @@ public class RoomService {
     }
 
     public void createRoom(Room newRoom) throws AlreadyExistsException {
-        if (!roomRepository.existsByName(newRoom.getName())) {
+        if (!roomRepository.existsByNameContainingIgnoreCase(newRoom.getName())) {
             roomRepository.save(newRoom);
         } else {
             throw new AlreadyExistsException(ROOM_ALREADY_EXIST);
@@ -29,7 +29,7 @@ public class RoomService {
     }
 
     public void updateRoom(Room roomToUpdate) throws NotFoundException {
-        if (roomRepository.existsByName(roomToUpdate.getName())) {
+        if (roomRepository.existsByNameContainingIgnoreCase(roomToUpdate.getName())) {
             roomRepository.update(roomToUpdate.getName(), roomToUpdate.getNumberOfColumns(), roomToUpdate.getNumberOfRows());
         } else {
             throw new NotFoundException(ROOM_NOT_FOUND);
@@ -37,15 +37,15 @@ public class RoomService {
     }
 
     public void deleteRoom(String roomName) throws NotFoundException {
-        if (roomRepository.existsByName(roomName)) {
-            roomRepository.deleteByName(roomName);
+        if (roomRepository.existsByNameContainingIgnoreCase(roomName)) {
+            roomRepository.deleteByNameContainingIgnoreCase(roomName);
         } else {
             throw new NotFoundException(ROOM_NOT_FOUND);
         }
     }
 
     public Room findByName(String name) {
-        return roomRepository.findByName(name);
+        return roomRepository.findByNameContainingIgnoreCase(name);
     }
 
 

@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, Long> {
 
-    boolean existsByMovie_TitleAndRoom_NameAndDate(String movieTitle, String roomName, LocalDateTime date);
+    boolean existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(String movieTitle, String roomName, LocalDateTime date);
 
     @Transactional
-    void deleteByMovie_TitleAndRoom_NameAndDate(String movieTitle, String roomName, LocalDateTime date);
+    void deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(String movieTitle, String roomName, LocalDateTime date);
 
 }

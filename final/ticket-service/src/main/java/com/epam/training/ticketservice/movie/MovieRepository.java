@@ -13,14 +13,16 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Movie m SET m.genre = :genre, m.length = :length WHERE m.title = :title")
+    @Query("UPDATE Movie m " +
+            "SET m.genre = :genre, m.length = :length " +
+            "WHERE lower(m.title) = lower(:title)")
     void update(@Param("title") String title, @Param("genre") String genre, @Param("length") Integer length);
 
     @Transactional
-    void deleteByTitle(String title);
+    void deleteByTitleContainingIgnoreCase(String title);
 
-    boolean existsByTitle(String title);
+    boolean existsByTitleContainingIgnoreCase(String title);
 
-    Movie findByTitle(String title);
+    Movie findByTitleContainingIgnoreCase(String title);
 
 }

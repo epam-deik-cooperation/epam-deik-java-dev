@@ -69,7 +69,7 @@ public class MovieServiceTest {
 
 
         //When
-        when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(true);
+        when(movieRepository.existsByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(true);
         movieService.updateMovie(testMovie);
 
         //Then
@@ -85,7 +85,7 @@ public class MovieServiceTest {
 
 
         //When
-        when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(false);
+        when(movieRepository.existsByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(false);
 
         //Then
         assertThrows(NotFoundException.class, () -> movieService.updateMovie(testMovie));
@@ -101,11 +101,11 @@ public class MovieServiceTest {
 
 
         //When
-        when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(true);
+        when(movieRepository.existsByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(true);
         movieService.deleteMovie(testMovie.getTitle());
 
         //Then
-        verify(movieRepository, times(1)).deleteByTitle(testMovie.getTitle());
+        verify(movieRepository, times(1)).deleteByTitleContainingIgnoreCase(testMovie.getTitle());
     }
 
     @Test
@@ -115,11 +115,11 @@ public class MovieServiceTest {
 
 
         //When
-        when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(false);
+        when(movieRepository.existsByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(false);
 
         //Then
         assertThrows(NotFoundException.class, () -> movieService.deleteMovie(testMovie.getTitle()));
-        verify(movieRepository, times(0)).deleteByTitle(testMovie.getTitle());
+        verify(movieRepository, times(0)).deleteByTitleContainingIgnoreCase(testMovie.getTitle());
     }
 
 

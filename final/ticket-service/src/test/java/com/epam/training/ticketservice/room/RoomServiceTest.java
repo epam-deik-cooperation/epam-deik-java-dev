@@ -68,7 +68,7 @@ public class RoomServiceTest {
 
 
         //When
-        when(roomRepository.existsByName(testRoom.getName())).thenReturn(true);
+        when(roomRepository.existsByNameContainingIgnoreCase(testRoom.getName())).thenReturn(true);
         roomService.updateRoom(testRoom);
 
         //Then
@@ -84,7 +84,7 @@ public class RoomServiceTest {
 
 
         //When
-        when(roomRepository.existsByName(testRoom.getName())).thenReturn(false);
+        when(roomRepository.existsByNameContainingIgnoreCase(testRoom.getName())).thenReturn(false);
 
         //Then
         assertThrows(NotFoundException.class, () -> roomService.updateRoom(testRoom));
@@ -100,11 +100,11 @@ public class RoomServiceTest {
 
 
         //When
-        when(roomRepository.existsByName(testRoom.getName())).thenReturn(true);
+        when(roomRepository.existsByNameContainingIgnoreCase(testRoom.getName())).thenReturn(true);
         roomService.deleteRoom(testRoom.getName());
 
         //Then
-        verify(roomRepository, times(1)).deleteByName(testRoom.getName());
+        verify(roomRepository, times(1)).deleteByNameContainingIgnoreCase(testRoom.getName());
     }
 
     @Test
@@ -114,10 +114,10 @@ public class RoomServiceTest {
 
 
         //When
-        when(roomRepository.existsByName(testRoom.getName())).thenReturn(false);
+        when(roomRepository.existsByNameContainingIgnoreCase(testRoom.getName())).thenReturn(false);
 
         //Then
         assertThrows(NotFoundException.class, () -> roomService.deleteRoom(testRoom.getName()));
-        verify(roomRepository, times(0)).deleteByName(testRoom.getName());
+        verify(roomRepository, times(0)).deleteByNameContainingIgnoreCase(testRoom.getName());
     }
 }

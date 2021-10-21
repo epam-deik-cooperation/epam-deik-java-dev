@@ -86,8 +86,10 @@ public class ScreeningService {
     }
 
     public void deleteScreening(String movieTitle, String roomName, LocalDateTime date) throws NotFoundException {
-        if (screeningRepository.existsByMovie_TitleAndRoom_NameAndDate(movieTitle, roomName, date)) {
-            screeningRepository.deleteByMovie_TitleAndRoom_NameAndDate(movieTitle, roomName, date);
+        if (screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(movieTitle,
+                roomName, date)) {
+            screeningRepository.deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(movieTitle,
+                    roomName, date);
         } else {
             throw new NotFoundException(SCREENING_NOT_FOUND);
         }

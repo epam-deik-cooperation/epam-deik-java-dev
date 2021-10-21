@@ -39,4 +39,11 @@ public class Movie {
     public String toString() {
         return title + " (" + genre + ", " + length + ")";
     }
+
+    @PrePersist
+    @PreUpdate
+    public void formatTitleAndGenre() {
+        this.title = title.substring(0,1).toUpperCase() + title.substring(1).toLowerCase();
+        this.genre = genre.toLowerCase();
+    }
 }
