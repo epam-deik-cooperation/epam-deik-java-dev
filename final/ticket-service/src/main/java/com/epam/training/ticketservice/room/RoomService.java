@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.room;
 
+import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,19 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    private final static String ROOM_NOT_FOUND = "No room found with such name!";
+    private final static String ROOM_NOT_FOUND = "No room found with such name";
+    private final static String ROOM_ALREADY_EXIST = "Room already exists with such name";
 
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
-    public void createRoom(Room newRoom) {
-        roomRepository.save(newRoom);
+    public void createRoom(Room newRoom) throws AlreadyExistsException {
+        if (!roomRepository.existsByName(newRoom.getName())) {
+            roomRepository.save(newRoom);
+        } else {
+            throw new AlreadyExistsException(ROOM_ALREADY_EXIST);
+        }
     }
 
     public void updateRoom(Room roomToUpdate) throws NotFoundException {

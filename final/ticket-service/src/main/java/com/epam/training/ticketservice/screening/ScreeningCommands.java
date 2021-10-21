@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.screening;
 
+import com.epam.training.ticketservice.exception.DateConflictException;
 import com.epam.training.ticketservice.movie.MovieService;
 import com.epam.training.ticketservice.room.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,15 @@ public class ScreeningCommands {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime date = LocalDateTime.parse(startDate, formatter);
-
-        screeningService.createScreening(Screening.builder()
-                .movie(movieService.findByTitle(movieTitle))
-                .room(roomService.findByName(roomName))
-                .date(date)
-                .build());
+        try {
+            screeningService.createScreening(Screening.builder()
+                    .movie(movieService.findByTitle(movieTitle))
+                    .room(roomService.findByName(roomName))
+                    .date(date)
+                    .build());
+        } catch (DateConflictException e) {
+            return e.getMessage();
+        }
 
         return "Successfully created screening";
     }
@@ -41,13 +45,13 @@ public class ScreeningCommands {
         return "";
     }
 
-    public String list() {
-        /*
-            TODO:
-                - 'list screenings' command implementation
-        */
-
-        return "";
+    @ShellMethod(value = "list movies", key = "list screenings")
+    public void list() {
+        if (!screeningService.getAllScreenings().isEmpty()) {
+            screeningService.getAllScreenings().forEach(System.out::println);
+        } else {
+            System.out.println("There are no screenings");
+        }
     }
 
 

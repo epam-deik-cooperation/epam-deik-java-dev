@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.room;
 
+import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testCreateRoom() {
+    public void testCreateRoom() throws AlreadyExistsException {
 
         //Given
 

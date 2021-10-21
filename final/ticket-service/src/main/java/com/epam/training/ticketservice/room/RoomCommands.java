@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.room;
 
+import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -13,11 +14,15 @@ public class RoomCommands {
     @ShellMethod(value = "format: create room name rows columns", key = "create room")
     public String create(String name, int rows, int columns) {
 
-        roomService.createRoom(Room.builder()
-                .name(name)
-                .numberOfRows(rows)
-                .numberOfColumns(columns)
-                .build());
+        try {
+            roomService.createRoom(Room.builder()
+                    .name(name)
+                    .numberOfRows(rows)
+                    .numberOfColumns(columns)
+                    .build());
+        } catch (AlreadyExistsException e) {
+            return e.getMessage();
+        }
 
         return String.format("Successfully created room '%s'", name);
     }
@@ -39,13 +44,14 @@ public class RoomCommands {
         return "";
     }
 
-    public String list() {
-        /*
-            TODO:
-                - 'list rooms' command implementation
-         */
+    @ShellMethod(value = "list movies", key = "list rooms")
+    public void list() {
+        if (!roomService.getAllRooms().isEmpty()) {
+            roomService.getAllRooms().forEach(System.out::println);
+        } else {
+            System.out.println("There are no rooms at the moment");
+        }
 
-        return "";
     }
 
 

@@ -33,4 +33,9 @@ public class Screening {
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
+
+    @Override
+    public String toString() {
+        return movie + ", screened in room " + room.getName() + ", at " + date;
+    }
 }

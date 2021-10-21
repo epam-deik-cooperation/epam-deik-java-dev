@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.movie;
 
 
+import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +51,7 @@ public class MovieServiceTest {
     }
 
     @Test
-    public void testCreateMovie() {
+    public void testCreateMovie() throws AlreadyExistsException {
 
         //Given
 

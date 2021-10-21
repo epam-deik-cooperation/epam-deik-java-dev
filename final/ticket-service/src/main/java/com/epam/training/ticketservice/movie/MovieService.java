@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.movie;
 
 
+import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,19 @@ public class MovieService {
     private final MovieRepository movieRepository;
 
     private final static String MOVIE_NOT_FOUND = "Movie with given title not found.";
+    private final static String MOVIE_ALREADY_EXIST = "Movie with given title already exists";
 
 
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
 
-    public void createMovie(Movie newMovie) {
-        movieRepository.save(newMovie);
+    public void createMovie(Movie newMovie) throws AlreadyExistsException {
+        if (!movieRepository.existsByTitle(newMovie.getTitle())) {
+            movieRepository.save(newMovie);
+        } else {
+            throw new AlreadyExistsException(MOVIE_ALREADY_EXIST);
+        }
     }
 
     public void updateMovie(Movie movieToUpdate) throws NotFoundException {

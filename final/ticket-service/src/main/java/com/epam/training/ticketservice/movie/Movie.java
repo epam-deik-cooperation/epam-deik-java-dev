@@ -1,11 +1,14 @@
 package com.epam.training.ticketservice.movie;
 
+import com.epam.training.ticketservice.screening.Screening;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
@@ -29,5 +32,11 @@ public class Movie {
     @Column(name = "genre")
     private String genre;
 
+    @OneToMany(mappedBy = "movie", cascade = {CascadeType.REMOVE})
+    private List<Screening> screenings = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return title + " (" + genre + ", " + length + ")";
+    }
 }

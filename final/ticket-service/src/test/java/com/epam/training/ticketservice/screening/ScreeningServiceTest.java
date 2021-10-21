@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.screening;
 
+import com.epam.training.ticketservice.exception.DateConflictException;
 import com.epam.training.ticketservice.movie.Movie;
 import com.epam.training.ticketservice.room.Room;
 import javassist.NotFoundException;
@@ -79,7 +80,7 @@ public class ScreeningServiceTest {
     }
 
     @Test
-    public void testCreateScreeningShouldSucceedIfThereIsNoConflictingDate() {
+    public void testCreateScreeningShouldSucceedIfThereIsNoConflictingDate() throws DateConflictException {
 
         // Given
         testScreening.setDate(LocalDateTime.of(1999, Month.APRIL, 10, 10, 10));
@@ -94,7 +95,7 @@ public class ScreeningServiceTest {
     }
 
     @Test
-    public void testCreateScreeningShouldFailIfThereIsConflictingDate() {
+    public void testCreateScreeningShouldThrowExceptionIfThereIsConflictingDate() throws DateConflictException {
 
         // Given
         LocalDateTime time = LocalDateTime.of(1999, Month.APRIL, 10, 10, 10);
@@ -103,14 +104,14 @@ public class ScreeningServiceTest {
 
         // When
         when(screeningRepository.findAll()).thenReturn(testList);
-        screeningService.createScreening(testScreening);
 
         // Then
+        assertThrows(DateConflictException.class, () -> screeningService.createScreening(testScreening));
         verify(screeningRepository, times(0)).save(testScreening);
     }
 
     @Test
-    public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() {
+    public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() throws DateConflictException {
 
         // Given
 
