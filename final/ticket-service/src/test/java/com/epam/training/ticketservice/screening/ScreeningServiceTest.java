@@ -111,6 +111,23 @@ public class ScreeningServiceTest {
     }
 
     @Test
+    public void testCreateScreeningShouldThrowExceptionIfNewScreeningWouldStartInBreakTime() throws DateConflictException {
+
+        // Given
+        LocalDateTime time = LocalDateTime.of(1999, Month.APRIL, 10, 10, 10);
+        int movieLength = testMovie.getLength();
+        testScreening.setDate(time.plusMinutes(movieLength+1));
+        testList.get(0).setDate(time);
+
+        // When
+        when(screeningRepository.findAll()).thenReturn(testList);
+
+        // Then
+        assertThrows(DateConflictException.class, () -> screeningService.createScreening(testScreening));
+        verify(screeningRepository, times(0)).save(testScreening);
+    }
+
+    @Test
     public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() throws DateConflictException {
 
         // Given

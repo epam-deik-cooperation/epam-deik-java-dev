@@ -15,8 +15,8 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
-    private final static String MOVIE_NOT_FOUND = "Movie with given title not found.";
-    private final static String MOVIE_ALREADY_EXIST = "Movie with given title already exists";
+    private static final String MOVIE_NOT_FOUND = "Movie with given title not found.";
+    private static final String MOVIE_ALREADY_EXIST = "Movie with given title already exists";
 
 
     public List<Movie> getAllMovies() {

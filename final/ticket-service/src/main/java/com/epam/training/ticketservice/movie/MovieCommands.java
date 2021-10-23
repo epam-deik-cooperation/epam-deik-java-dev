@@ -1,20 +1,23 @@
 package com.epam.training.ticketservice.movie;
 
 
+import com.epam.training.ticketservice.util.SecuredCommands;
 import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class MovieCommands {
+public class MovieCommands extends SecuredCommands {
 
     private final MovieService movieService;
 
     @ShellMethod(value = "format: create movie title genre length", key = "create movie")
-    public String create(String title, String genre, int length) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String createMovie(String title, String genre, int length) {
 
         try {
             movieService.createMovie(Movie.builder()
@@ -30,7 +33,8 @@ public class MovieCommands {
     }
 
     @ShellMethod(value = "format: update movie title genre length", key = "update movie")
-    public String update(String title, String genre, int length) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String updateMovie(String title, String genre, int length) {
 
         try {
             movieService.updateMovie(Movie.builder()
@@ -47,7 +51,8 @@ public class MovieCommands {
 
 
     @ShellMethod(value = "format: delete movie title", key = "delete movie")
-    public String delete(String title) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String deleteMovie(String title) {
         try {
             movieService.deleteMovie(title);
         } catch (NotFoundException e) {
@@ -57,7 +62,7 @@ public class MovieCommands {
     }
 
     @ShellMethod(value = "list movies", key = "list movies")
-    public void list() {
+    public void listMovies() {
         if (!movieService.getAllMovies().isEmpty()) {
             movieService.getAllMovies().forEach(System.out::println);
         } else {

@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.screening;
 
+import com.epam.training.ticketservice.util.SecuredCommands;
 import com.epam.training.ticketservice.exception.DateConflictException;
 import com.epam.training.ticketservice.movie.MovieService;
 import com.epam.training.ticketservice.room.RoomService;
@@ -7,13 +8,14 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class ScreeningCommands {
+public class ScreeningCommands extends SecuredCommands {
 
     private final ScreeningService screeningService;
     private final MovieService movieService;
@@ -22,7 +24,8 @@ public class ScreeningCommands {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @ShellMethod(value = "format: create screening movieTitle roomName startDate", key = "create screening")
-    public String create(String movieTitle, String roomName, String startDate) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String createScreening(String movieTitle, String roomName, String startDate) {
 
         LocalDateTime date = LocalDateTime.parse(startDate, formatter);
 
@@ -40,7 +43,8 @@ public class ScreeningCommands {
     }
 
     @ShellMethod(value = "format: delete screening movieTitle roomName startDate", key = "delete screening")
-    public String delete(String movieTitle, String roomName, String startDate) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String deleteScreening(String movieTitle, String roomName, String startDate) {
 
         LocalDateTime date = LocalDateTime.parse(startDate, formatter);
         try {
@@ -53,7 +57,7 @@ public class ScreeningCommands {
     }
 
     @ShellMethod(value = "list movies", key = "list screenings")
-    public void list() {
+    public void listScreening() {
         if (!screeningService.getAllScreenings().isEmpty()) {
             screeningService.getAllScreenings().forEach(System.out::println);
         } else {

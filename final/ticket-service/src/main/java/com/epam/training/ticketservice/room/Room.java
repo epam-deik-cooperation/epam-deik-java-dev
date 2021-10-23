@@ -6,7 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,15 +46,19 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room " + name + " with " +
-                numberOfColumns * numberOfRows + " seats, " +
-                numberOfRows + " rows and " + numberOfColumns + " columns";
+        return "Room " + name + " with "
+                + numberOfColumns * numberOfRows + " seats, "
+                + numberOfRows + " rows and " + numberOfColumns + " columns";
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Room room = (Room) o;
         return name.equals(room.name);
     }

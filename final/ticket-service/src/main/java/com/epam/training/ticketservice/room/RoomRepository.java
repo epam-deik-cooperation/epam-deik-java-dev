@@ -13,9 +13,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Room r " +
-            "SET r.numberOfColumns = :numberOfColumns, r.numberOfRows = :numberOfRows " +
-            "WHERE lower(r.name) = lower(:name)")
+    @Query("UPDATE Room r "
+            + "SET r.numberOfColumns = :numberOfColumns, r.numberOfRows = :numberOfRows "
+            + "WHERE lower(r.name) = lower(:name)")
     void update(@Param("name") String name, @Param("numberOfColumns") Integer numberOfColumns,
                 @Param("numberOfRows") Integer numberOfRows);
 

@@ -13,8 +13,8 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    private final static String ROOM_NOT_FOUND = "No room found with such name";
-    private final static String ROOM_ALREADY_EXIST = "Room already exists with such name";
+    private static final String ROOM_NOT_FOUND = "No room found with such name";
+    private static final String ROOM_ALREADY_EXIST = "Room already exists with such name";
 
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
@@ -30,7 +30,9 @@ public class RoomService {
 
     public void updateRoom(Room roomToUpdate) throws NotFoundException {
         if (roomRepository.existsByNameContainingIgnoreCase(roomToUpdate.getName())) {
-            roomRepository.update(roomToUpdate.getName(), roomToUpdate.getNumberOfColumns(), roomToUpdate.getNumberOfRows());
+            roomRepository.update(roomToUpdate.getName(),
+                    roomToUpdate.getNumberOfColumns(),
+                    roomToUpdate.getNumberOfRows());
         } else {
             throw new NotFoundException(ROOM_NOT_FOUND);
         }

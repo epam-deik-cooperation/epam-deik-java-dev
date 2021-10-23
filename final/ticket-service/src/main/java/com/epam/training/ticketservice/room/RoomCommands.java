@@ -1,19 +1,22 @@
 package com.epam.training.ticketservice.room;
 
+import com.epam.training.ticketservice.util.SecuredCommands;
 import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class RoomCommands {
+public class RoomCommands extends SecuredCommands {
 
     private final RoomService roomService;
 
     @ShellMethod(value = "format: create room name rows columns", key = "create room")
-    public String create(String name, int rows, int columns) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String createRoom(String name, int rows, int columns) {
         try {
             roomService.createRoom(Room.builder()
                     .name(name)
@@ -27,7 +30,8 @@ public class RoomCommands {
     }
 
     @ShellMethod(value = "format: update room roomName rows cols", key = "update room")
-    public String update(String roomName, int rows, int cols) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String updateRoom(String roomName, int rows, int cols) {
         try {
             roomService.updateRoom(Room.builder()
                     .name(roomName)
@@ -41,7 +45,8 @@ public class RoomCommands {
     }
 
     @ShellMethod(value = "format: delete room roomName", key = "delete room")
-    public String delete(String roomName) {
+    @ShellMethodAvailability("isAccountAdmin")
+    public String deleteRoom(String roomName) {
         try {
             roomService.deleteRoom(roomName);
         } catch (NotFoundException e) {
@@ -50,8 +55,8 @@ public class RoomCommands {
         return String.format("Successfully deleted room '%s' ", roomName);
     }
 
-    @ShellMethod(value = "list movies", key = "list rooms")
-    public void list() {
+    @ShellMethod(value = "list rooms", key = "list rooms")
+    public void listRooms() {
         if (!roomService.getAllRooms().isEmpty()) {
             roomService.getAllRooms().forEach(System.out::println);
         } else {

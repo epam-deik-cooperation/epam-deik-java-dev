@@ -62,6 +62,20 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void testCreateRoomShouldThrowExceptionIfRoomAlreadyExist() throws AlreadyExistsException {
+
+        //Given
+
+        //When
+        when(roomRepository.existsByNameContainingIgnoreCase(testRoom.getName())).thenReturn(true);
+
+        //Then
+        assertThrows(AlreadyExistsException.class, () -> roomService.createRoom(testRoom));
+        verify(roomRepository, times(0)).save(testRoom);
+
+    }
+
+    @Test
     public void testUpdateRoom() throws NotFoundException {
 
         //Given
@@ -119,5 +133,17 @@ public class RoomServiceTest {
         //Then
         assertThrows(NotFoundException.class, () -> roomService.deleteRoom(testRoom.getName()));
         verify(roomRepository, times(0)).deleteByNameContainingIgnoreCase(testRoom.getName());
+    }
+
+    @Test
+    public void testFindByName() {
+        // Given
+
+        // When
+        when(roomRepository.findByNameContainingIgnoreCase(testRoom.getName())).thenReturn(testRoom);
+        roomService.findByName(testRoom.getName());
+
+        // Then
+        verify(roomRepository, times(1)).findByNameContainingIgnoreCase(testRoom.getName());
     }
 }
