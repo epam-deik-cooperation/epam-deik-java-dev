@@ -3,7 +3,7 @@ package com.epam.training.taxi.invoice;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class CsvInvoiceWriter implements InvoiceWriter{
+public class CsvInvoiceWriter implements InvoiceWriter {
 
     private final String pathToOutputFile;
 

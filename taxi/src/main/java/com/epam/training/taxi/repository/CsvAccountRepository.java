@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class CsvAccountRepository implements AccountRepository{
+public class CsvAccountRepository implements AccountRepository {
 
     private final String pathToCsvFile;
 
@@ -19,7 +19,7 @@ public class CsvAccountRepository implements AccountRepository{
     public Account getAccount(Long accountId) throws IOException {
         String[] accountArray = Files.lines(Path.of(pathToCsvFile))
                 .map(line -> line.split(","))
-                .filter(record -> Long.parseLong(record[0])==accountId)
+                .filter(record -> Long.parseLong(record[0]) == accountId)
                 .findFirst()
                 .orElse(null);
 

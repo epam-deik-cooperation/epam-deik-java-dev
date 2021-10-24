@@ -1,6 +1,7 @@
 package com.epam.training.taxi;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
@@ -19,9 +20,7 @@ public class MainTest {
         Main.main(args);
 
         // Then
-        String lastOutput = Files.lines(Path.of("./out.csv"))
-                .reduce((first, second) -> second)
-                .orElse(null);
+        String lastOutput = getLastLineFromOutputFile();
 
         assertEquals("1,1.0,99.0,11.0", lastOutput);
     }
@@ -36,12 +35,15 @@ public class MainTest {
         Main.main(args);
 
         // Then
-        String lastOutput = Files.lines(Path.of("./out.csv"))
-                .reduce((first, second) -> second)
-                .orElse(null);
+        String lastOutput = getLastLineFromOutputFile();
 
         assertEquals("null,1.0,110.0,0.0", lastOutput);
     }
 
+    private String getLastLineFromOutputFile() throws IOException {
+        return Files.lines(Path.of("./out.csv"))
+                .reduce((first, second) -> second)
+                .orElse(null);
+    }
 
 }

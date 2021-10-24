@@ -1,6 +1,8 @@
 package com.epam.training.taxi.account;
 
-public final class RegisteredAccount implements Account{
+import java.util.Objects;
+
+public final class RegisteredAccount implements Account {
 
     private final String accountId;
     private final String fullName;
@@ -25,5 +27,24 @@ public final class RegisteredAccount implements Account{
     @Override
     public Double getDiscountPercentage() {
         return discountPercentage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        RegisteredAccount that = (RegisteredAccount) o;
+
+        return Objects.equals(accountId, that.accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return accountId != null ? accountId.hashCode() : 0;
     }
 }

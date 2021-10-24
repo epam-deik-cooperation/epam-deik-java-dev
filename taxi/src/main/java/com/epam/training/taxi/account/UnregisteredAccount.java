@@ -1,6 +1,6 @@
 package com.epam.training.taxi.account;
 
-public final class UnregisteredAccount implements Account{
+public final class UnregisteredAccount implements Account {
 
     @Override
     public String getAccountId() {
