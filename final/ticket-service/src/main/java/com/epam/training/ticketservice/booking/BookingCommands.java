@@ -47,7 +47,7 @@ public class BookingCommands extends SecuredCommands {
                 .account(account)
                 .screening(screening)
                 .seats(seatsToBook)
-                .price(priceCalculator.calculate(screening))
+                .price(priceCalculator.calculate(screening, seatsToBook.size()))
                 .build();
 
         bookingService.create(booking);

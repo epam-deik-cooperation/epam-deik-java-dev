@@ -10,10 +10,26 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    
+
+    private boolean isBookingValid(Booking newBooking) {
+        List<Booking> bookingsAtPlace = bookingRepository.findAllByScreening_MovieAndScreening_RoomAndScreening_Date(
+                newBooking.getScreening().getMovie(),
+                newBooking.getScreening().getRoom(),
+                newBooking.getScreening().getDate());
+
+        return newBooking.getSeats()
+                .stream()
+                .noneMatch(x -> (bookingsAtPlace.stream()
+                        .map(Booking::getSeats)
+                        .map(y -> y.contains(x))
+                        .findAny()
+                        .isPresent()));
+    }
 
     public void create(Booking newBooking) {
-        bookingRepository.save(newBooking);
+        if (isBookingValid(newBooking)) {
+            bookingRepository.save(newBooking);
+        }
     }
 
 
