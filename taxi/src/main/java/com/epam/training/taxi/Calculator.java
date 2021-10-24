@@ -9,28 +9,28 @@ public class Calculator {
 
     public static void main(String[] args) throws IOException {
         // Get params
-        Long Acc_ID = Long.valueOf(args[0]);
-        Double Dist = Double.valueOf(args[1]);
+        Long accountId = Long.valueOf(args[0]);
+        Double distance = Double.valueOf(args[1]);
 
         // Get acc
-        String[] Acc = Files.lines(Path.of("src/main/resources/accounts.csv"))
+        String[] account = Files.lines(Path.of("src/main/resources/accounts.csv"))
                 .map(line -> line.split(","))
-                .filter(record -> Long.parseLong(record[0])==Acc_ID)
+                .filter(record -> Long.parseLong(record[0])==accountId)
                 .findFirst()
                 .orElse(null);
 
         // Calc
-        if (Acc!=null) {
-            double Discount_perc = Double.parseDouble(Acc[2]);
-            Double price = Dist * 110;
-            price = price - price*Discount_perc;
+        if (account!=null) {
+            double discountPercentage = Double.parseDouble(account[2]);
+            Double price = distance * 110;
+            price = price - price*discountPercentage;
             FileWriter Out = new FileWriter("./out.csv", true);
-            Out.write(Acc_ID.toString() + "," + Dist.toString() + "," + price + "," + Dist*110*Discount_perc + System.lineSeparator());
+            Out.write(accountId.toString() + "," + distance.toString() + "," + price + "," + distance*110*discountPercentage + System.lineSeparator());
             Out.close();
         } else {
-            Double price = Dist * 110;
+            Double price = distance * 110;
             FileWriter Out = new FileWriter("./out.csv", true);
-            Out.write("null," + Dist.toString() + "," + price + "," + 0 + System.lineSeparator());
+            Out.write("null," + distance.toString() + "," + price + "," + 0 + System.lineSeparator());
             Out.close();
         }
     }
