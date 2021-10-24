@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.booking;
 import com.epam.training.ticketservice.account.Account;
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.booking.price.PriceCalculator;
+import com.epam.training.ticketservice.room.Seat;
 import com.epam.training.ticketservice.screening.Screening;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.util.SecuredCommands;
@@ -34,11 +35,11 @@ public class BookingCommands extends SecuredCommands {
 
         Screening screening = screeningService.getScreeningByProperties(movieTitle, roomName, date);
 
-        Map<Integer, Integer> seatsToBook = new HashMap<>();
+        List<Seat> seatsToBook = new ArrayList<>();
 
         Arrays.stream(seats.split(" ")).forEach(x -> {
             List<String> seatSpot = Arrays.asList(x.split(","));
-            seatsToBook.put(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1)));
+            seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
         });
 
 

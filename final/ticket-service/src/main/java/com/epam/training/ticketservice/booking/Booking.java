@@ -1,9 +1,11 @@
 package com.epam.training.ticketservice.booking;
 
 import com.epam.training.ticketservice.account.Account;
+import com.epam.training.ticketservice.room.Seat;
 import com.epam.training.ticketservice.screening.Screening;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.springframework.data.repository.cdi.Eager;
@@ -15,9 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
+@Table(name = "bookings")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Booking {
 
     @Id
@@ -33,7 +37,7 @@ public class Booking {
     private Screening screening;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Map<Integer, Integer> seats;
+    private List<Seat> seats;
 
     @Column(name = "price")
     private int price;
@@ -44,7 +48,7 @@ public class Booking {
         StringBuilder sb = new StringBuilder();
         List<String> seatList = new ArrayList<>();
 
-        seats.forEach((key, value) -> seatList.add(String.format("(%d,%d)", key, value)));
+        seats.forEach(x -> seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
 
         return sb.append("Seats ")
                 .append(String.join(", ", seatList))
@@ -56,7 +60,7 @@ public class Booking {
                 .append(screening.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .append(" for ")
                 .append(price)
-                .append(" HUF\n")
+                .append(" HUF")
                 .toString();
 
     }

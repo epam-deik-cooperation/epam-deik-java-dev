@@ -33,15 +33,13 @@ public class AccountCommands {
             sb.append("Signed in with");
 
             if (isAdminLoggedIn()) {
-                sb.append(" privileged");
-            }
-            sb.append(String.format(" account '%s' \n", user));
-
-            if (!isAdminLoggedIn()) {
+                sb.append(String.format(" privileged account '%s'", user));
+                return sb.toString();
+            } else if (!isAdminLoggedIn()) {
+                sb.append(String.format(" account '%s' \n", user));
                 bookings.forEach(x -> sb.append(x.toString()));
-                sb.append((bookings.isEmpty() ? "You have not booked any tickets yet" : sb.toString()));
+                sb.append((bookings.isEmpty() ? "You have not booked any tickets yet" : ""));
             }
-
             return sb.toString();
 
         } else {
