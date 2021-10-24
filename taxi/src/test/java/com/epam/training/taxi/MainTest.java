@@ -16,7 +16,7 @@ public class MainTest {
         String[] args = new String[]{"1", "1"};
 
         // When
-        Calculator.main(args);
+        Main.main(args);
 
         // Then
         String lastOutput = Files.lines(Path.of("./out.csv"))
@@ -33,7 +33,7 @@ public class MainTest {
         String[] args = new String[]{"30", "1"};
 
         // When
-        Calculator.main(args);
+        Main.main(args);
 
         // Then
         String lastOutput = Files.lines(Path.of("./out.csv"))
