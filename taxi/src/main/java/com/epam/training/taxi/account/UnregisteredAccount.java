@@ -2,22 +2,18 @@ package com.epam.training.taxi.account;
 
 public final class UnregisteredAccount implements Account{
 
-    private final String accountId = "null";
-    private final String fullName = "Unknown";
-    private final Double discountPercentage = 0.0;
-
     @Override
     public String getAccountId() {
-        return accountId;
+        return "null";
     }
 
     @Override
     public String getFullName() {
-        return fullName;
+        return "Unknown";
     }
 
     @Override
     public Double getDiscountPercentage() {
-        return discountPercentage;
+        return 0.0;
     }
 }

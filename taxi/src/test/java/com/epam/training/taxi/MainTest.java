@@ -40,6 +40,8 @@ public class MainTest {
                 .reduce((first, second) -> second)
                 .orElse(null);
 
-        assertEquals("null,1.0,110.0,0", lastOutput);
+        assertEquals("null,1.0,110.0,0.0", lastOutput);
     }
+
+
 }

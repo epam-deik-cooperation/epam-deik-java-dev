@@ -9,19 +9,20 @@ import java.nio.file.Path;
 
 public class CsvAccountRepository implements AccountRepository{
 
-    private final Path pathToCsvFile;
+    private final String pathToCsvFile;
 
-    public CsvAccountRepository(Path pathToCsvFile) {
+    public CsvAccountRepository(String pathToCsvFile) {
         this.pathToCsvFile = pathToCsvFile;
     }
 
     @Override
     public Account getAccount(Long accountId) throws IOException {
-        return Files.lines(pathToCsvFile)
+        String[] accountArray = Files.lines(Path.of(pathToCsvFile))
                 .map(line -> line.split(","))
                 .filter(record -> Long.parseLong(record[0])==accountId)
                 .findFirst()
-                .map(AccountFactory::getAccount)
-                .orElseThrow(UnknownError::new);
+                .orElse(null);
+
+        return AccountFactory.getAccount(accountArray);
     }
 }

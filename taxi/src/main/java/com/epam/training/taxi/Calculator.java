@@ -3,6 +3,8 @@ package com.epam.training.taxi;
 import com.epam.training.taxi.account.Account;
 import com.epam.training.taxi.invoice.Invoice;
 
+
+
 public class Calculator {
 
     private int pricePerKilometer;
