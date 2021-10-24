@@ -6,8 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    Account findByUserName(String userName);
-
+    Account findByUserNameContainingIgnoreCase(String userName);
 
 
 }

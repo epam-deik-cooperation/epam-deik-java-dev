@@ -13,7 +13,7 @@ public abstract class SecuredCommands {
         if (authentication == null || !(authentication instanceof UsernamePasswordAuthenticationToken)) {
             return Availability.unavailable("you are not signed in. Please sign in to be able to use this command!");
         }
-        if(authentication.getAuthorities().stream().noneMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
+        if (authentication.getAuthorities().stream().noneMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
             return Availability.unavailable("you are not an admin :( ");
         }
         return Availability.available();

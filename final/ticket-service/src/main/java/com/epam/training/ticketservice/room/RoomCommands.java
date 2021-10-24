@@ -14,7 +14,7 @@ public class RoomCommands extends SecuredCommands {
 
     private final RoomService roomService;
 
-    @ShellMethod(value = "format: create room name rows columns", key = "create room")
+    @ShellMethod(value = "create room name rows columns", key = "create room")
     @ShellMethodAvailability("isAccountAdmin")
     public String createRoom(String name, int rows, int columns) {
         try {
@@ -29,7 +29,7 @@ public class RoomCommands extends SecuredCommands {
         return String.format("Successfully created room '%s'", name);
     }
 
-    @ShellMethod(value = "format: update room roomName rows cols", key = "update room")
+    @ShellMethod(value = "update room roomName rows cols", key = "update room")
     @ShellMethodAvailability("isAccountAdmin")
     public String updateRoom(String roomName, int rows, int cols) {
         try {
@@ -44,7 +44,7 @@ public class RoomCommands extends SecuredCommands {
         return String.format("Successfully updated room '%s'", roomName);
     }
 
-    @ShellMethod(value = "format: delete room roomName", key = "delete room")
+    @ShellMethod(value = "delete room roomName", key = "delete room")
     @ShellMethodAvailability("isAccountAdmin")
     public String deleteRoom(String roomName) {
         try {

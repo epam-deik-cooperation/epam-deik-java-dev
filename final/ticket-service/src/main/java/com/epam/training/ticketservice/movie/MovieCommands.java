@@ -15,7 +15,7 @@ public class MovieCommands extends SecuredCommands {
 
     private final MovieService movieService;
 
-    @ShellMethod(value = "format: create movie title genre length", key = "create movie")
+    @ShellMethod(value = "create movie title genre length", key = "create movie")
     @ShellMethodAvailability("isAccountAdmin")
     public String createMovie(String title, String genre, int length) {
 
@@ -32,7 +32,7 @@ public class MovieCommands extends SecuredCommands {
         return String.format("Successfully created movie '%s'", title);
     }
 
-    @ShellMethod(value = "format: update movie title genre length", key = "update movie")
+    @ShellMethod(value = "update movie title genre length", key = "update movie")
     @ShellMethodAvailability("isAccountAdmin")
     public String updateMovie(String title, String genre, int length) {
 
@@ -50,7 +50,7 @@ public class MovieCommands extends SecuredCommands {
     }
 
 
-    @ShellMethod(value = "format: delete movie title", key = "delete movie")
+    @ShellMethod(value = "delete movie title", key = "delete movie")
     @ShellMethodAvailability("isAccountAdmin")
     public String deleteMovie(String title) {
         try {

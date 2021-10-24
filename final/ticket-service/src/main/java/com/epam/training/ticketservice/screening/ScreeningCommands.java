@@ -23,7 +23,7 @@ public class ScreeningCommands extends SecuredCommands {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    @ShellMethod(value = "format: create screening movieTitle roomName startDate", key = "create screening")
+    @ShellMethod(value = "create screening movieTitle roomName startDate", key = "create screening")
     @ShellMethodAvailability("isAccountAdmin")
     public String createScreening(String movieTitle, String roomName, String startDate) {
 
@@ -42,7 +42,7 @@ public class ScreeningCommands extends SecuredCommands {
         return "Successfully created screening";
     }
 
-    @ShellMethod(value = "format: delete screening movieTitle roomName startDate", key = "delete screening")
+    @ShellMethod(value = "delete screening movieTitle roomName startDate", key = "delete screening")
     @ShellMethodAvailability("isAccountAdmin")
     public String deleteScreening(String movieTitle, String roomName, String startDate) {
 

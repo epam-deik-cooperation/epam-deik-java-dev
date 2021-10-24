@@ -28,11 +28,11 @@ public class AccountServiceTest {
                 .build();
 
         // When
-        when(accountRepository.findByUserName(testAccount.getUserName())).thenReturn(testAccount);
+        when(accountRepository.findByUserNameContainingIgnoreCase(testAccount.getUserName())).thenReturn(testAccount);
         accountService.findByUserName(testAccount.getUserName());
 
         // Then
-        verify(accountRepository, times(1)).findByUserName(testAccount.getUserName());
+        verify(accountRepository, times(1)).findByUserNameContainingIgnoreCase(testAccount.getUserName());
     }
 
 

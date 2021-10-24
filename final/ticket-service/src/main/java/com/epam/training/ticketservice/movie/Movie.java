@@ -52,7 +52,7 @@ public class Movie {
     @PrePersist
     @PreUpdate
     public void formatTitleAndGenre() {
-        this.title = title.substring(0,1).toUpperCase() + title.substring(1).toLowerCase();
+        this.title = title.substring(0, 1).toUpperCase() + title.substring(1).toLowerCase();
         this.genre = genre.toLowerCase();
     }
 }

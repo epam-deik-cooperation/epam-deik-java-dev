@@ -20,16 +20,16 @@ public class AccountDetailsService implements UserDetailsService {
 
         Account account = accountService.findByUserName(userName);
 
-        if(account == null) {
+        if (account == null) {
             throw new UsernameNotFoundException("User does not exist");
         }
 
         User.UserBuilder builder = User.withUsername(userName);
         builder.password(new BCryptPasswordEncoder().encode(account.getPassword()));
 
-        if(account.getAccountType().equals(AccountType.ADMIN)) {
+        if (account.getAccountType().equals(AccountType.ADMIN)) {
             builder.roles("USER", "ADMIN");
-        } else if(account.getAccountType().equals(AccountType.USER)){
+        } else if (account.getAccountType().equals(AccountType.USER)) {
             builder.roles("USER");
         }
 

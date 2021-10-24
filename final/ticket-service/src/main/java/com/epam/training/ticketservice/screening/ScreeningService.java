@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,8 @@ public class ScreeningService {
 
     private final ScreeningRepository screeningRepository;
     private static final String SCREENING_NOT_FOUND = "No screening found with such properties";
-    private static final String BREAK_TIME_CONFLICT = "This would start in the break period after another screening in this room";
+    private static final String BREAK_TIME_CONFLICT =
+            "This would start in the break period after another screening in this room";
     private static final String OVERLAPPING_TIME = "There is an overlapping screening";
 
     private boolean isDateAvailable(LocalDateTime startDate, LocalDateTime endDate,
@@ -73,6 +75,14 @@ public class ScreeningService {
         return screeningRepository.findAll();
     }
 
+    public Screening getScreeningByProperties(String movieTitle, String roomName, String date) {
+        return screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+                movieTitle,
+                roomName,
+                LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+    }
+
+
     public void createScreening(Screening newScreening) throws DateConflictException {
         if (validateScreening(newScreening)) {
             if (validateScreening(newScreening, 10)) {
@@ -86,10 +96,10 @@ public class ScreeningService {
     }
 
     public void deleteScreening(String movieTitle, String roomName, LocalDateTime date) throws NotFoundException {
-        if (screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(movieTitle,
-                roomName, date)) {
-            screeningRepository.deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(movieTitle,
-                    roomName, date);
+        if (screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+                movieTitle, roomName, date)) {
+            screeningRepository.deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+                    movieTitle, roomName, date);
         } else {
             throw new NotFoundException(SCREENING_NOT_FOUND);
         }

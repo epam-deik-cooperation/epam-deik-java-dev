@@ -1,11 +1,13 @@
 package com.epam.training.ticketservice.account;
 
+import com.epam.training.ticketservice.booking.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,5 +28,9 @@ public class Account {
 
     @Column(name = "account_type")
     private AccountType accountType;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private List<Booking> bookings;
+    
 
 }

@@ -20,13 +20,14 @@
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
         <checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
         <surefire-maven-plugin.version>3.0.0-M5</surefire-maven-plugin.version>
-        <springboot.version>2.5.5</springboot.version>
+        <springboot.version>2.5.6</springboot.version>
         <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
         <spring-security.version>5.5.3</spring-security.version>
         <maven-exec-plugin.version>3.0.0</maven-exec-plugin.version>
         <exec.mainClass>com.epam.training.ticketservice.Application</exec.mainClass>
         <lombok.version>1.18.22</lombok.version>
         <h2.version>1.4.200</h2.version>
+        <postgresql.version>42.3.0</postgresql.version>
         <junit.version>5.7.1</junit.version>
     </properties>
 
@@ -40,6 +41,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
             <version>${springboot.version}</version>
         </dependency>
 
@@ -60,6 +67,12 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <dependency>
@@ -175,7 +188,20 @@
                         </goals>
                         <configuration>
 
-                           
+                            <excludes>
+                                <exclude>com/epam/training/ticketservice/room/RoomCommands.class</exclude>
+                                <exclude>com/epam/training/ticketservice/room/Room.class</exclude>
+                                <exclude>com/epam/training/ticketservice/movie/Movie.class</exclude>
+                                <exclude>com/epam/training/ticketservice/movie/MovieCommands.class</exclude>
+                                <exclude>com/epam/training/ticketservice/screening/Screening.class</exclude>
+                                <exclude>com/epam/training/ticketservice/screening/ScreeningCommands.class</exclude>
+                                <exclude>com/epam/training/ticketservice/account/Account.class</exclude>
+                                <exclude>com/epam/training/ticketservice/exception/*.class</exclude>
+                                <exclude>com/epam/training/ticketservice/config/*.class</exclude>
+                                <exclude>com/epam/training/ticketservice/util/*.class</exclude>
+                                <exclude>com/epam/training/ticketservice/Application.class</exclude>
+                            </excludes>
+
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>

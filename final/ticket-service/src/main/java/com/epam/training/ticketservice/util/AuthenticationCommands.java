@@ -1,7 +1,9 @@
 package com.epam.training.ticketservice.util;
 
+import com.epam.training.ticketservice.account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -9,16 +11,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
-import org.springframework.util.StringUtils;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class AuthenticationCommands extends SecuredCommands{
+public class AuthenticationCommands extends SecuredCommands {
 
     private final AuthenticationManager authenticationManager;
+    private final AccountService accountService;
 
 
-    @ShellMethod(value = "format: sign in username password", key = "sign in")
+    @ShellMethod(value = "sign in username password", key = "sign in")
     @ShellMethodAvailability("isNotSignedIn")
     public void signIn(String userName, String password) {
 
@@ -26,11 +28,34 @@ public class AuthenticationCommands extends SecuredCommands{
 
         try {
             Authentication result = authenticationManager.authenticate(request);
-            SecurityContextHolder.getContext().setAuthentication(result);
-               } catch (AuthenticationException e) {
+            if (!result.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
+                SecurityContextHolder.getContext().setAuthentication(result);
+            } else {
+                throw new BadCredentialsException("");
+            }
+        } catch (AuthenticationException e) {
             System.out.println("Login failed due to incorrect credentials");
         }
     }
+
+    @ShellMethod(value = "sign in privileged username password", key = "sign in privileged")
+    @ShellMethodAvailability("isNotSignedIn")
+    public void signInPrivileged(String userName, String password) {
+
+        Authentication request = new UsernamePasswordAuthenticationToken(userName, password);
+
+        try {
+            Authentication result = authenticationManager.authenticate(request);
+            if (result.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
+                SecurityContextHolder.getContext().setAuthentication(result);
+            } else {
+                throw new BadCredentialsException("");
+            }
+        } catch (AuthenticationException e) {
+            System.out.println("Login failed due to incorrect credentials");
+        }
+    }
+
 
     @ShellMethod(value = "sign out", key = "sign out")
     public void signOut() {
@@ -39,6 +64,11 @@ public class AuthenticationCommands extends SecuredCommands{
         } catch (AuthenticationException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @ShellMethod(value = "sign up userName password", key = "sign up")
+    public void signUp(String userName, String password) {
+        accountService.createAccount(userName, password);
     }
 
 }
