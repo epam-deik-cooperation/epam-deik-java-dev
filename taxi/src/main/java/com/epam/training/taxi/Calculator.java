@@ -1,8 +1,11 @@
 package com.epam.training.taxi;
 
+import com.epam.training.taxi.account.Account;
+import com.epam.training.taxi.repository.AccountRepository;
+import com.epam.training.taxi.repository.CsvAccountRepository;
+
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Calculator {
@@ -12,12 +15,10 @@ public class Calculator {
         Long accountId = Long.valueOf(args[0]);
         Double distance = Double.valueOf(args[1]);
 
+        AccountRepository accountRepository = new CsvAccountRepository(Path.of("src/main/resources/accounts.csv"));
+
         // Get acc
-        String[] account = Files.lines(Path.of("src/main/resources/accounts.csv"))
-                .map(line -> line.split(","))
-                .filter(record -> Long.parseLong(record[0])==accountId)
-                .findFirst()
-                .orElse(null);
+        Account account = accountRepository.getAccount(accountId);
 
         // Calc
         if (account!=null) {
