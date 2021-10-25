@@ -1,18 +1,21 @@
 package com.epam.training.webshop;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import com.epam.training.webshop.domain.grossprice.impl.GrossPriceCalculatorDecorator;
 import com.epam.training.webshop.domain.order.Cart;
 import com.epam.training.webshop.domain.order.impl.CartImpl;
 import com.epam.training.webshop.domain.order.model.Product;
 import com.epam.training.webshop.domain.order.model.impl.SimpleProduct;
 import com.epam.training.webshop.repository.OrderRepository;
-import java.util.Collections;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 class ShoppingCartTest {
 
@@ -35,7 +38,7 @@ class ShoppingCartTest {
         List<Product> expectedResult = Collections.emptyList();
 
         // When
-        List<Product> actualResult = underTest.getProductsFromBasket();
+        List<Product> actualResult = underTest.getProductsFromCart();
 
         // Then
         assertEquals(expectedResult, actualResult);
@@ -50,7 +53,7 @@ class ShoppingCartTest {
         underTest.addProduct(product);
 
         // When
-        List<Product> actualResult = underTest.getProductsFromBasket();
+        List<Product> actualResult = underTest.getProductsFromCart();
 
         // Then
         assertEquals(expectedResult, actualResult);

@@ -1,7 +1,14 @@
 package com.epam.training.webshop.config;
 
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+
+import com.epam.training.webshop.domain.ShoppingCartService;
 import com.epam.training.webshop.domain.grossprice.impl.GrossPriceCalculatorDecorator;
 import com.epam.training.webshop.domain.grossprice.impl.HungarianTaxGrossPriceCalculator;
+import com.epam.training.webshop.domain.impl.ShoppingCartServiceImpl;
 import com.epam.training.webshop.domain.order.Cart;
 import com.epam.training.webshop.domain.order.impl.CartImpl;
 import com.epam.training.webshop.domain.order.orderconfirm.OrderConfirmationService;
@@ -17,10 +24,6 @@ import com.epam.training.webshop.repository.OrderRepository;
 import com.epam.training.webshop.repository.ProductRepository;
 import com.epam.training.webshop.repository.impl.DummyOrderRepository;
 import com.epam.training.webshop.repository.impl.DummyProductRepository;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 
 public final class CliConfiguration {
 
@@ -32,13 +35,17 @@ public final class CliConfiguration {
     }
 
     public static CliInterpreter cliInterpreter() {
-        Cart cart = cart();
+        ShoppingCartService shoppingCartService = orderService();
         CliInterpreter cliInterpreter = new CliInterpreter(cliReader(), cliWriter());
         CommandLineParser commandLineParserChain = new ExitCommandLineParser(cliInterpreter);
-        commandLineParserChain.setSuccessor(new AddProductCommandLineParser(productRepository(), cart));
-        commandLineParserChain.setSuccessor(new OrderCommandLineParser(cart));
+        commandLineParserChain.setSuccessor(new AddProductCommandLineParser(shoppingCartService));
+        commandLineParserChain.setSuccessor(new OrderCommandLineParser(shoppingCartService));
         cliInterpreter.updateCommandLineParser(commandLineParserChain);
         return cliInterpreter;
+    }
+
+    public static ShoppingCartService orderService() {
+        return new ShoppingCartServiceImpl(cart(), productRepository());
     }
 
     public static Writer cliWriter() {

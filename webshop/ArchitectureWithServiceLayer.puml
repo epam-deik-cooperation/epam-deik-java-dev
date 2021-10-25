@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package Presentation <<Rectangle>> {
+interface CommandLineParser
+abstract AbstractCommandLineParser
+CommandLineParser <|.. AbstractCommandLineParser
+
+class AddProductCommandLineParser
+AbstractCommandLineParser <|-- AddProductCommandLineParser
+class ExitCommandLineParser
+AbstractCommandLineParser <|-- ExitCommandLineParser
+class OrderCommandLineParser
+AbstractCommandLineParser <|-- OrderCommandLineParser
+
+class CliInterpreter
+
+interface Command
+class AddProductCommand
+Command <|.. AddProductCommand
+class ExitCommand
+Command <|.. ExitCommand
+class OrderCommand
+Command <|.. OrderCommand
+CliInterpreter --> Command : Executes
+CliInterpreter --> CommandLineParser : Uses to parse input
+CommandLineParser --> Command : Creates
+ExitCommand --> CommandLineParser : Stops
+}
+
+package Domain/Service <<Rectangle>> {
+    interface ShoppingCartService {
+        addProduct(itemName)
+        placeOrder()
+        getTotalNetPrice()
+        getTotalGrossPrice()
+    }
+    class ShoppingCartServiceImpl
+    ShoppingCartService <|.. ShoppingCartServiceImpl
+    ShoppingCartServiceImpl *-- Cart
+    interface Cart
+    class CartImpl
+    Cart <|.. CartImpl
+    interface Product
+    class SimpleProductImpl
+    Product <|.. SimpleProductImpl
+    CartImpl o-- Product
+    interface Observer
+    interface Observable
+    Observable --> Observer : Notifies
+    Observable <|.. Cart
+    interface OrderConfirmationService
+    Observer <|.. OrderConfirmationService
+    class DummyOrderConfirmationService
+    OrderConfirmationService <|.. DummyOrderConfirmationService
+    interface GrossPriceCalculator
+    CartImpl *.. GrossPriceCalculator : Uses for calculating gross price
+    class GrossPriceCalculatorDecorator
+    GrossPriceCalculator <|.. GrossPriceCalculatorDecorator
+    class GrossPriceCalculatorImpl
+    GrossPriceCalculator <|.. GrossPriceCalculatorImpl
+    class HungarianTaxGrossPriceCalculator
+    GrossPriceCalculatorDecorator <|-- HungarianTaxGrossPriceCalculator
+    HungarianTaxGrossPriceCalculator --> GrossPriceCalculator : Decorates
+}
+
+OrderCommand --> ShoppingCartService : Places order
+AddProductCommand --> ShoppingCartService : Adds product
+
+package DataAccess <<Rectangle>> {
+    interface OrderRepository
+    class DummyOrderRepository
+    OrderRepository <|.. DummyOrderRepository
+    interface ProductRepository
+    class DummyProductRepository
+    ProductRepository <|.. DummyProductRepository
+}
+
+ShoppingCartServiceImpl --> OrderRepository : Saves order into
+ShoppingCartServiceImpl --> ProductRepository : Loads product from
+
+@enduml

@@ -1,11 +1,13 @@
 package com.epam.training.webshop.domain.warehouse.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epam.training.webshop.domain.order.Cart;
 import com.epam.training.webshop.domain.order.model.Product;
 import com.epam.training.webshop.domain.warehouse.Warehouse;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DummyWarehouse implements Warehouse {
 
@@ -18,6 +20,6 @@ public class DummyWarehouse implements Warehouse {
 
     @Override
     public void notify(Cart cart) {
-        registerOrderedProducts(cart.getProductsFromBasket());
+        registerOrderedProducts(cart.getProductsFromCart());
     }
 }

@@ -1,14 +1,15 @@
 package com.epam.training.webshop.domain.order.impl;
 
-import com.epam.training.webshop.domain.grossprice.impl.GrossPriceCalculatorDecorator;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.epam.training.webshop.domain.grossprice.GrossPriceCalculator;
 import com.epam.training.webshop.domain.order.Cart;
 import com.epam.training.webshop.domain.order.Coupon;
 import com.epam.training.webshop.domain.order.Observer;
 import com.epam.training.webshop.domain.order.model.Product;
 import com.epam.training.webshop.repository.OrderRepository;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class CartImpl implements Cart {
 
@@ -17,10 +18,10 @@ public class CartImpl implements Cart {
     private final List<Product> products;
     private final List<Coupon> coupons;
 
-    private final GrossPriceCalculatorDecorator grossPriceCalculatorDecorator;
+    private final GrossPriceCalculator grossPriceCalculatorDecorator;
     private final OrderRepository orderRepository;
 
-    public CartImpl(OrderRepository orderRepository, GrossPriceCalculatorDecorator grossPriceCalculatorDecorator) {
+    public CartImpl(OrderRepository orderRepository, GrossPriceCalculator grossPriceCalculatorDecorator) {
         this.orderRepository = orderRepository;
         this.grossPriceCalculatorDecorator = grossPriceCalculatorDecorator;
         products = new ArrayList<>();
@@ -34,7 +35,7 @@ public class CartImpl implements Cart {
     }
 
     @Override
-    public List<Product> getProductsFromBasket() {
+    public List<Product> getProductsFromCart() {
         return products;
     }
 
@@ -49,7 +50,7 @@ public class CartImpl implements Cart {
     }
 
     @Override
-    public List<Coupon> getCouponsFromBasket() {
+    public List<Coupon> getCouponsFromCart() {
         return coupons;
     }
 
