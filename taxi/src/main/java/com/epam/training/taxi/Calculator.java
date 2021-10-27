@@ -1,37 +1,62 @@
 package com.epam.training.taxi;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
 
 public class Calculator {
 
-    public static void main(String[] args) throws IOException {
-        // Get params
-        Long Acc_ID = Long.valueOf(args[0]);
-        Double Dist = Double.valueOf(args[1]);
+    private final Integer PRICE_PER_DISTANCE = 110;
+    private final String delimiter = ",";
 
-        // Get acc
-        String[] Acc = Files.lines(Path.of("src/main/resources/accounts.csv"))
-                .map(line -> line.split(","))
-                .filter(record -> Long.parseLong(record[0])==Acc_ID)
-                .findFirst()
-                .orElse(null);
+    public void recordPassengerTransport(Long ID, Double distance,AccountDTO data) throws IOException
+    {
+        List<Account> accountList = data.readFromCSV(AccountDTOImpl.PATH_TO_INPUT_CSV);
 
-        // Calc
-        if (Acc!=null) {
-            double Discount_perc = Double.parseDouble(Acc[2]);
-            Double price = Dist * 110;
-            price = price - price*Discount_perc;
-            FileWriter Out = new FileWriter("./out.csv", true);
-            Out.write(Acc_ID.toString() + "," + Dist.toString() + "," + price + "," + Dist*110*Discount_perc + System.lineSeparator());
-            Out.close();
-        } else {
-            Double price = Dist * 110;
-            FileWriter Out = new FileWriter("./out.csv", true);
-            Out.write("null," + Dist.toString() + "," + price + "," + 0 + System.lineSeparator());
-            Out.close();
+        Account currentAccount = getCurrentAccount(accountList,ID);
+
+        Double price = calculatePrice(currentAccount,distance);
+
+        String outputString = getOutputString(currentAccount,distance,price);
+
+        data.writeToCSV(AccountDTOImpl.PATH_TO_OUT_CSV,outputString);
+    }
+
+    public Double calculatePrice(Account account, Double distance)
+    {
+        double price;
+        if(account == null)
+        {
+            price = distance * PRICE_PER_DISTANCE;
+        }else {
+            price = distance * PRICE_PER_DISTANCE;
+            price = price - price * account.getDiscount();
+        }
+        return price;
+
+    }
+    public String getOutputString(Account account, Double distance, Double price)
+    {
+        if(account == null)
+        {
+            return "null" + delimiter +
+                    distance + delimiter +
+                    price + delimiter +
+                    0;
+        }else
+        {
+            return account.getID() + delimiter +
+                    distance + delimiter +
+                    price + delimiter +
+                    (distance * PRICE_PER_DISTANCE * account.getDiscount());
         }
     }
+
+    public Account getCurrentAccount(List<Account> accounts, Long ID)
+    {
+        return accounts.stream()
+                .filter(m -> ID.equals(m.getID()))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
