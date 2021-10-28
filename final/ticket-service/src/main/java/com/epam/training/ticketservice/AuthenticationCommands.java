@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.util;
+package com.epam.training.ticketservice;
 
 import com.epam.training.ticketservice.account.AccountService;
 import lombok.RequiredArgsConstructor;

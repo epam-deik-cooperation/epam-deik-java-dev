@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice;
 
 
-import com.epam.training.ticketservice.util.AccountInitializer;
 import lombok.RequiredArgsConstructor;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;

@@ -35,5 +35,24 @@ public class AccountServiceTest {
         verify(accountRepository, times(1)).findByUserNameContainingIgnoreCase(testAccount.getUserName());
     }
 
+    @Test
+    public void testCreateAccount() {
+
+        // Given
+        String userName = "test";
+        String password = "test";
+        Account account = Account.builder()
+                .userName(userName)
+                .password(password)
+                .accountType(AccountType.USER)
+                .build();
+
+        // When
+        accountService.createAccount(userName, password);
+
+        // Then
+        verify(accountRepository, times(1)).save(account);
+    }
+
 
 }

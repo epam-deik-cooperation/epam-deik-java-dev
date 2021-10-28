@@ -51,6 +51,20 @@ public class MovieServiceTest {
     }
 
     @Test
+    public void testFindByTitle() {
+
+        // Given
+
+
+        // When
+        when(movieRepository.findByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(testMovie);
+        Movie actualMovie = movieService.findByTitle(testMovie.getTitle());
+
+        // Then
+        assertEquals(testMovie, actualMovie);
+    }
+
+    @Test
     public void testCreateMovie() throws AlreadyExistsException {
 
         //Given
@@ -60,6 +74,20 @@ public class MovieServiceTest {
 
         //Then
         verify(movieRepository, times(1)).save(testMovie);
+    }
+
+    @Test
+    public void testCreateMovieShouldThrowAlreadyExistExceptionIfMovieAlreadyExists() {
+
+        // Given
+
+
+        // When
+        when(movieRepository.existsByTitleContainingIgnoreCase(anyString())).thenReturn(true);
+
+        // Then
+        assertThrows(AlreadyExistsException.class, () -> movieService.createMovie(testMovie));
+        verify(movieRepository, times(0)).save(testMovie);
     }
 
     @Test

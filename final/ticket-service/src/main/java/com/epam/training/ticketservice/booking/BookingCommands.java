@@ -3,17 +3,21 @@ package com.epam.training.ticketservice.booking;
 import com.epam.training.ticketservice.account.Account;
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.booking.price.PriceCalculator;
+import com.epam.training.ticketservice.exception.ConflictException;
 import com.epam.training.ticketservice.room.Seat;
 import com.epam.training.ticketservice.screening.Screening;
 import com.epam.training.ticketservice.screening.ScreeningService;
-import com.epam.training.ticketservice.util.SecuredCommands;
+import com.epam.training.ticketservice.SecuredCommands;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -33,24 +37,28 @@ public class BookingCommands extends SecuredCommands {
                 .getAuthentication()
                 .getName());
 
-        Screening screening = screeningService.getScreeningByProperties(movieTitle, roomName, date);
+        try {
+            Screening screening = screeningService.getScreeningByProperties(movieTitle, roomName, date);
 
-        List<Seat> seatsToBook = new ArrayList<>();
+            List<Seat> seatsToBook = new ArrayList<>();
 
-        Arrays.stream(seats.split(" ")).forEach(x -> {
-            List<String> seatSpot = Arrays.asList(x.split(","));
-            seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
-        });
+            Arrays.stream(seats.split(" ")).forEach(x -> {
+                List<String> seatSpot = Arrays.asList(x.split(","));
+                seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
+            });
 
 
-        Booking booking = Booking.builder()
-                .account(account)
-                .screening(screening)
-                .seats(seatsToBook)
-                .price(priceCalculator.calculate(screening, seatsToBook.size()))
-                .build();
+            Booking booking = Booking.builder()
+                    .account(account)
+                    .screening(screening)
+                    .seats(seatsToBook)
+                    .price(priceCalculator.calculate(screening, seatsToBook.size()))
+                    .build();
 
-        bookingService.create(booking);
+            bookingService.createBooking(booking);
+        } catch (NotFoundException | ConflictException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 

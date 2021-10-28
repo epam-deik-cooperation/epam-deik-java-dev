@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.util;
+package com.epam.training.ticketservice;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

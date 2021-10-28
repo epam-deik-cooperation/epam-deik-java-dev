@@ -189,16 +189,14 @@
                         <configuration>
 
                             <excludes>
-                                <exclude>com/epam/training/ticketservice/room/RoomCommands.class</exclude>
                                 <exclude>com/epam/training/ticketservice/room/Room.class</exclude>
+                                <exclude>com/epam/training/ticketservice/room/Seat.class</exclude>
                                 <exclude>com/epam/training/ticketservice/movie/Movie.class</exclude>
-                                <exclude>com/epam/training/ticketservice/movie/MovieCommands.class</exclude>
                                 <exclude>com/epam/training/ticketservice/screening/Screening.class</exclude>
-                                <exclude>com/epam/training/ticketservice/screening/ScreeningCommands.class</exclude>
                                 <exclude>com/epam/training/ticketservice/account/Account.class</exclude>
+                                <exclude>com/epam/training/ticketservice/booking/Booking.class</exclude>
                                 <exclude>com/epam/training/ticketservice/exception/*.class</exclude>
                                 <exclude>com/epam/training/ticketservice/config/*.class</exclude>
-                                <exclude>com/epam/training/ticketservice/util/*.class</exclude>
                                 <exclude>com/epam/training/ticketservice/Application.class</exclude>
                             </excludes>
 

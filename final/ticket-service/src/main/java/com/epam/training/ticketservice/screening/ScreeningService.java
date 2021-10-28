@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.screening;
 
-import com.epam.training.ticketservice.exception.DateConflictException;
+import com.epam.training.ticketservice.exception.ConflictException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -75,23 +75,32 @@ public class ScreeningService {
         return screeningRepository.findAll();
     }
 
-    public Screening getScreeningByProperties(String movieTitle, String roomName, String date) {
-        return screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+    public Screening getScreeningByProperties(String movieTitle,
+                                              String roomName,
+                                              String date) throws NotFoundException {
+        Screening screening =
+                screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
                 movieTitle,
                 roomName,
                 LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+
+        if (screening != null) {
+            return screening;
+        } else {
+            throw new NotFoundException(SCREENING_NOT_FOUND);
+        }
     }
 
 
-    public void createScreening(Screening newScreening) throws DateConflictException {
+    public void createScreening(Screening newScreening) throws ConflictException {
         if (validateScreening(newScreening)) {
             if (validateScreening(newScreening, 10)) {
                 screeningRepository.save(newScreening);
             } else {
-                throw new DateConflictException(BREAK_TIME_CONFLICT);
+                throw new ConflictException(BREAK_TIME_CONFLICT);
             }
         } else {
-            throw new DateConflictException(OVERLAPPING_TIME);
+            throw new ConflictException(OVERLAPPING_TIME);
         }
     }
 

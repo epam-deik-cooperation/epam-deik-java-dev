@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.screening;
 
-import com.epam.training.ticketservice.exception.DateConflictException;
+import com.epam.training.ticketservice.exception.ConflictException;
 import com.epam.training.ticketservice.movie.Movie;
 import com.epam.training.ticketservice.room.Room;
 import javassist.NotFoundException;
@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ScreeningServiceTest {
                 .length(100)
                 .build();
 
+
         testScreening = Screening.builder()
                 .room(testRoom)
                 .movie(testMovie)
@@ -80,7 +82,51 @@ public class ScreeningServiceTest {
     }
 
     @Test
-    public void testCreateScreeningShouldSucceedIfThereIsNoConflictingDate() throws DateConflictException {
+    public void testGetScreeningByPropertiesShouldReturnScreeningIfPropertiesAreValid() throws NotFoundException {
+
+        // Given
+        String roomName = testRoom.getName();
+        String title = testMovie.getTitle();
+        LocalDateTime date = testScreening.getDate();
+        String dateAsString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+
+        // When
+        when(screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+                title, roomName, date)).thenReturn(testScreening);
+
+        Screening actualScreening = screeningService.getScreeningByProperties(title, roomName, dateAsString);
+
+
+        // Then
+        assertEquals(testScreening, actualScreening);
+
+
+    }
+
+    @Test
+    public void testGetScreeningByPropertiesShouldThrowNotFoundExceptionIfScreeningDoesNotExist() throws NotFoundException {
+
+        // Given
+        String roomName = testRoom.getName();
+        String title = testMovie.getTitle();
+        LocalDateTime date = testScreening.getDate();
+        String dateAsString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+
+        // When
+        when(screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
+                title, roomName, date)).thenReturn(null);
+
+
+        // Then
+        assertThrows(NotFoundException.class,
+                () -> screeningService.getScreeningByProperties(title, roomName, dateAsString));
+
+    }
+
+    @Test
+    public void testCreateScreeningShouldSucceedIfThereIsNoConflictingDate() throws ConflictException {
 
         // Given
         testScreening.setDate(LocalDateTime.of(1999, Month.APRIL, 10, 10, 10));
@@ -95,7 +141,7 @@ public class ScreeningServiceTest {
     }
 
     @Test
-    public void testCreateScreeningShouldThrowExceptionIfThereIsConflictingDate() throws DateConflictException {
+    public void testCreateScreeningShouldThrowExceptionIfThereIsConflictingDate() throws ConflictException {
 
         // Given
         LocalDateTime time = LocalDateTime.of(1999, Month.APRIL, 10, 10, 10);
@@ -106,29 +152,29 @@ public class ScreeningServiceTest {
         when(screeningRepository.findAll()).thenReturn(testList);
 
         // Then
-        assertThrows(DateConflictException.class, () -> screeningService.createScreening(testScreening));
+        assertThrows(ConflictException.class, () -> screeningService.createScreening(testScreening));
         verify(screeningRepository, times(0)).save(testScreening);
     }
 
     @Test
-    public void testCreateScreeningShouldThrowExceptionIfNewScreeningWouldStartInBreakTime() throws DateConflictException {
+    public void testCreateScreeningShouldThrowExceptionIfNewScreeningWouldStartInBreakTime() throws ConflictException {
 
         // Given
         LocalDateTime time = LocalDateTime.of(1999, Month.APRIL, 10, 10, 10);
         int movieLength = testMovie.getLength();
-        testScreening.setDate(time.plusMinutes(movieLength+1));
+        testScreening.setDate(time.plusMinutes(movieLength + 1));
         testList.get(0).setDate(time);
 
         // When
         when(screeningRepository.findAll()).thenReturn(testList);
 
         // Then
-        assertThrows(DateConflictException.class, () -> screeningService.createScreening(testScreening));
+        assertThrows(ConflictException.class, () -> screeningService.createScreening(testScreening));
         verify(screeningRepository, times(0)).save(testScreening);
     }
 
     @Test
-    public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() throws DateConflictException {
+    public void testCreateScreeningShouldSucceedWhenThereAreNoScreeningsInTheRoomYet() throws ConflictException {
 
         // Given
 

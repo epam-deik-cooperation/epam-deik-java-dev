@@ -1,8 +1,7 @@
-package com.epam.training.ticketservice.util;
+package com.epam.training.ticketservice;
 
 import com.epam.training.ticketservice.account.Account;
 import com.epam.training.ticketservice.account.AccountRepository;
-import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.account.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

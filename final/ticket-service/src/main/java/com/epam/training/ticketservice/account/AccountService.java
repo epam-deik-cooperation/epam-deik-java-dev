@@ -1,10 +1,8 @@
 package com.epam.training.ticketservice.account;
 
-import com.epam.training.ticketservice.booking.Booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

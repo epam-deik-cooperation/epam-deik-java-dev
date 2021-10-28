@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.movie;
 
 
-import com.epam.training.ticketservice.util.SecuredCommands;
+import com.epam.training.ticketservice.SecuredCommands;
 import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;

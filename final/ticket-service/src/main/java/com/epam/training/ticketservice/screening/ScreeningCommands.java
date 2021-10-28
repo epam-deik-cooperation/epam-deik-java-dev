@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.screening;
 
-import com.epam.training.ticketservice.util.SecuredCommands;
-import com.epam.training.ticketservice.exception.DateConflictException;
+import com.epam.training.ticketservice.SecuredCommands;
+import com.epam.training.ticketservice.exception.ConflictException;
 import com.epam.training.ticketservice.movie.MovieService;
 import com.epam.training.ticketservice.room.RoomService;
 import javassist.NotFoundException;
@@ -35,7 +35,7 @@ public class ScreeningCommands extends SecuredCommands {
                     .room(roomService.findByName(roomName))
                     .date(date)
                     .build());
-        } catch (DateConflictException e) {
+        } catch (ConflictException e) {
             return e.getMessage();
         }
 

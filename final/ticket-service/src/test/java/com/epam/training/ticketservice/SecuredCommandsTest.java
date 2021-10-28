@@ -1,2 +1,4 @@
-package com.epam.training.ticketservice;public class SecuredCommandsTest {
+package com.epam.training.ticketservice;
+
+public class SecuredCommandsTest {
 }

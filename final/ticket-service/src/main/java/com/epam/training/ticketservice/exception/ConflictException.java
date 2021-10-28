@@ -1,8 +1,8 @@
 package com.epam.training.ticketservice.exception;
 
-public class DateConflictException extends Exception {
+public class ConflictException extends Exception {
 
-    public DateConflictException(String message) {
+    public ConflictException(String message) {
         super(message);
     }
 }

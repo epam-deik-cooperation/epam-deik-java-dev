@@ -13,7 +13,7 @@ public class PriceCalculator {
     private static int BASE_PRICE = 1500;
 
     public int calculate(Screening screening, int quantityOfTickets) {
-        return quantityOfTickets*(BASE_PRICE + priceComponentService.getPrice(screening));
+        return quantityOfTickets * (BASE_PRICE + priceComponentService.getPrice(screening));
     }
 
 
