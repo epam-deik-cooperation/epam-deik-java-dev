@@ -8,16 +8,20 @@ import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
 
-    private final List<Product> productList = List.of(
-        Product.builder()
-            .withName("GPU")
-            .withNetPrice(new Money(600_000, Currency.getInstance("HUF")))
-            .build(),
-        Product.builder()
-            .withName("PS5")
-            .withNetPrice(new Money(500_000, Currency.getInstance("HUF")))
-            .build()
-    );
+    private List<Product> productList;
+
+    public void init() {
+        productList = List.of(
+            Product.builder()
+                .withName("GPU")
+                .withNetPrice(new Money(600_000, Currency.getInstance("HUF")))
+                .build(),
+            Product.builder()
+                .withName("PS5")
+                .withNetPrice(new Money(500_000, Currency.getInstance("HUF")))
+                .build()
+        );
+    }
 
     @Override
     public List<Product> getProductList() {

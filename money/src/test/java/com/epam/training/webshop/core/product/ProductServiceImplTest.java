@@ -8,11 +8,18 @@ import com.epam.training.webshop.core.product.model.Product;
 import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ProductServiceImplTest {
 
-    private final ProductServiceImpl underTest = new ProductServiceImpl();
+    private ProductServiceImpl underTest;
+
+    @BeforeEach
+    public void setUp() {
+        underTest = new ProductServiceImpl();
+        underTest.init();
+    }
 
     @Test
     public void testGetProductListShouldReturnAStaticListWithTwoElement() {

@@ -1,20 +1,21 @@
 package com.epam.training.webshop.ui.command.impl;
 
-import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
-import com.epam.training.webshop.ui.session.Session;
+import com.epam.training.webshop.core.cart.Cart;
+import com.epam.training.webshop.core.checkout.CheckoutService;
 
 public class UserCheckoutCartCommand extends AbstractCommand {
 
-    private final GrossPriceCalculator grossPriceCalculator;
+    private final CheckoutService checkoutService;
+    private final Cart cart;
 
-    public UserCheckoutCartCommand(GrossPriceCalculator grossPriceCalculator) {
+    public UserCheckoutCartCommand(CheckoutService checkoutService, Cart cart) {
         super("user", "cart", "checkout");
-        this.grossPriceCalculator = grossPriceCalculator;
+        this.checkoutService = checkoutService;
+        this.cart = cart;
     }
 
     @Override
     public String process(String[] params) {
-        return "To pay: " + grossPriceCalculator.getAggregatedGrossPrice(Session.INSTANCE.getCart()).getValue();
+        return "Your order: " + checkoutService.checkout(cart);
     }
 }
-

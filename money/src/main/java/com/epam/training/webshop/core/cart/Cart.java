@@ -5,6 +5,7 @@ import com.epam.training.webshop.core.finance.money.Money;
 import com.epam.training.webshop.core.product.model.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,10 @@ public class Cart {
 
     public void add(Product product) {
         productList.add(product);
+    }
+
+    public List<Product> getProductList() {
+        return Collections.unmodifiableList(productList);
     }
 
     public Money getAggregatedNetPrice() {
