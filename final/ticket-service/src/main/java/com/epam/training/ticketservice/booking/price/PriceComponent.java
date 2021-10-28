@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.util.List;
 
 @Entity
@@ -28,19 +30,28 @@ public class PriceComponent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name", unique = true)
+    private String name;
+
     @OneToMany
     @JoinColumn(name = "room_id", referencedColumnName = "id")
-    private List<Room> room;
+    private List<Room> rooms;
 
     @OneToMany
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
-    private List<Movie> movie;
+    private List<Movie> movies;
 
     @OneToMany
     @JoinColumn(name = "screening_id", referencedColumnName = "id")
-    private List<Screening> screening;
+    private List<Screening> screenings;
 
     @Column(name = "price")
     private int price;
+
+    @PrePersist
+    @PreUpdate
+    public void formatName() {
+        this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+    }
 
 }

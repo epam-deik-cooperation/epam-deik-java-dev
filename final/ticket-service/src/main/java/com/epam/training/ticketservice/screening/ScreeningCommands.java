@@ -35,7 +35,7 @@ public class ScreeningCommands extends SecuredCommands {
                     .room(roomService.findByName(roomName))
                     .date(date)
                     .build());
-        } catch (ConflictException e) {
+        } catch (ConflictException | NotFoundException e) {
             return e.getMessage();
         }
 
@@ -56,7 +56,7 @@ public class ScreeningCommands extends SecuredCommands {
         return "Successfully deleted screening";
     }
 
-    @ShellMethod(value = "list movies", key = "list screenings")
+    @ShellMethod(value = "list screenings", key = "list screenings")
     public void listScreening() {
         if (!screeningService.getAllScreenings().isEmpty()) {
             screeningService.getAllScreenings().forEach(System.out::println);

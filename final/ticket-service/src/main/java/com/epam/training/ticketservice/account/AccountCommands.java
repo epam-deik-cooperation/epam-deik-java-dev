@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.account;
 
 import com.epam.training.ticketservice.booking.Booking;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
@@ -23,21 +24,28 @@ public class AccountCommands {
     }
 
     @ShellMethod(value = "describe account", key = "describe account")
-    public String describeAccount() {
+    public String describeAccount() throws NotFoundException {
 
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
+
             String user = SecurityContextHolder.getContext().getAuthentication().getName();
+
             List<Booking> bookings = accountService.findByUserName(user).getBookings();
 
             StringBuilder sb = new StringBuilder();
             sb.append("Signed in with");
 
             if (isAdminLoggedIn()) {
+
                 sb.append(String.format(" privileged account '%s'", user));
+
                 return sb.toString();
             } else if (!isAdminLoggedIn()) {
                 sb.append(String.format(" account '%s' \n", user));
-                bookings.forEach(x -> sb.append(x.toString()));
+
+                bookings.forEach(x -> sb.append(x.toString())
+                        .append("\n"));
+
                 sb.append((bookings.isEmpty() ? "You have not booked any tickets yet" : ""));
             }
             return sb.toString();

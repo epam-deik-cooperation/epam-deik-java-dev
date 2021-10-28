@@ -36,4 +36,5 @@ public abstract class SecuredCommands {
             return Availability.unavailable("You have already signed in");
         }
     }
+
 }

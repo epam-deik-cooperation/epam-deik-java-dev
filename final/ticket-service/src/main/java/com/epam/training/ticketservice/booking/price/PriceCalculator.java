@@ -1,7 +1,9 @@
 package com.epam.training.ticketservice.booking.price;
 
 import com.epam.training.ticketservice.screening.Screening;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,10 +12,12 @@ public class PriceCalculator {
 
     private final PriceComponentService priceComponentService;
 
-    private static int BASE_PRICE = 1500;
+    @Setter
+    @Getter
+    private static int basePrice = 1500;
 
     public int calculate(Screening screening, int quantityOfTickets) {
-        return quantityOfTickets * (BASE_PRICE + priceComponentService.getPrice(screening));
+        return quantityOfTickets * (basePrice + priceComponentService.getPrice(screening));
     }
 
 

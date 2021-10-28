@@ -51,7 +51,7 @@ public class MovieServiceTest {
     }
 
     @Test
-    public void testFindByTitle() {
+    public void testFindByTitle() throws NotFoundException{
 
         // Given
 

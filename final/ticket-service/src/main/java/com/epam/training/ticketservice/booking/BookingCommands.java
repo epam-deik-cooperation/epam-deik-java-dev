@@ -32,12 +32,12 @@ public class BookingCommands extends SecuredCommands {
     @ShellMethodAvailability("isAccountUser")
     public void book(String movieTitle, String roomName, String date, String seats) {
 
-        Account account = accountService.findByUserName(SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName());
-
         try {
+            Account account = accountService.findByUserName(SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName());
+
             Screening screening = screeningService.getScreeningByProperties(movieTitle, roomName, date);
 
             List<Seat> seatsToBook = new ArrayList<>();
@@ -61,5 +61,15 @@ public class BookingCommands extends SecuredCommands {
         }
     }
 
+    @ShellMethod(value = "show price for movieTitle roomName date seats", key = "show price for")
+    public String showPriceFor(String movieTitle, String roomName, String date, String seats)
+            throws NotFoundException {
+
+        try {
+            return bookingService.showPriceForBooking(movieTitle, roomName, date, seats);
+        } catch (ConflictException e) {
+            return e.getMessage();
+        }
+    }
 
 }

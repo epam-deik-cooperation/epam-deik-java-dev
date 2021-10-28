@@ -47,8 +47,15 @@ public class MovieService {
         }
     }
 
-    public Movie findByTitle(String title) {
-        return movieRepository.findByTitleContainingIgnoreCase(title);
+    public Movie findByTitle(String title) throws NotFoundException {
+
+        Movie movie = movieRepository.findByTitleContainingIgnoreCase(title);
+
+        if (movie != null) {
+            return movieRepository.findByTitleContainingIgnoreCase(title);
+        } else {
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        }
     }
 
 

@@ -1,12 +1,16 @@
 package com.epam.training.ticketservice.booking;
 
+import com.epam.training.ticketservice.booking.price.PriceCalculator;
 import com.epam.training.ticketservice.exception.ConflictException;
 import com.epam.training.ticketservice.room.Seat;
+import com.epam.training.ticketservice.screening.Screening;
+import com.epam.training.ticketservice.screening.ScreeningService;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +19,8 @@ import java.util.stream.Collectors;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final ScreeningService screeningService;
+    private final PriceCalculator priceCalculator;
 
     private boolean isSeatPresent(Booking newBooking) throws NotFoundException {
 
@@ -75,6 +81,32 @@ public class BookingService {
         if (isBookingValid(newBooking)) {
             bookingRepository.save(newBooking);
         }
+    }
+
+    public String showPriceForBooking(String movieTitle, String roomName, String date, String seats)
+            throws NotFoundException, ConflictException {
+
+        Screening screening = screeningService.getScreeningByProperties(movieTitle, roomName, date);
+
+        List<Seat> seatsToBook = new ArrayList<>();
+
+        Arrays.stream(seats.split(" ")).forEach(x -> {
+            List<String> seatSpot = Arrays.asList(x.split(","));
+            seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
+        });
+
+        Booking booking = Booking.builder()
+                .screening(screening)
+                .seats(seatsToBook)
+                .price(priceCalculator.calculate(screening, seatsToBook.size()))
+                .build();
+
+        if (screening == null || !isBookingValid(booking)) {
+            throw new NotFoundException("No possible booking found with such properties");
+        }
+
+
+        return String.format("The price for this booking would be %d HUF", booking.getPrice());
     }
 
 
