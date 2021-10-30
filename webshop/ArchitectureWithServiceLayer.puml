@@ -34,27 +34,48 @@ package Domain/Service <<Rectangle>> {
         placeOrder()
         getTotalNetPrice()
         getTotalGrossPrice()
+        getProductsFromCart()
+        removeProduct(Product productToRemove)
+        addCoupon(Coupon coupon)
+        removeCoupon(Coupon coupon)
+        getCouponsFromCart()
+        getBasePrice()
+        getDiscountForCoupons()
+        subscribe(Observer observer)
     }
     class ShoppingCartServiceImpl
     ShoppingCartService <|.. ShoppingCartServiceImpl
     ShoppingCartServiceImpl *-- Cart
-    interface Cart
-    class CartImpl
-    Cart <|.. CartImpl
+    Observable <|.. ShoppingCartService
+    interface Cart {
+        getProducts()
+        getCoupons()
+        ddProduct(Product product)
+        removeProduct(Product product)
+        addCoupon(Coupon coupon);
+        removeCoupon(Coupon coupon);
+    }
+    class SimpleCart
+    Cart <|.. SimpleCart
     interface Product
     class SimpleProductImpl
     Product <|.. SimpleProductImpl
-    CartImpl o-- Product
+    SimpleCart o-- Product
     interface Observer
     interface Observable
     Observable --> Observer : Notifies
-    Observable <|.. Cart
+
     interface OrderConfirmationService
     Observer <|.. OrderConfirmationService
     class DummyOrderConfirmationService
+    interface ConfirmationService
     OrderConfirmationService <|.. DummyOrderConfirmationService
+    OrderConfirmationService <|.. EmailConfirmationAdapter
+    EmailConfirmationAdapter *-- EmailConfirmationService
+    ConfirmationService <|.. EmailConfirmationService
+
     interface GrossPriceCalculator
-    CartImpl *.. GrossPriceCalculator : Uses for calculating gross price
+    ShoppingCartServiceImpl *.. GrossPriceCalculator : Uses for calculating gross price
     class GrossPriceCalculatorDecorator
     GrossPriceCalculator <|.. GrossPriceCalculatorDecorator
     class GrossPriceCalculatorImpl

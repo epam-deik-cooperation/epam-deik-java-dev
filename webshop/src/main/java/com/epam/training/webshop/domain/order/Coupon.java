@@ -9,4 +9,3 @@ public interface Coupon {
 
     double getDiscountForProducts(List<Product> products);
 }
-

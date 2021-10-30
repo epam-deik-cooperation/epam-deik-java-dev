@@ -1,12 +1,15 @@
 package com.epam.training.webshop.presentation.cli.command.impl;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.epam.training.webshop.domain.ShoppingCartService;
 import com.epam.training.webshop.presentation.cli.command.AbstractCommandLineParser;
 import com.epam.training.webshop.presentation.cli.command.Command;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
+@Component
+@Order(2)
 public class AddProductCommandLineParser extends AbstractCommandLineParser {
 
     private static final String COMMAND_REGEX = "add product (.+)";
