@@ -1,4 +1,6 @@
-package com.epam.training.taxi.invoice;
+package com.epam.training.taxi.persistence;
+
+import com.epam.training.taxi.invoice.Invoice;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +16,7 @@ public class CsvInvoiceWriter implements InvoiceWriter {
     @Override
     public void write(Invoice invoice) throws IOException {
         FileWriter CsvFileWriter = new FileWriter(pathToOutputFile, true);
-        CsvFileWriter.write(invoice.getAccountId() + "," + invoice.getDistance() + "," + invoice.getPrice() + ","
+        CsvFileWriter.write(invoice.getAccountId() + "," + invoice.getDistanceTravelled() + "," + invoice.getPrice() + ","
                 + invoice.getDiscountAmount() + System.lineSeparator());
         CsvFileWriter.close();
     }

@@ -14,13 +14,13 @@ public final class SimpleCalculator implements Calculator{
         this.pricePerKilometer = pricePerKilometer;
     }
 
-    public Invoice calculate(Account account, Double distance) {
-        if (distance < 0) {
+    public Invoice calculate(Account account, Double distanceTravelled) {
+        if (distanceTravelled < 0) {
             throw new NegativeDistanceException();
         }
         double discountPercentage = account.getDiscountPercentage();
-        Double price = distance * pricePerKilometer;
+        Double price = distanceTravelled * pricePerKilometer;
         price = price - price * discountPercentage;
-        return new SimpleInvoice(account.getAccountId(), distance, price, distance * pricePerKilometer * discountPercentage);
+        return new SimpleInvoice(account.getAccountId(), distanceTravelled, price, distanceTravelled * pricePerKilometer * discountPercentage);
     }
 }

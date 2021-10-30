@@ -1,4 +1,4 @@
-package com.epam.training.taxi.repository;
+package com.epam.training.taxi.persistence;
 
 import com.epam.training.taxi.account.Account;
 

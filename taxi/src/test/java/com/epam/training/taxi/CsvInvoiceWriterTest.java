@@ -1,6 +1,6 @@
 package com.epam.training.taxi;
 
-import com.epam.training.taxi.invoice.CsvInvoiceWriter;
+import com.epam.training.taxi.persistence.CsvInvoiceWriter;
 import com.epam.training.taxi.invoice.Invoice;
 import com.epam.training.taxi.invoice.SimpleInvoice;
 import org.junit.jupiter.api.Test;

@@ -4,7 +4,7 @@ public interface Invoice {
 
     Long getAccountId();
 
-    Double getDistance();
+    Double getDistanceTravelled();
 
     Double getPrice();
 

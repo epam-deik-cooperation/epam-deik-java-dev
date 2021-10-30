@@ -5,6 +5,6 @@ import com.epam.training.taxi.invoice.Invoice;
 
 public interface Calculator {
 
-    Invoice calculate(Account account, Double distance);
+    Invoice calculate(Account account, Double distanceTravelled);
 
 }

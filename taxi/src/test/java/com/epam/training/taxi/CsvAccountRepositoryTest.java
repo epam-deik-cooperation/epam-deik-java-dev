@@ -3,7 +3,7 @@ package com.epam.training.taxi;
 import com.epam.training.taxi.account.Account;
 import com.epam.training.taxi.account.RegisteredAccount;
 import com.epam.training.taxi.account.UnregisteredAccount;
-import com.epam.training.taxi.repository.CsvAccountRepository;
+import com.epam.training.taxi.persistence.CsvAccountRepository;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

@@ -34,8 +34,6 @@ public class SimpleCalculatorTest {
 
         // When
         Invoice actual = underTest.calculate(account, distance);
-        System.out.println(expected.toString());
-        System.out.println(actual.toString());
 
         // Then
         assertEquals(expected, actual);
