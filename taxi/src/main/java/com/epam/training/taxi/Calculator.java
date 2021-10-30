@@ -3,11 +3,12 @@ package com.epam.training.taxi;
 import com.epam.training.taxi.account.Account;
 import com.epam.training.taxi.exception.NegativeDistanceException;
 import com.epam.training.taxi.invoice.Invoice;
+import com.epam.training.taxi.invoice.SimpleInvoice;
 
 
 public class Calculator {
 
-    private int pricePerKilometer;
+    private final int pricePerKilometer;
 
     public Calculator(int pricePerKilometer) {
         this.pricePerKilometer = pricePerKilometer;
@@ -20,6 +21,6 @@ public class Calculator {
         double discountPercentage = account.getDiscountPercentage();
         Double price = distance * pricePerKilometer;
         price = price - price * discountPercentage;
-        return new Invoice(account.getAccountId(), distance, price, distance * pricePerKilometer * discountPercentage);
+        return new SimpleInvoice(account.getAccountId(), distance, price, distance * pricePerKilometer * discountPercentage);
     }
 }

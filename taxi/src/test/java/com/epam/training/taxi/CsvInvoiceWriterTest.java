@@ -2,6 +2,7 @@ package com.epam.training.taxi;
 
 import com.epam.training.taxi.invoice.CsvInvoiceWriter;
 import com.epam.training.taxi.invoice.Invoice;
+import com.epam.training.taxi.invoice.SimpleInvoice;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class CsvInvoiceWriterTest {
     public void testWriteShouldWriteCorrectValueToFileWhenGivenValidInvoice() throws IOException {
 
         // Given
-        Invoice invoice = new Invoice(5L, 10.0, 1000.0, 100.0);
+        Invoice invoice = new SimpleInvoice(5L, 10.0, 1000.0, 100.0);
 
         // When
         underTest.write(invoice);

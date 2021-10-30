@@ -5,6 +5,7 @@ import com.epam.training.taxi.account.RegisteredAccount;
 import com.epam.training.taxi.account.UnregisteredAccount;
 import com.epam.training.taxi.exception.NegativeDistanceException;
 import com.epam.training.taxi.invoice.Invoice;
+import com.epam.training.taxi.invoice.SimpleInvoice;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ public class CalculatorTest {
         // Given
         Account account = new RegisteredAccount(1L, "Test", 0.25);
         Double distance = 1.0;
-        Invoice expected = new Invoice(1L, distance, 75.0, 25.0);
+        Invoice expected = new SimpleInvoice(1L, distance, 75.0, 25.0);
 
         // When
         Invoice actual = underTest.calculate(account, distance);
