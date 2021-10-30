@@ -3,8 +3,8 @@ package com.epam.training.taxi.account;
 public final class UnregisteredAccount implements Account {
 
     @Override
-    public String getAccountId() {
-        return "null";
+    public Long getAccountId() {
+        return null;
     }
 
     @Override

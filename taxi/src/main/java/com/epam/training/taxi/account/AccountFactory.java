@@ -7,7 +7,7 @@ public final class AccountFactory {
         if (accountArray == null) {
             return new UnregisteredAccount();
         } else {
-            return new RegisteredAccount(accountArray[0], accountArray[1], Double.parseDouble(accountArray[2]));
+            return new RegisteredAccount(Long.parseLong(accountArray[0]), accountArray[1], Double.parseDouble(accountArray[2]));
         }
     }
 

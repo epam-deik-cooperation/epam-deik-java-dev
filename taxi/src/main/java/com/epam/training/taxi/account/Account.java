@@ -2,7 +2,7 @@ package com.epam.training.taxi.account;
 
 public interface Account {
 
-    String getAccountId();
+    Long getAccountId();
 
     String getFullName();
 

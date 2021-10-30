@@ -31,7 +31,7 @@ public class CsvAccountRepositoryTest {
     public void testGetAccountShouldReturnRegisteredAccountWhenGivenValidAccountId() throws IOException {
         // Given
         Long accountId = 1L;
-        RegisteredAccount expected = new RegisteredAccount("1","Kiss Béla",0.1);
+        RegisteredAccount expected = new RegisteredAccount(1L,"Kiss Béla",0.1);
 
         // When
         Account actual = underTest.getAccount(accountId);

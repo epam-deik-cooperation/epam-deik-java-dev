@@ -26,9 +26,9 @@ public class CalculatorTest {
     @Test
     public void testCalculateShouldReturnCorrectInvoiceWhenGivenPositiveDistance() {
         // Given
-        Account account = new RegisteredAccount("1", "Test", 0.25);
+        Account account = new RegisteredAccount(1L, "Test", 0.25);
         Double distance = 1.0;
-        Invoice expected = new Invoice("1", distance, 75.0, 25.0);
+        Invoice expected = new Invoice(1L, distance, 75.0, 25.0);
 
         // When
         Invoice actual = underTest.calculate(account, distance);

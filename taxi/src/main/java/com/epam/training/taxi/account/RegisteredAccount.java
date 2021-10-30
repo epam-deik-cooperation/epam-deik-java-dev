@@ -4,18 +4,18 @@ import java.util.Objects;
 
 public final class RegisteredAccount implements Account {
 
-    private final String accountId;
+    private final Long accountId;
     private final String fullName;
     private final Double discountPercentage;
 
-    public RegisteredAccount(String accountId, String fullName, Double discountPercentage) {
+    public RegisteredAccount(Long accountId, String fullName, Double discountPercentage) {
         this.accountId = accountId;
         this.fullName = fullName;
         this.discountPercentage = discountPercentage;
     }
 
     @Override
-    public String getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 

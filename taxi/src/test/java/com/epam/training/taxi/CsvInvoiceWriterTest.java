@@ -19,7 +19,7 @@ public class CsvInvoiceWriterTest {
     public void testWriteShouldWriteCorrectValueToFileWhenGivenValidInvoice() throws IOException {
 
         // Given
-        Invoice invoice = new Invoice("5", 10.0, 1000.0, 100.0);
+        Invoice invoice = new Invoice(5L, 10.0, 1000.0, 100.0);
 
         // When
         underTest.write(invoice);

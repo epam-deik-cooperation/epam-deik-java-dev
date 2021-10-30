@@ -4,19 +4,19 @@ import java.util.Objects;
 
 public final class Invoice {
 
-    private String accountId;
+    private Long accountId;
     private Double distance;
     private Double price;
     private Double discountAmount;
 
-    public Invoice(String accountId, Double distance, Double price, Double discountAmount) {
+    public Invoice(Long accountId, Double distance, Double price, Double discountAmount) {
         this.accountId = accountId;
         this.distance = distance;
         this.price = price;
         this.discountAmount = discountAmount;
     }
 
-    public String getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
