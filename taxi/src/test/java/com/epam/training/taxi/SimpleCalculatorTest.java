@@ -3,6 +3,7 @@ package com.epam.training.taxi;
 import com.epam.training.taxi.account.Account;
 import com.epam.training.taxi.account.RegisteredAccount;
 import com.epam.training.taxi.account.UnregisteredAccount;
+import com.epam.training.taxi.calculator.SimpleCalculator;
 import com.epam.training.taxi.exception.NegativeDistanceException;
 import com.epam.training.taxi.invoice.Invoice;
 import com.epam.training.taxi.invoice.SimpleInvoice;
@@ -10,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CalculatorTest {
+public class SimpleCalculatorTest {
 
-    private final Calculator underTest = new Calculator(100);
+    private final SimpleCalculator underTest = new SimpleCalculator(100);
 
     @Test
     public void testCalculateShouldThrowExceptionWhenGivenNegativeDistance() {

@@ -1,4 +1,4 @@
-package com.epam.training.taxi;
+package com.epam.training.taxi.calculator;
 
 import com.epam.training.taxi.account.Account;
 import com.epam.training.taxi.exception.NegativeDistanceException;
@@ -6,11 +6,11 @@ import com.epam.training.taxi.invoice.Invoice;
 import com.epam.training.taxi.invoice.SimpleInvoice;
 
 
-public class Calculator {
+public final class SimpleCalculator implements Calculator{
 
     private final int pricePerKilometer;
 
-    public Calculator(int pricePerKilometer) {
+    public SimpleCalculator(int pricePerKilometer) {
         this.pricePerKilometer = pricePerKilometer;
     }
 

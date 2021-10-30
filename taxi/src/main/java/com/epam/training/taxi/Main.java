@@ -1,6 +1,8 @@
 package com.epam.training.taxi;
 
 import com.epam.training.taxi.account.Account;
+import com.epam.training.taxi.calculator.Calculator;
+import com.epam.training.taxi.calculator.SimpleCalculator;
 import com.epam.training.taxi.invoice.CsvInvoiceWriter;
 import com.epam.training.taxi.invoice.Invoice;
 import com.epam.training.taxi.invoice.InvoiceWriter;
@@ -16,7 +18,7 @@ public class Main {
         Double distance = Double.valueOf(args[1]);
 
         AccountRepository accountRepository = new CsvAccountRepository("src/main/resources/accounts.csv");
-        Calculator calculator = new Calculator(110);
+        Calculator calculator = new SimpleCalculator(110);
         InvoiceWriter invoiceWriter = new CsvInvoiceWriter("./out.csv");
 
         Account account = accountRepository.getAccount(accountId);
