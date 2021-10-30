@@ -14,6 +14,7 @@ public final class SimpleCalculator implements Calculator{
         this.pricePerKilometer = pricePerKilometer;
     }
 
+    @Override
     public Invoice calculate(Account account, Double distanceTravelled) {
         if (distanceTravelled < 0) {
             throw new NegativeDistanceException();

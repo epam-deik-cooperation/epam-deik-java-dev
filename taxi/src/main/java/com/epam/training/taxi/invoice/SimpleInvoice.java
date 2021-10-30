@@ -16,18 +16,22 @@ public final class SimpleInvoice implements Invoice {
         this.discountAmount = discountAmount;
     }
 
+    @Override
     public Long getAccountId() {
         return accountId;
     }
 
+    @Override
     public Double getDistanceTravelled() {
         return distanceTravelled;
     }
 
+    @Override
     public Double getPrice() {
         return price;
     }
 
+    @Override
     public Double getDiscountAmount() {
         return discountAmount;
     }
