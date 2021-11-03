@@ -80,9 +80,9 @@ public class ScreeningService {
                                               String date) throws NotFoundException {
         Screening screening =
                 screeningRepository.findByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(
-                movieTitle,
-                roomName,
-                LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                        movieTitle,
+                        roomName,
+                        LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         if (screening != null) {
             return screening;

@@ -136,7 +136,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testFindByName() {
+    public void testFindByName() throws NotFoundException {
         // Given
 
         // When

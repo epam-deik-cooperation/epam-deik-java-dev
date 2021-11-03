@@ -12,8 +12,4 @@ public interface PriceComponentRepository extends JpaRepository<PriceComponent, 
     boolean existsByNameContainingIgnoreCase(String name);
 
 
-
-
-
-
 }

@@ -46,8 +46,15 @@ public class RoomService {
         }
     }
 
-    public Room findByName(String name) {
-        return roomRepository.findByNameContainingIgnoreCase(name);
+    public Room findByName(String name) throws NotFoundException {
+
+        Room room = roomRepository.findByNameContainingIgnoreCase(name);
+
+        if (room != null) {
+            return room;
+        } else {
+            throw new NotFoundException(ROOM_NOT_FOUND);
+        }
     }
 
 

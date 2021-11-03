@@ -1,5 +1,7 @@
 package com.epam.training.ticketservice.account;
 
+import javassist.NotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +20,7 @@ public class AccountServiceTest {
     AccountService accountService;
 
     @Test
-    public void testFindByUserName() {
+    public void testFindByUserName() throws NotFoundException {
 
         // Given
         Account testAccount = Account.builder()
@@ -33,6 +35,26 @@ public class AccountServiceTest {
 
         // Then
         verify(accountRepository, times(1)).findByUserNameContainingIgnoreCase(testAccount.getUserName());
+    }
+
+    @Test
+    public void testFindByUserNameShouldThrowNotFoundExceptionIfUserDoesNotExist() {
+
+        // Given
+        Account testAccount = Account.builder()
+                .userName("test")
+                .password("test")
+                .accountType(AccountType.ADMIN)
+                .build();
+
+        // When
+        when(accountRepository.findByUserNameContainingIgnoreCase(testAccount.getUserName())).thenReturn(null);
+
+        // Then
+        Assertions.assertThrows(NotFoundException.class,
+                () -> accountService.findByUserName(testAccount.getUserName()));
+
+
     }
 
     @Test
