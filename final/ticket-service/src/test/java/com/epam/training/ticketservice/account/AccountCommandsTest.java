@@ -44,7 +44,8 @@ public class AccountCommandsTest {
     }
 
     @Test
-    public void describeAccountShouldReturnAdminDescriptionIfUserWithAdminRoleIsSignedIn() throws NotFoundException {
+    public void testDescribeAccountShouldReturnAdminDescriptionIfUserWithAdminRoleIsSignedIn()
+            throws NotFoundException {
 
         // Given
         Authentication authentication = new TestingAuthenticationToken(

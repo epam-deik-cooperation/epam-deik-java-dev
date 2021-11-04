@@ -15,5 +15,4 @@ public class Seat {
     int rowIndex;
     int columnIndex;
 
-
 }
