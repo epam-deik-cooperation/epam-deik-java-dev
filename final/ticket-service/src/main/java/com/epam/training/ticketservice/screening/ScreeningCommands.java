@@ -57,11 +57,16 @@ public class ScreeningCommands extends SecuredCommands {
     }
 
     @ShellMethod(value = "list screenings", key = "list screenings")
-    public void listScreening() {
+    public String listScreening() {
+
+        StringBuilder sb = new StringBuilder();
+
         if (!screeningService.getAllScreenings().isEmpty()) {
-            screeningService.getAllScreenings().forEach(System.out::println);
+            screeningService.getAllScreenings().forEach(x -> sb.append(x).append("\n"));
+            sb.setLength(sb.length() - 1);
+            return sb.toString();
         } else {
-            System.out.println("There are no screenings");
+            return "There are no screenings";
         }
     }
 

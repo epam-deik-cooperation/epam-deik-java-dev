@@ -20,7 +20,7 @@ public class BookingCommands extends SecuredCommands {
 
     @ShellMethod(value = "book movieTitle roomName date seats", key = "book")
     @ShellMethodAvailability("isAccountUser")
-    public void book(String movieTitle, String roomName, String date, String seats) {
+    public String book(String movieTitle, String roomName, String date, String seats) {
 
         try {
             Account account = accountService.findByUserName(SecurityContextHolder
@@ -33,8 +33,9 @@ public class BookingCommands extends SecuredCommands {
             bookingService.createBooking(booking);
 
         } catch (NotFoundException | ConflictException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
+        return null;
     }
 
     @ShellMethod(value = "show price for movieTitle roomName date seats", key = "show price for")

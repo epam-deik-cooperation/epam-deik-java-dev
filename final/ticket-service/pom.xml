@@ -198,7 +198,8 @@
                                 <exclude>com/epam/training/ticketservice/booking/Booking.class</exclude>
                                 <exclude>com/epam/training/ticketservice/exception/*.class</exclude>
                                 <exclude>com/epam/training/ticketservice/config/*.class</exclude>
-                                <exclude>com/epam/training/ticketservice/Application.class</exclude>
+                                <exclude>com/epam/training/ticketservice/*.class</exclude>
+                                <exclude>com/epam/training/ticketservice/screening/ScreeningCommands.class</exclude>
                             </excludes>
 
                             <rules>

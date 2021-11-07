@@ -62,11 +62,16 @@ public class MovieCommands extends SecuredCommands {
     }
 
     @ShellMethod(value = "list movies", key = "list movies")
-    public void listMovies() {
+    public String listMovies() {
+
+        StringBuilder sb = new StringBuilder();
+
         if (!movieService.getAllMovies().isEmpty()) {
-            movieService.getAllMovies().forEach(System.out::println);
+            movieService.getAllMovies().forEach(x -> sb.append(x).append("\n"));
+            sb.setLength(sb.length() - 1);
+            return sb.toString();
         } else {
-            System.out.println("There are no movies at the moment");
+            return "There are no movies at the moment";
         }
     }
 

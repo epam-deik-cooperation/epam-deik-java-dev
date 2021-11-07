@@ -40,7 +40,7 @@ public class AuthenticationCommands extends SecuredCommands {
 
     @ShellMethod(value = "sign in privileged username password", key = "sign in privileged")
     @ShellMethodAvailability("isNotSignedIn")
-    public void signInPrivileged(String userName, String password) {
+    public String signInPrivileged(String userName, String password) {
 
         Authentication request = new UsernamePasswordAuthenticationToken(userName, password);
 
@@ -49,11 +49,12 @@ public class AuthenticationCommands extends SecuredCommands {
             if (result.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
                 SecurityContextHolder.getContext().setAuthentication(result);
             } else {
-                throw new BadCredentialsException("");
+                throw new BadCredentialsException("Login failed due to incorrect credentials");
             }
         } catch (AuthenticationException e) {
-            System.out.println("Login failed due to incorrect credentials");
+            return e.getMessage();
         }
+        return null;
     }
 
 

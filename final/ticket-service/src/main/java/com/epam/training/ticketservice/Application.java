@@ -22,7 +22,7 @@ public class Application {
 
     @Bean
     public PromptProvider myPromptProvider() {
-        return () -> new AttributedString("ticket-service:>",
+        return () -> new AttributedString("Ticket service>",
                 AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
     }
 }

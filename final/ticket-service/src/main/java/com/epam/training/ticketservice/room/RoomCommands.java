@@ -56,11 +56,16 @@ public class RoomCommands extends SecuredCommands {
     }
 
     @ShellMethod(value = "list rooms", key = "list rooms")
-    public void listRooms() {
+    public String listRooms() {
+
+        StringBuilder sb = new StringBuilder();
+
         if (!roomService.getAllRooms().isEmpty()) {
-            roomService.getAllRooms().forEach(System.out::println);
+            roomService.getAllRooms().forEach(x -> sb.append(x).append("\n"));
+            sb.setLength(sb.length() - 1);
+            return sb.toString();
         } else {
-            System.out.println("There are no rooms at the moment");
+            return "There are no rooms at the moment";
         }
     }
 
