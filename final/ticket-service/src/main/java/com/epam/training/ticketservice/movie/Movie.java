@@ -50,15 +50,16 @@ public class Movie {
 
     @Override
     public String toString() {
-        return title + " (" + genre + ", " + length + ")";
+        return title + " (" + genre + ", " + length + " minutes)";
     }
 
-    @PrePersist
-    @PreUpdate
-    public void formatTitleAndGenre() {
-        this.title = title.substring(0, 1).toUpperCase() + title.substring(1).toLowerCase();
-        this.genre = genre.toLowerCase();
-    }
+    /*  @PrePersist
+        @PreUpdate
+        public void formatTitleAndGenre() {
+            this.title = title.substring(0, 1).toUpperCase() + title.substring(1).toLowerCase();
+            this.genre = genre.toLowerCase();
+        }
+    */
 
     @Override
     public boolean equals(Object o) {

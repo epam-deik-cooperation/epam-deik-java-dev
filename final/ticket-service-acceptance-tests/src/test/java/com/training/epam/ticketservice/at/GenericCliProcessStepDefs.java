@@ -14,7 +14,7 @@ import io.cucumber.java.en.When;
 
 public class GenericCliProcessStepDefs {
 
-    private static final int OUTPUT_TIMEOUT = 15000;
+    private static final int OUTPUT_TIMEOUT = 35000;
 
     private ProcessUnderTest cliProcess;
 

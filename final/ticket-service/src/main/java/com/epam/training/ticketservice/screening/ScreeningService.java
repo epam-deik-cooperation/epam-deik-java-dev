@@ -46,8 +46,8 @@ public class ScreeningService {
                             y.getDate().plusMinutes(y.getMovie().getLength()),
                             screening.getDate(),
                             screening.getDate().plusMinutes(screening.getMovie().getLength()), 0))
-                    .filter(boolValue -> boolValue)
-                    .findFirst().orElse(false);
+                    .filter(boolValue -> !boolValue)
+                    .findFirst().orElse(true);
         }
     }
 
@@ -66,8 +66,8 @@ public class ScreeningService {
                             y.getDate().plusMinutes(y.getMovie().getLength()),
                             screening.getDate(),
                             screening.getDate().plusMinutes(screening.getMovie().getLength()), breakTime))
-                    .filter(boolValue -> boolValue)
-                    .findFirst().orElse(false);
+                    .filter(boolValue -> !boolValue)
+                    .findFirst().orElse(true);
         }
     }
 

@@ -80,7 +80,7 @@ public class AccountCommandsTest {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("Signed in with account '%s' \n", account.getUserName()));
+        sb.append(String.format("Signed in with account '%s'\n", account.getUserName()));
         account.getBookings().forEach(x -> sb.append(x.toString())
                 .append("\n"));
         sb.append((account.getBookings().isEmpty() ? "You have not booked any tickets yet" : ""));

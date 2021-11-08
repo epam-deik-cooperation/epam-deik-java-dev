@@ -20,7 +20,7 @@ public class ProcessUnderTest implements AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessUnderTest.class);
     private static final int JVM_STARTUP_FAILURE_WAIT_TIME = 150;
-    private static final int DELAY_BEFORE_CLEANING_PROCESS_OUTPUT = 250;
+    private static final int DELAY_BEFORE_CLEANING_PROCESS_OUTPUT = 750;
 
     private Process process;
     private BufferedReader output;

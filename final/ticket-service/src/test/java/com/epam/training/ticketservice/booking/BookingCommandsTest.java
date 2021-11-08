@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.booking;
 import com.epam.training.ticketservice.account.Account;
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.exception.ConflictException;
+import com.epam.training.ticketservice.room.Seat;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +48,7 @@ public class BookingCommandsTest {
         movieTitle = "test movie";
         roomName = "test room";
         date = "2021-11-11 11:11";
-        seats = "1,1 2,2";
+        seats = "1,1";
 
 
         account = Account.builder().userName("user")
@@ -73,7 +74,10 @@ public class BookingCommandsTest {
     public void testBookShouldInvokeCreateBooking() throws NotFoundException, ConflictException {
 
         // Given
-        Booking testBooking = Booking.builder().build();
+        Booking testBooking = Booking.builder()
+                .price(2000)
+                .seats(List.of(new Seat(1, 1)))
+                .build();
 
         // When
         when(accountService.findByUserName(anyString())).thenReturn(account);

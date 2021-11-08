@@ -32,7 +32,8 @@ public class PriceCommands extends SecuredCommands {
     }
 
 
-    @ShellMethod(value = "attach component to movie componentName movieTitle", key = "attach component to movie")
+    @ShellMethod(value = "attach price component to movie componentName movieTitle",
+            key = "attach price component to movie")
     @ShellMethodAvailability("isAccountAdmin")
     public void attachComponentToMovie(String componentName, String movieTitle) {
         try {
@@ -43,7 +44,8 @@ public class PriceCommands extends SecuredCommands {
     }
 
 
-    @ShellMethod(value = "attach component to room componentName roomName", key = "attach component to room")
+    @ShellMethod(value = "attach price component to room componentName roomName",
+            key = "attach price component to room")
     @ShellMethodAvailability("isAccountAdmin")
     public void attachComponentToRoom(String componentName, String roomName) {
 
@@ -55,8 +57,8 @@ public class PriceCommands extends SecuredCommands {
     }
 
 
-    @ShellMethod(value = "attach component to screening componentName movieTitle roomName date",
-            key = "attach component to screening")
+    @ShellMethod(value = "attach price component to screening componentName movieTitle roomName date",
+            key = "attach price component to screening")
     @ShellMethodAvailability("isAccountAdmin")
     public void attachComponentToScreening(
             String componentName, String movieTitle, String roomName, String date) throws NotFoundException {

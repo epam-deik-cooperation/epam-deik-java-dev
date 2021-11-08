@@ -41,19 +41,20 @@ public class AccountCommands {
 
                 return sb.toString();
             } else if (!isAdminLoggedIn()) {
-                sb.append(String.format(" account '%s' \n", user));
+                sb.append(String.format(" account '%s'\n", user));
 
-                bookings.forEach(x -> sb.append(x.toString())
-                        .append("\n"));
+                if (!bookings.isEmpty()) {
+                    sb.append("Your previous bookings are\n");
+                    bookings.forEach(x -> sb.append(x.toString())
+                            .append("\n"));
+                    sb.setLength(sb.length() - 1);
+                } else {
+                    sb.append("You have not booked any tickets yet");
+                }
+                return sb.toString();
 
-                sb.append((bookings.isEmpty() ? "You have not booked any tickets yet" : ""));
             }
-            return sb.toString();
-
-        } else {
-            return "You are not signed in";
         }
+        return "You are not signed in";
     }
-
-
 }

@@ -19,10 +19,11 @@ public class AuthenticationCommands extends SecuredCommands {
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
 
+    private static final String LOGIN_FAILED_BAD_CREDENTIALS = "Login failed due to incorrect credentials";
 
     @ShellMethod(value = "sign in username password", key = "sign in")
     @ShellMethodAvailability("isNotSignedIn")
-    public void signIn(String userName, String password) {
+    public String signIn(String userName, String password) {
 
         Authentication request = new UsernamePasswordAuthenticationToken(userName, password);
 
@@ -34,8 +35,9 @@ public class AuthenticationCommands extends SecuredCommands {
                 throw new BadCredentialsException("");
             }
         } catch (AuthenticationException e) {
-            System.out.println("Login failed due to incorrect credentials");
+            return LOGIN_FAILED_BAD_CREDENTIALS;
         }
+        return null;
     }
 
     @ShellMethod(value = "sign in privileged username password", key = "sign in privileged")
@@ -49,10 +51,10 @@ public class AuthenticationCommands extends SecuredCommands {
             if (result.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))) {
                 SecurityContextHolder.getContext().setAuthentication(result);
             } else {
-                throw new BadCredentialsException("Login failed due to incorrect credentials");
+                throw new BadCredentialsException("");
             }
         } catch (AuthenticationException e) {
-            return e.getMessage();
+            return LOGIN_FAILED_BAD_CREDENTIALS;
         }
         return null;
     }
