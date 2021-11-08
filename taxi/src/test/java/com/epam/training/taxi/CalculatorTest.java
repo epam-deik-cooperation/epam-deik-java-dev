@@ -1,26 +1,16 @@
 package com.epam.training.taxi;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CalculatorTest {
 
@@ -32,7 +22,7 @@ class CalculatorTest {
         return fileLines.get(fileLines.size() - 1);
     }
 
-    @Test
+    /*@Test
     void testMainInsertsNullLineWhenInvalidId() throws IOException {
         // Given
         String accountId = "-1";
@@ -63,5 +53,5 @@ class CalculatorTest {
 
         // Then
         assertEquals(expected, outFileLastLine());
-    }
+    }*/
 }
