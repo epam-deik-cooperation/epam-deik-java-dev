@@ -3,7 +3,11 @@ package com.epam.training.webshop.presentation.cli.command.impl;
 import com.epam.training.webshop.domain.ShoppingCartService;
 import com.epam.training.webshop.presentation.cli.command.AbstractCommandLineParser;
 import com.epam.training.webshop.presentation.cli.command.Command;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
+@Component
+@Order(3)
 public class OrderCommandLineParser extends AbstractCommandLineParser {
 
     private static final String ORDER_COMMAND = "order cart";

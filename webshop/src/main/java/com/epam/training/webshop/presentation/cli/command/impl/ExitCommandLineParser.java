@@ -3,7 +3,11 @@ package com.epam.training.webshop.presentation.cli.command.impl;
 import com.epam.training.webshop.presentation.cli.CliInterpreter;
 import com.epam.training.webshop.presentation.cli.command.AbstractCommandLineParser;
 import com.epam.training.webshop.presentation.cli.command.Command;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
+@Component
+@Order(1)
 public class ExitCommandLineParser extends AbstractCommandLineParser {
 
     private static final String EXIT_COMMAND = "exit";
