@@ -1,16 +1,18 @@
 package com.epam.training.webshop.core.cart;
 
+import com.epam.training.webshop.core.checkout.CheckoutObserver;
+import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
 import com.epam.training.webshop.core.product.model.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Currency;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class Cart {
+public class Cart implements CheckoutObserver {
 
     private final List<Product> productList;
     private final Bank bank;
@@ -25,7 +27,7 @@ public class Cart {
     }
 
     public static Cart of(Bank bank, Product... products) {
-        return new Cart(bank, Arrays.asList(products));
+        return new Cart(bank, new LinkedList<>(Arrays.asList(products)));
     }
 
     public void add(Product product) {
@@ -33,7 +35,7 @@ public class Cart {
     }
 
     public List<Product> getProductList() {
-        return Collections.unmodifiableList(productList);
+        return List.copyOf(productList);
     }
 
     public Money getAggregatedNetPrice() {
@@ -42,6 +44,11 @@ public class Cart {
             aggregatedPrice = aggregatedPrice.add(product.getNetPrice(), bank);
         }
         return aggregatedPrice;
+    }
+
+    @Override
+    public void handleOrder(Order order) {
+        productList.clear();
     }
 
     @Override

@@ -25,6 +25,9 @@ public class CheckoutServiceImplTest {
     @Mock
     private GrossPriceCalculator grossPriceCalculator;
 
+    @Mock
+    private CheckoutObservable checkoutObservable;
+
     @InjectMocks
     private CheckoutServiceImpl underTest;
 
@@ -48,7 +51,8 @@ public class CheckoutServiceImplTest {
         verify(cart).getProductList();
         verify(cart).getAggregatedNetPrice();
         verify(grossPriceCalculator).getAggregatedGrossPrice(cart);
-        verifyNoMoreInteractions(grossPriceCalculator, cart, productList, netPrice, grossPrice);
+        verify(checkoutObservable).notifyObservers(expected);
+        verifyNoMoreInteractions(grossPriceCalculator, cart, productList, netPrice, grossPrice, checkoutObservable);
     }
 
     @Test
@@ -58,6 +62,6 @@ public class CheckoutServiceImplTest {
         assertThrows(NullPointerException.class, () -> underTest.checkout(null));
 
         // Then
-        verifyNoMoreInteractions(grossPriceCalculator);
+        verifyNoMoreInteractions(grossPriceCalculator, checkoutObservable);
     }
 }

@@ -1,5 +1,6 @@
 package com.epam.training.webshop.core.cart;
 
+import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.bank.model.CurrencyPair;
 import com.epam.training.webshop.core.finance.money.Money;
@@ -113,5 +114,20 @@ class CartTest {
         Assertions.assertEquals(expected, actual);
         Mockito.verify(mockBank, Mockito.times(2)).getExchangeRate(HUF_TO_HUF_CURRENCY_PAIR);
         Mockito.verifyNoMoreInteractions(mockBank);
+    }
+
+    @Test
+    public void testHandleOrderShouldEmptyTheProductListWhenItIsCalled() {
+        // Given
+        Order order = Mockito.mock(Order.class);
+        Cart underTest = Cart.of(mockBank, TEST_PRODUCT_CHOCOLATE);
+        Cart expected = Cart.of(mockBank);
+
+        // When
+        underTest.handleOrder(order);
+
+        // Then
+        Assertions.assertEquals(expected, underTest);
+        Mockito.verifyNoMoreInteractions(mockBank, order);
     }
 }

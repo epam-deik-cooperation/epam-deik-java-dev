@@ -1,15 +1,12 @@
 package com.epam.training.webshop;
 
-import com.epam.training.webshop.ui.interpreter.CommandLineInterpreter;
-import java.io.IOException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Application {
 
-    public static void main(String[] args) throws IOException {
-        ApplicationContext context = new AnnotationConfigApplicationContext("com.epam.training.webshop");
-        CommandLineInterpreter commandLineInterpreter = context.getBean(CommandLineInterpreter.class);
-        commandLineInterpreter.handleUserInputs();
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
     }
 }

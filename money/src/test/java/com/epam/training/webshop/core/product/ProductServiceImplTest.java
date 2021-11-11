@@ -1,6 +1,7 @@
 package com.epam.training.webshop.core.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.epam.training.webshop.core.finance.money.Money;
@@ -87,5 +88,51 @@ public class ProductServiceImplTest {
         // Then
         assertTrue(actual.isEmpty());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCreateProductShouldStoreTheGivenProductWhenTheInputProductIsValid() {
+        // Given
+        Product expected = new Product.Builder()
+            .withName("Monitor")
+            .withNetPrice(new Money(230_000D, Currency.getInstance("HUF")))
+            .build();
+
+        // When
+        underTest.createProduct(expected);
+
+        // Then
+        Product actual = underTest.getProductByName("Monitor").get();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCreateProductShouldThrowNullPointerExceptionWhenProductIsNull() {
+        // Given - When - Then
+        assertThrows(NullPointerException.class, () -> underTest.createProduct(null));
+    }
+
+    @Test
+    public void testCreateProductShouldThrowNullPointerExceptionWhenProductNameIsNull() {
+        // Given
+        Product product = new Product.Builder()
+            .withName(null)
+            .withNetPrice(new Money(230_000D, Currency.getInstance("HUF")))
+            .build();
+
+        // When - Then
+        assertThrows(NullPointerException.class, () -> underTest.createProduct(product));
+    }
+
+    @Test
+    public void testCreateProductShouldThrowNullPointerExceptionWhenNetPriceIsNull() {
+        // Given
+        Product product = new Product.Builder()
+            .withName("Monitor")
+            .withNetPrice(null)
+            .build();
+
+        // When - Then
+        assertThrows(NullPointerException.class, () -> underTest.createProduct(product));
     }
 }
