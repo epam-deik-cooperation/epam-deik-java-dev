@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.io.Writer;
 
 public class CliInterpreter {
-
     private final BufferedReader input;
     private final Writer output;
     private boolean shouldRun;

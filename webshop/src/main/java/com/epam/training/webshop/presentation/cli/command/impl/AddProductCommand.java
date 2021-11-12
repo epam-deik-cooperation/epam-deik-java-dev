@@ -1,7 +1,7 @@
 package com.epam.training.webshop.presentation.cli.command.impl;
 
-import com.epam.training.webshop.domain.ShoppingCartService;
-import com.epam.training.webshop.domain.exception.NoSuchProductException;
+import com.epam.training.webshop.service.ShoppingCartService;
+import com.epam.training.webshop.service.exception.NoSuchProductException;
 import com.epam.training.webshop.presentation.cli.command.Command;
 
 public class AddProductCommand implements Command {

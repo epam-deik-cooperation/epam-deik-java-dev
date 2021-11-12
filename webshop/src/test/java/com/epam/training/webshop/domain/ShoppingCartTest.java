@@ -2,14 +2,16 @@ package com.epam.training.webshop.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import com.epam.training.webshop.domain.exception.NoSuchProductException;
-import com.epam.training.webshop.domain.grossprice.impl.GrossPriceCalculatorDecorator;
-import com.epam.training.webshop.domain.impl.ShoppingCartServiceImpl;
-import com.epam.training.webshop.domain.order.model.Product;
-import com.epam.training.webshop.domain.order.model.impl.SimpleCart;
-import com.epam.training.webshop.domain.order.model.impl.SimpleProduct;
-import com.epam.training.webshop.repository.OrderRepository;
+
+import com.epam.training.webshop.model.Product;
+import com.epam.training.webshop.service.exception.NoSuchProductException;
+import com.epam.training.webshop.service.impl.GrossPriceCalculatorDecorator;
+import com.epam.training.webshop.service.impl.ShoppingCartServiceImpl;
+import com.epam.training.webshop.model.Cart;
+import com.epam.training.webshop.repository.CartRepository;
 import com.epam.training.webshop.repository.ProductRepository;
+import com.epam.training.webshop.service.ShoppingCartService;
+
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +28,7 @@ class ShoppingCartTest {
     @Mock
     private GrossPriceCalculatorDecorator grossPriceCalculatorDecorator;
     @Mock
-    private OrderRepository orderRepository;
+    private CartRepository cartRepository;
     @Mock
     private ProductRepository productRepository;
 
@@ -40,7 +42,7 @@ class ShoppingCartTest {
         // Given
 
         List<Product> expectedResult = Collections.emptyList();
-        underTest = new ShoppingCartServiceImpl(new SimpleCart(), productRepository, orderRepository, grossPriceCalculatorDecorator);
+        underTest = new ShoppingCartServiceImpl(new Cart(), productRepository, cartRepository, grossPriceCalculatorDecorator);
 
         // When
         List<Product> actualResult = underTest.getProductsFromCart();
@@ -52,10 +54,10 @@ class ShoppingCartTest {
     @Test
     public void testListProductShouldReturnTheListOfProductsWhenNotEmpty() throws NoSuchProductException {
         // Given
-        Product product = new SimpleProduct(PRODUCT_NAME, 100);
+        Product product = new Product(PRODUCT_NAME, 100);
         List<Product> expectedResult = Collections.singletonList(product);
-        given(productRepository.getAllProduct()).willReturn(Collections.singletonList(product));
-        underTest = new ShoppingCartServiceImpl(new SimpleCart(), productRepository, orderRepository, grossPriceCalculatorDecorator);
+        given(productRepository.findAll()).willReturn(Collections.singletonList(product));
+        underTest = new ShoppingCartServiceImpl(new Cart(), productRepository, cartRepository, grossPriceCalculatorDecorator);
         underTest.addProduct(PRODUCT_NAME);
 
         // When

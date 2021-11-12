@@ -1,13 +1,13 @@
 package com.epam.training.webshop.config;
 
-import com.epam.training.webshop.domain.ShoppingCartService;
-import com.epam.training.webshop.domain.grossprice.GrossPriceCalculator;
-import com.epam.training.webshop.domain.impl.ShoppingCartServiceImpl;
-import com.epam.training.webshop.domain.order.Observer;
-import com.epam.training.webshop.domain.order.model.Cart;
+import com.epam.training.webshop.model.Cart;
+import com.epam.training.webshop.service.ShoppingCartService;
+import com.epam.training.webshop.service.GrossPriceCalculator;
+import com.epam.training.webshop.service.impl.ShoppingCartServiceImpl;
+import com.epam.training.webshop.service.Observer;
 import com.epam.training.webshop.presentation.cli.CliInterpreter;
 import com.epam.training.webshop.presentation.cli.command.CommandLineParser;
-import com.epam.training.webshop.repository.OrderRepository;
+import com.epam.training.webshop.repository.CartRepository;
 import com.epam.training.webshop.repository.ProductRepository;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -17,20 +17,18 @@ import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.CollectionUtils;
 
 @Configuration
-@ComponentScan("com.epam.training.webshop")
 @PropertySource(value = "classpath:application.properties", encoding = "UTF-8")
 public class WebShopConfiguration {
 
     @Bean
-    public CliInterpreter cliInterpreter(Reader reader, Writer writer, @Lazy CommandLineParser commandLineParser) {
-        CliInterpreter cliInterpreter = new CliInterpreter(reader, writer);
+    public CliInterpreter cliInterpreter(@Lazy CommandLineParser commandLineParser) {
+        CliInterpreter cliInterpreter = new CliInterpreter(cliReader(), cliWriter());
         cliInterpreter.updateCommandLineParser(commandLineParser);
         return cliInterpreter;
     }
@@ -65,10 +63,10 @@ public class WebShopConfiguration {
     @Bean
     public ShoppingCartService shoppingCartService(Cart cart,
                                                    ProductRepository productRepository,
-                                                   OrderRepository orderRepository,
+                                                   CartRepository cartRepository,
                                                    @Qualifier("hungarianTaxGrossPriceCalculator") GrossPriceCalculator grossPriceCalculator,
                                                    List<Observer> observers) {
-        final ShoppingCartServiceImpl shoppingCartService = new ShoppingCartServiceImpl(cart, productRepository, orderRepository, grossPriceCalculator);
+        final ShoppingCartServiceImpl shoppingCartService = new ShoppingCartServiceImpl(cart, productRepository, cartRepository, grossPriceCalculator);
         observers.forEach(shoppingCartService::subscribe);
         return shoppingCartService;
     }

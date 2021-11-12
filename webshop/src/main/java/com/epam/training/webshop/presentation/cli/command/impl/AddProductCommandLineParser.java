@@ -1,6 +1,6 @@
 package com.epam.training.webshop.presentation.cli.command.impl;
 
-import com.epam.training.webshop.domain.ShoppingCartService;
+import com.epam.training.webshop.service.ShoppingCartService;
 import com.epam.training.webshop.presentation.cli.command.AbstractCommandLineParser;
 import com.epam.training.webshop.presentation.cli.command.Command;
 import java.util.regex.Matcher;
