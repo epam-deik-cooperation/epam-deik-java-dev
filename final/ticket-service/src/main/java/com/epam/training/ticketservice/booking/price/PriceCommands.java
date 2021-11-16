@@ -17,7 +17,7 @@ public class PriceCommands extends SecuredCommands {
     @ShellMethod(value = "update base price value", key = "update base price")
     @ShellMethodAvailability("isAccountAdmin")
     public void updateBasePrice(int value) {
-        priceComponentService.updateBasePrice(value);
+        PriceCalculator.setBasePrice(value);
     }
 
 

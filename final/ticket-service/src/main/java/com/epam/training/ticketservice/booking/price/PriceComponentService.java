@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class PriceComponentService {
     private final ScreeningService screeningService;
 
     @Transactional
-    public int getPrice(Screening screening) {
+    public int getAdditionalPrice(Screening screening) {
         int price = 0;
 
         List<PriceComponent> components = priceComponentRepository.findAll();
@@ -57,9 +58,6 @@ public class PriceComponentService {
         return price;
     }
 
-    public void updateBasePrice(int value) {
-        PriceCalculator.setBasePrice(value);
-    }
 
     public void createPriceComponent(String name, int price) throws AlreadyExistsException {
         if (priceComponentRepository.existsByNameContainingIgnoreCase(name)) {
@@ -81,6 +79,9 @@ public class PriceComponentService {
             throw new NotFoundException(NO_PRICE_COMPONENT_FOUND);
         } else {
             List<Movie> movies = priceComponent.getMovies();
+            if (movies == null) {
+                movies = new ArrayList<>();
+            }
 
             movies.add(movieService.findByTitle(movieTitle));
             priceComponent.setMovies(movies);
@@ -100,6 +101,9 @@ public class PriceComponentService {
             throw new NotFoundException(NO_PRICE_COMPONENT_FOUND);
         } else {
             List<Screening> screenings = priceComponent.getScreenings();
+            if (screenings == null) {
+                screenings = new ArrayList<>();
+            }
 
             screenings.add(screeningService.getScreeningByProperties(movieTitle, roomName, date));
             priceComponent.setScreenings(screenings);
@@ -117,6 +121,9 @@ public class PriceComponentService {
             throw new NotFoundException(NO_PRICE_COMPONENT_FOUND);
         } else {
             List<Room> rooms = priceComponent.getRooms();
+            if (rooms == null) {
+                rooms = new ArrayList<>();
+            }
 
             rooms.add(roomService.findByName(roomName));
             priceComponent.setRooms(rooms);

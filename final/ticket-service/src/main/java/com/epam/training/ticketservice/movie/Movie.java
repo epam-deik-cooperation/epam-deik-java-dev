@@ -63,7 +63,7 @@ public class Movie {
             return false;
         }
         Movie movie = (Movie) o;
-        return id.equals(movie.id) && title.equals(movie.title) && Objects.equals(length, movie.length);
+        return title.equals(movie.title) && Objects.equals(length, movie.length);
     }
 
     @Override
