@@ -6,18 +6,11 @@ import com.epam.training.webshop.core.cart.grossprice.impl.GrossPriceCalculatorI
 import com.epam.training.webshop.core.cart.grossprice.impl.HungarianTaxGrossPriceCalculator;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.bank.impl.StaticBank;
-import com.epam.training.webshop.core.product.ProductService;
-import com.epam.training.webshop.core.product.ProductServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfiguration {
-
-    @Bean(initMethod = "init")
-    public ProductService productService() {
-        return new ProductServiceImpl();
-    }
 
     @Bean
     public GrossPriceCalculator grossPriceCalculator() {

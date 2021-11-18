@@ -11,7 +11,7 @@ import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
 import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ public class CheckoutServiceImplTest {
     @Test
     public void testCheckoutShouldReturnWithAnOrderWhenCartIsNotNull() {
         // Given
-        List<Product> productList = mock(List.class);
+        List<ProductDto> productList = mock(List.class);
         Cart cart = mock(Cart.class);
         Money netPrice = mock(Money.class);
         Money grossPrice = mock(Money.class);

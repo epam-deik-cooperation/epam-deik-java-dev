@@ -3,7 +3,7 @@ package com.epam.training.webshop.ui.command;
 import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.checkout.CheckoutService;
 import com.epam.training.webshop.core.product.ProductService;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.Optional;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -29,7 +29,7 @@ public class CartCommand {
     @ShellMethod(key = "user cart addProduct", value = "Add product to cart")
     public String addProductToCart(String productName) {
         String resultString = productName + " is added to your cart";
-        Optional<Product> optionalProduct = productService.getProductByName(productName);
+        Optional<ProductDto> optionalProduct = productService.getProductByName(productName);
         if (optionalProduct.isEmpty()) {
             resultString = productName + " is not found as a Product";
         } else {

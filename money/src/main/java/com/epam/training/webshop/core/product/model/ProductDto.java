@@ -3,12 +3,12 @@ package com.epam.training.webshop.core.product.model;
 import com.epam.training.webshop.core.finance.money.Money;
 import java.util.Objects;
 
-public class Product {
+public class ProductDto {
 
     private final String name;
     private final Money netPrice;
 
-    public Product(String name, Money netPrice) {
+    public ProductDto(String name, Money netPrice) {
         this.name = name;
         this.netPrice = netPrice;
     }
@@ -31,7 +31,7 @@ public class Product {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        Product product = (Product) o;
+        ProductDto product = (ProductDto) o;
         return Objects.equals(name, product.name) && Objects.equals(netPrice, product.netPrice);
     }
 
@@ -62,8 +62,8 @@ public class Product {
             return this;
         }
 
-        public Product build() {
-            return new Product(name, netPrice);
+        public ProductDto build() {
+            return new ProductDto(name, netPrice);
         }
     }
 }

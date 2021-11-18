@@ -1,17 +1,17 @@
 package com.epam.training.webshop.core.checkout.model;
 
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.List;
 import java.util.Objects;
 
 public class Order {
 
-    private final List<Product> productList;
+    private final List<ProductDto> productList;
     private final Money netPrice;
     private final Money grossPrice;
 
-    public Order(List<Product> productList, Money netPrice, Money grossPrice) {
+    public Order(List<ProductDto> productList, Money netPrice, Money grossPrice) {
         this.productList = productList;
         this.netPrice = netPrice;
         this.grossPrice = grossPrice;
