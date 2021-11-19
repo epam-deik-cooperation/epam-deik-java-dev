@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +59,7 @@ public class PriceCalculatorTest {
 
 
         // Then
-        Assertions.assertEquals(expectedPrice, actualPrice);
+        assertEquals(expectedPrice, actualPrice);
 
 
     }

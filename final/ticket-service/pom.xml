@@ -219,19 +219,17 @@
                         <configuration>
 
                             <excludes>
+                                <exclude>com/epam/training/ticketservice/account/Account.class</exclude>
+                                <exclude>com/epam/training/ticketservice/account/AccountType.class</exclude>
+                                <exclude>com/epam/training/ticketservice/booking/Booking.class</exclude>
+                                <exclude>com/epam/training/ticketservice/booking/price/PriceComponent.class</exclude>
+                                <exclude>com/epam/training/ticketservice/config/SpringSecurityConfig.class</exclude>
+                                <exclude>com/epam/training/ticketservice/exception/AlreadyExistsException.class</exclude>
+                                <exclude>com/epam/training/ticketservice/exception/ConflictException.class</exclude>
+                                <exclude>com/epam/training/ticketservice/movie/Movie.class</exclude>
                                 <exclude>com/epam/training/ticketservice/room/Room.class</exclude>
                                 <exclude>com/epam/training/ticketservice/room/Seat.class</exclude>
-                                <exclude>com/epam/training/ticketservice/movie/Movie.class</exclude>
                                 <exclude>com/epam/training/ticketservice/screening/Screening.class</exclude>
-                                <exclude>com/epam/training/ticketservice/account/Account.class</exclude>
-                                <exclude>com/epam/training/ticketservice/booking/Booking.class</exclude>
-                                <exclude>com/epam/training/ticketservice/exception/*.class</exclude>
-                                <exclude>com/epam/training/ticketservice/config/*.class</exclude>
-                                <exclude>com/epam/training/ticketservice/*.class</exclude>
-                                <exclude>com/epam/training/ticketservice/room/RoomCommands.class</exclude>
-                                <exclude>com/epam/training/ticketservice/screening/ScreeningCommands.class</exclude>
-                                <exclude>com/epam/training/ticketservice/booking/price/PriceComponent.class</exclude>
-                                <exclude>com/epam/training/ticketservice/booking/price/PriceCommands.class</exclude>
 
                             </excludes>
 

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -126,7 +127,7 @@ public class PriceComponentServiceTest {
         }
 
         // Then
-        Assertions.assertEquals(expectedPrice, actualPrice);
+        assertEquals(expectedPrice, actualPrice);
 
     }
 
@@ -156,7 +157,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertThrows(AlreadyExistsException.class,
+        assertThrows(AlreadyExistsException.class,
                 () -> pcService.createPriceComponent(testComponent.getName(), testComponent.getPrice()));
         verify(pcRepository, times(0)).save(testComponent);
 
@@ -179,7 +180,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertTrue(testComponent.getMovies().contains(testMovie));
+        assertTrue(testComponent.getMovies().contains(testMovie));
 
         verify(pcRepository, times(1)).save(testComponent);
 
@@ -202,7 +203,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertTrue(testComponent.getRooms().contains(testRoom));
+        assertTrue(testComponent.getRooms().contains(testRoom));
 
         verify(pcRepository, times(1)).save(testComponent);
 
@@ -230,7 +231,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertTrue(testComponent.getScreenings().contains(testScreening));
+        assertTrue(testComponent.getScreenings().contains(testScreening));
 
         verify(pcRepository, times(1)).save(testComponent);
 
@@ -248,7 +249,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertThrows(NotFoundException.class,
+        assertThrows(NotFoundException.class,
                 () -> pcService.attachPriceComponentToMovie(testComponent.getName(), testMovie.getTitle()));
 
         verify(pcRepository, times(0)).save(any(PriceComponent.class));
@@ -268,7 +269,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertThrows(NotFoundException.class,
+        assertThrows(NotFoundException.class,
                 () -> pcService.attachPriceComponentToRoom(testComponent.getName(), testRoom.getName()));
 
         verify(pcRepository, times(0)).save(any(PriceComponent.class));
@@ -287,7 +288,7 @@ public class PriceComponentServiceTest {
 
 
         // Then
-        Assertions.assertThrows(NotFoundException.class,
+        assertThrows(NotFoundException.class,
                 () -> pcService.attachPriceComponentToScreening(testComponent.getName(),
                         testMovie.getTitle(),
                         testRoom.getName(),

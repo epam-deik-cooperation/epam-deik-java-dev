@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +57,7 @@ public class BookingCommandsTest {
                 .bookings(List.of())
                 .build();
 
-        Authentication authentication = new TestingAuthenticationToken(
+       Authentication authentication = new TestingAuthenticationToken(
                 account.getUserName(),
                 account,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
@@ -64,7 +65,7 @@ public class BookingCommandsTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @AfterEach
+   @AfterEach
     void clearContext() {
         SecurityContextHolder.clearContext();
     }
@@ -99,7 +100,7 @@ public class BookingCommandsTest {
         String actualMessage = bookingCommands.showPriceFor(movieTitle, roomName, date, seats);
 
         // Then
-        Assertions.assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedMessage, actualMessage);
 
 
     }
@@ -121,7 +122,7 @@ public class BookingCommandsTest {
 
         // Then
 
-        Assertions.assertEquals(expectedString, actualString);
+        assertEquals(expectedString, actualString);
 
 
     }

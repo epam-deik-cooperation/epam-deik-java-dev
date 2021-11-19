@@ -23,46 +23,55 @@ public class PriceCommands extends SecuredCommands {
 
     @ShellMethod(value = "create price component componentName price", key = "create price component")
     @ShellMethodAvailability("isAccountAdmin")
-    public void createPriceComponent(String name, int price) {
+    public String createPriceComponent(String name, int price) {
         try {
             priceComponentService.createPriceComponent(name, price);
         } catch (AlreadyExistsException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
+        return String.format("Component '%s' successfully created for '%d'", name, price);
     }
 
 
     @ShellMethod(value = "attach price component to movie componentName movieTitle",
             key = "attach price component to movie")
     @ShellMethodAvailability("isAccountAdmin")
-    public void attachComponentToMovie(String componentName, String movieTitle) {
+    public String attachComponentToMovie(String componentName, String movieTitle) {
         try {
             priceComponentService.attachPriceComponentToMovie(componentName, movieTitle);
         } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
+        return String.format("Component '%s' successfully attachet to movie '%s'", componentName, movieTitle);
     }
 
 
     @ShellMethod(value = "attach price component to room componentName roomName",
             key = "attach price component to room")
     @ShellMethodAvailability("isAccountAdmin")
-    public void attachComponentToRoom(String componentName, String roomName) {
+    public String attachComponentToRoom(String componentName, String roomName) {
 
         try {
             priceComponentService.attachPriceComponentToRoom(componentName, roomName);
         } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
+        return String.format("Component '%s' successfully attachet to room '%s'", componentName, roomName);
     }
 
 
     @ShellMethod(value = "attach price component to screening componentName movieTitle roomName date",
             key = "attach price component to screening")
     @ShellMethodAvailability("isAccountAdmin")
-    public void attachComponentToScreening(
-            String componentName, String movieTitle, String roomName, String date) throws NotFoundException {
-        priceComponentService.attachPriceComponentToScreening(componentName, movieTitle, roomName, date);
+    public String attachComponentToScreening(
+            String componentName, String movieTitle, String roomName, String date) {
+        try {
+            priceComponentService.attachPriceComponentToScreening(componentName, movieTitle, roomName, date);
+        } catch (NotFoundException e) {
+            return e.getMessage();
+        }
+        return String.format("Component '%s' successfully attachet to screening '%s %s %s'",
+                componentName, movieTitle, roomName, date);
     }
 
 
