@@ -146,7 +146,7 @@ public class ScreeningCommandsTest {
 
         // When
         when(screeningService.getAllScreenings()).thenReturn(Collections.emptyList());
-        String actualString = screeningCommands.listScreening();
+        String actualString = screeningCommands.listScreenings();
 
         // Then
         assertEquals(expectedString, actualString);
@@ -173,7 +173,7 @@ public class ScreeningCommandsTest {
 
         // When
         when(screeningService.getAllScreenings()).thenReturn(List.of(testScreening1, testScreening2));
-        String actualString = screeningCommands.listScreening();
+        String actualString = screeningCommands.listScreenings();
 
         // Then
         assertEquals(expectedString, actualString);

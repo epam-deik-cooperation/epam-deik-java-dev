@@ -160,16 +160,7 @@ public class BookingServiceTest {
 
 
         // When
-        when(screeningService.getScreeningByProperties(testMovie.getTitle(),
-                testRoom.getName(),
-                testScreening.getDate().toString())).thenReturn(testScreening);
-
-        when(priceCalculator.calculate(testScreening, testBooking.getSeats().size())).thenReturn(1500);
-
-        String actualString = bookingService.showPriceForBooking(testMovie.getTitle(),
-                testRoom.getName(),
-                testScreening.getDate().toString(),
-                sb.toString());
+        String actualString = bookingService.showPriceForBooking(testBooking);
 
 
         // Then
@@ -196,15 +187,10 @@ public class BookingServiceTest {
                         .append(" "));
 
         // When
-        try {
-            when(screeningService.getScreeningByProperties(testMovie.getTitle(),
-                    testRoom.getName(),
-                    testScreening.getDate().toString())).thenReturn(null);
+        testBooking.setScreening(null);
 
-            bookingService.showPriceForBooking(testMovie.getTitle(),
-                    testRoom.getName(),
-                    testScreening.getDate().toString(),
-                    sb.toString());
+        try {
+            bookingService.showPriceForBooking(testBooking);
         } catch (NotFoundException | ConflictException e) {
             actualString = e.getMessage();
         }

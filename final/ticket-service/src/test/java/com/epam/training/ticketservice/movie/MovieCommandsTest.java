@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.movie;
 
 import com.epam.training.ticketservice.exception.AlreadyExistsException;
 import javassist.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,17 +35,34 @@ public class MovieCommandsTest {
     @InjectMocks
     MovieCommands movieCommands;
 
+    private Movie movie;
+    private String title;
+    private String genre;
+    private int length;
+
+
+    @BeforeEach
+    private void setUp() {
+        title = "test";
+        genre = "test";
+        length = 100;
+
+        movie = Movie.builder()
+                .title(title)
+                .genre(genre)
+                .length(length)
+                .build();
+    }
+
 
     @Test
     public void testCreateMovie() throws AlreadyExistsException {
 
         // Given
-        String title = "test";
-        String genre = "test";
-        int length = 100;
 
 
         // When
+        when(movieService.mapToMovie(title, genre, length)).thenReturn(movie);
         movieCommands.createMovie(title, genre, length);
 
         // Then
@@ -56,11 +74,10 @@ public class MovieCommandsTest {
             throws AlreadyExistsException {
 
         // Given
-        String title = "test";
-        String genre = "test";
-        int length = 100;
+
 
         // When
+        when(movieService.mapToMovie(title, genre, length)).thenReturn(movie);
         doThrow(AlreadyExistsException.class).when(movieService).createMovie(any(Movie.class));
         movieCommands.createMovie(title, genre, length);
 
@@ -73,12 +90,10 @@ public class MovieCommandsTest {
     public void testUpdateMovie() throws NotFoundException {
 
         // Given
-        String title = "test";
-        String genre = "test";
-        int length = 100;
 
 
         // When
+        when(movieService.mapToMovie(title, genre, length)).thenReturn(movie);
         movieCommands.updateMovie(title, genre, length);
 
         // Then
@@ -90,11 +105,10 @@ public class MovieCommandsTest {
             throws NotFoundException {
 
         // Given
-        String title = "test";
-        String genre = "test";
-        int length = 100;
+
 
         // When
+        when(movieService.mapToMovie(title, genre, length)).thenReturn(movie);
         doThrow(NotFoundException.class).when(movieService).updateMovie(any(Movie.class));
         movieCommands.updateMovie(title, genre, length);
 

@@ -15,13 +15,6 @@ public class AccountCommands {
 
     private final AccountService accountService;
 
-    private boolean isAdminLoggedIn() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream()
-                .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
-    }
 
     @ShellMethod(value = "describe account", key = "describe account")
     public String describeAccount() throws NotFoundException {
@@ -57,4 +50,13 @@ public class AccountCommands {
         }
         return "You are not signed in";
     }
+
+    private boolean isAdminLoggedIn() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
+    }
+
 }

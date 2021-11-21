@@ -16,10 +16,11 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 @RequiredArgsConstructor
 public class AuthenticationCommands extends SecuredCommands {
 
+    private static final String LOGIN_FAILED_BAD_CREDENTIALS = "Login failed due to incorrect credentials";
+
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
 
-    private static final String LOGIN_FAILED_BAD_CREDENTIALS = "Login failed due to incorrect credentials";
 
     @ShellMethod(value = "sign in username password", key = "sign in")
     @ShellMethodAvailability("isNotSignedIn")

@@ -12,39 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
-
-    private final MovieRepository movieRepository;
-
     private static final String MOVIE_NOT_FOUND = "Movie with given title not found.";
     private static final String MOVIE_ALREADY_EXIST = "Movie with given title already exists";
+
+    private final MovieRepository movieRepository;
 
 
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
-    }
-
-    public void createMovie(Movie newMovie) throws AlreadyExistsException {
-        if (!movieRepository.existsByTitleContainingIgnoreCase(newMovie.getTitle())) {
-            movieRepository.save(newMovie);
-        } else {
-            throw new AlreadyExistsException(MOVIE_ALREADY_EXIST);
-        }
-    }
-
-    public void updateMovie(Movie movieToUpdate) throws NotFoundException {
-        if (movieRepository.existsByTitleContainingIgnoreCase(movieToUpdate.getTitle())) {
-            movieRepository.update(movieToUpdate.getTitle(), movieToUpdate.getGenre(), movieToUpdate.getLength());
-        } else {
-            throw new NotFoundException(MOVIE_NOT_FOUND);
-        }
-    }
-
-    public void deleteMovie(String movieTitle) throws NotFoundException {
-        if (movieRepository.existsByTitleContainingIgnoreCase(movieTitle)) {
-            movieRepository.deleteByTitleContainingIgnoreCase(movieTitle);
-        } else {
-            throw new NotFoundException(MOVIE_NOT_FOUND);
-        }
     }
 
     public Movie findByTitle(String title) throws NotFoundException {
@@ -53,6 +28,38 @@ public class MovieService {
 
         if (movie != null) {
             return movieRepository.findByTitleContainingIgnoreCase(title);
+        } else {
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        }
+    }
+
+    public Movie mapToMovie(String title, String genre, int length) {
+        return Movie.builder()
+                .title(title)
+                .genre(genre)
+                .length(length)
+                .build();
+    }
+
+    public void createMovie(Movie movie) throws AlreadyExistsException {
+        if (!movieRepository.existsByTitleContainingIgnoreCase(movie.getTitle())) {
+            movieRepository.save(movie);
+        } else {
+            throw new AlreadyExistsException(MOVIE_ALREADY_EXIST);
+        }
+    }
+
+    public void updateMovie(Movie movie) throws NotFoundException {
+        if (movieRepository.existsByTitleContainingIgnoreCase(movie.getTitle())) {
+            movieRepository.update(movie.getTitle(), movie.getGenre(), movie.getLength());
+        } else {
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        }
+    }
+
+    public void deleteMovie(String title) throws NotFoundException {
+        if (movieRepository.existsByTitleContainingIgnoreCase(title)) {
+            movieRepository.deleteByTitleContainingIgnoreCase(title);
         } else {
             throw new NotFoundException(MOVIE_NOT_FOUND);
         }

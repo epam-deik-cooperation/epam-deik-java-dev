@@ -18,8 +18,6 @@ import java.time.format.DateTimeFormatter;
 public class ScreeningCommands extends SecuredCommands {
 
     private final ScreeningService screeningService;
-    private final MovieService movieService;
-    private final RoomService roomService;
 
 
     @ShellMethod(value = "create screening movieTitle roomName startDate", key = "create screening")
@@ -53,7 +51,7 @@ public class ScreeningCommands extends SecuredCommands {
     }
 
     @ShellMethod(value = "list screenings", key = "list screenings")
-    public String listScreening() {
+    public String listScreenings() {
 
         StringBuilder sb = new StringBuilder();
 

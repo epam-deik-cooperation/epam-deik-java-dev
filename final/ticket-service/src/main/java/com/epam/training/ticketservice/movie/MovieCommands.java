@@ -20,11 +20,9 @@ public class MovieCommands extends SecuredCommands {
     public String createMovie(String title, String genre, int length) {
 
         try {
-            movieService.createMovie(Movie.builder()
-                    .title(title)
-                    .genre(genre)
-                    .length(length)
-                    .build());
+            Movie movie = movieService.mapToMovie(title, genre, length);
+            movieService.createMovie(movie);
+
         } catch (AlreadyExistsException e) {
             return e.getMessage();
         }
@@ -37,11 +35,9 @@ public class MovieCommands extends SecuredCommands {
     public String updateMovie(String title, String genre, int length) {
 
         try {
-            movieService.updateMovie(Movie.builder()
-                    .title(title)
-                    .genre(genre)
-                    .length(length)
-                    .build());
+            Movie movie = movieService.mapToMovie(title, genre, length);
+            movieService.updateMovie(movie);
+
         } catch (NotFoundException e) {
             return e.getMessage();
         }

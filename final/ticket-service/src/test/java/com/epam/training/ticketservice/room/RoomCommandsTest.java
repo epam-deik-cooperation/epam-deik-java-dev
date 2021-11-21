@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.room;
 
 import com.epam.training.ticketservice.exception.AlreadyExistsException;
-import com.epam.training.ticketservice.movie.Movie;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +31,7 @@ public class RoomCommandsTest {
     @InjectMocks
     RoomCommands roomCommands;
 
+    private Room room;
     private String name;
     private int rows;
     private int columns;
@@ -41,6 +41,11 @@ public class RoomCommandsTest {
         name = "test";
         rows = 10;
         columns = 10;
+        room = Room.builder()
+                .name(name)
+                .numberOfRows(rows)
+                .numberOfColumns(columns)
+                .build();
     }
 
 
@@ -51,6 +56,7 @@ public class RoomCommandsTest {
 
 
         // When
+        when(roomService.mapToRoom(name, rows, columns)).thenReturn(room);
         roomCommands.createRoom(name, rows, columns);
 
         // Then
@@ -65,6 +71,7 @@ public class RoomCommandsTest {
 
 
         // When
+        when(roomService.mapToRoom(name, rows, columns)).thenReturn(room);
         doThrow(AlreadyExistsException.class).when(roomService).createRoom(any(Room.class));
         roomCommands.createRoom(name, rows, columns);
 
@@ -80,6 +87,7 @@ public class RoomCommandsTest {
 
 
         // When
+        when(roomService.mapToRoom(name, rows, columns)).thenReturn(room);
         roomCommands.updateRoom(name, rows, columns);
 
         // Then
@@ -94,6 +102,7 @@ public class RoomCommandsTest {
 
 
         // When
+        when(roomService.mapToRoom(name, rows, columns)).thenReturn(room);
         doThrow(NotFoundException.class).when(roomService).updateRoom(any(Room.class));
         roomCommands.updateRoom(name, rows, columns);
 

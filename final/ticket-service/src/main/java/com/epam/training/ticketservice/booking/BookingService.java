@@ -24,61 +24,6 @@ public class BookingService {
     private final PriceCalculator priceCalculator;
 
 
-    private boolean isSeatPresent(Booking newBooking) throws NotFoundException {
-
-        List<Seat> notExistentSeatsInRoom = newBooking.getSeats()
-                .stream().filter(x -> x.getRowIndex() > newBooking.getScreening()
-                        .getRoom()
-                        .getNumberOfColumns()
-                        || x.getColumnIndex() > newBooking.getScreening()
-                        .getRoom()
-                        .getNumberOfRows())
-                .collect(Collectors.toList());
-
-        List<String> seatList = new ArrayList<>();
-
-        notExistentSeatsInRoom.forEach(x ->
-                seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
-
-        if (notExistentSeatsInRoom.isEmpty()) {
-            return true;
-        } else {
-            throw new NotFoundException(String.format("Seat %s does not exist in this room",
-                    String.join(", ", seatList)));
-        }
-    }
-
-    private boolean isSeatNotBooked(Booking newBooking, List<Booking> bookingsAtPlace) throws ConflictException {
-
-        List<Seat> bookedSeats = newBooking.getSeats()
-                .stream()
-                .filter(x -> bookingsAtPlace.stream()
-                        .map(Booking::getSeats)
-                        .anyMatch(y -> y.contains(x)))
-                .collect(Collectors.toList());
-
-        List<String> seatList = new ArrayList<>();
-
-        bookedSeats.forEach(x ->
-                seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
-
-        if (bookedSeats.isEmpty()) {
-            return true;
-        } else {
-            throw new ConflictException(String.format("Seat %s is already taken",
-                    String.join(", ", seatList)));
-        }
-    }
-
-    private boolean isBookingValid(Booking newBooking) throws NotFoundException, ConflictException {
-        List<Booking> bookingsAtPlace = bookingRepository.findAllByScreening_MovieAndScreening_RoomAndScreening_Date(
-                newBooking.getScreening().getMovie(),
-                newBooking.getScreening().getRoom(),
-                newBooking.getScreening().getDate());
-
-        return isSeatPresent(newBooking) && isSeatNotBooked(newBooking, bookingsAtPlace);
-    }
-
     public Booking mapToBooking(String movieTitle, String roomName, String date, String seats)
             throws NotFoundException {
 
@@ -98,7 +43,6 @@ public class BookingService {
                 .build();
     }
 
-
     public Booking mapToBooking(String movieTitle, String roomName, String date, String seats, Account account)
             throws NotFoundException {
 
@@ -108,16 +52,69 @@ public class BookingService {
         return booking;
     }
 
-    public void createBooking(Booking newBooking) throws NotFoundException, ConflictException {
-        if (isBookingValid(newBooking)) {
-            bookingRepository.save(newBooking);
+    public void createBooking(Booking booking) throws NotFoundException, ConflictException {
+        if (isBookingValid(booking)) {
+            bookingRepository.save(booking);
         }
     }
 
-    public String showPriceForBooking(String movieTitle, String roomName, String date, String seats)
-            throws NotFoundException, ConflictException {
+    private boolean isBookingValid(Booking booking) throws NotFoundException, ConflictException {
+        List<Booking> bookingsAtPlace = bookingRepository.findAllByScreening_MovieAndScreening_RoomAndScreening_Date(
+                booking.getScreening().getMovie(),
+                booking.getScreening().getRoom(),
+                booking.getScreening().getDate());
 
-        Booking booking = mapToBooking(movieTitle, roomName, date, seats);
+        return isSeatPresent(booking) && isSeatNotBooked(booking, bookingsAtPlace);
+    }
+
+    private boolean isSeatPresent(Booking booking) throws NotFoundException {
+
+        List<Seat> notExistentSeatsInRoom = booking.getSeats()
+                .stream().filter(x -> x.getRowIndex() > booking.getScreening()
+                        .getRoom()
+                        .getNumberOfColumns()
+                        || x.getColumnIndex() > booking.getScreening()
+                        .getRoom()
+                        .getNumberOfRows())
+                .collect(Collectors.toList());
+
+        List<String> seatList = new ArrayList<>();
+
+        notExistentSeatsInRoom.forEach(x ->
+                seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
+
+        if (notExistentSeatsInRoom.isEmpty()) {
+            return true;
+        } else {
+            throw new NotFoundException(String.format("Seat %s does not exist in this room",
+                    String.join(", ", seatList)));
+        }
+    }
+
+    private boolean isSeatNotBooked(Booking booking, List<Booking> bookingsAtPlace) throws ConflictException {
+
+        List<Seat> bookedSeats = booking.getSeats()
+                .stream()
+                .filter(x -> bookingsAtPlace.stream()
+                        .map(Booking::getSeats)
+                        .anyMatch(y -> y.contains(x)))
+                .collect(Collectors.toList());
+
+        List<String> seatList = new ArrayList<>();
+
+        bookedSeats.forEach(x ->
+                seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
+
+        if (bookedSeats.isEmpty()) {
+            return true;
+        } else {
+            throw new ConflictException(String.format("Seat %s is already taken",
+                    String.join(", ", seatList)));
+        }
+    }
+
+
+    public String showPriceForBooking(Booking booking) throws NotFoundException, ConflictException {
 
         if (booking.getScreening() == null || !isBookingValid(booking)) {
             throw new NotFoundException("No possible booking found with such properties");

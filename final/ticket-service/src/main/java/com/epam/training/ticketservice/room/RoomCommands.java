@@ -18,11 +18,9 @@ public class RoomCommands extends SecuredCommands {
     @ShellMethodAvailability("isAccountAdmin")
     public String createRoom(String name, int rows, int columns) {
         try {
-            roomService.createRoom(Room.builder()
-                    .name(name)
-                    .numberOfRows(rows)
-                    .numberOfColumns(columns)
-                    .build());
+            Room room = roomService.mapToRoom(name, rows, columns);
+            roomService.createRoom(room);
+
         } catch (AlreadyExistsException e) {
             return e.getMessage();
         }
@@ -31,28 +29,27 @@ public class RoomCommands extends SecuredCommands {
 
     @ShellMethod(value = "update room roomName rows cols", key = "update room")
     @ShellMethodAvailability("isAccountAdmin")
-    public String updateRoom(String roomName, int rows, int cols) {
+    public String updateRoom(String name, int rows, int columns) {
         try {
-            roomService.updateRoom(Room.builder()
-                    .name(roomName)
-                    .numberOfRows(rows)
-                    .numberOfColumns(cols)
-                    .build());
+            Room room = roomService.mapToRoom(name, rows, columns);
+            roomService.updateRoom(room);
+
         } catch (NotFoundException e) {
             return e.getMessage();
         }
-        return String.format("Successfully updated room '%s'", roomName);
+        return String.format("Successfully updated room '%s'", name);
     }
 
     @ShellMethod(value = "delete room roomName", key = "delete room")
     @ShellMethodAvailability("isAccountAdmin")
-    public String deleteRoom(String roomName) {
+    public String deleteRoom(String name) {
         try {
-            roomService.deleteRoom(roomName);
+            roomService.deleteRoom(name);
+
         } catch (NotFoundException e) {
             return e.getMessage();
         }
-        return String.format("Successfully deleted room '%s' ", roomName);
+        return String.format("Successfully deleted room '%s' ", name);
     }
 
     @ShellMethod(value = "list rooms", key = "list rooms")

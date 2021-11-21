@@ -3,7 +3,10 @@ package com.epam.training.ticketservice.booking;
 import com.epam.training.ticketservice.account.Account;
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.exception.ConflictException;
+import com.epam.training.ticketservice.movie.Movie;
+import com.epam.training.ticketservice.room.Room;
 import com.epam.training.ticketservice.room.Seat;
+import com.epam.training.ticketservice.screening.Screening;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import static org.mockito.Mockito.*;
 public class BookingCommandsTest {
 
     private Account account;
+    private Booking booking;
     private String movieTitle;
     private String roomName;
     private String date;
@@ -51,13 +56,12 @@ public class BookingCommandsTest {
         date = "2021-11-11 11:11";
         seats = "1,1";
 
-
         account = Account.builder().userName("user")
                 .password("pw")
                 .bookings(List.of())
                 .build();
 
-       Authentication authentication = new TestingAuthenticationToken(
+        Authentication authentication = new TestingAuthenticationToken(
                 account.getUserName(),
                 account,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
@@ -65,7 +69,7 @@ public class BookingCommandsTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-   @AfterEach
+    @AfterEach
     void clearContext() {
         SecurityContextHolder.clearContext();
     }
@@ -95,8 +99,32 @@ public class BookingCommandsTest {
         // Given
         String expectedMessage = "test";
 
+        Room room = Room.builder()
+                .numberOfColumns(10)
+                .numberOfRows(10)
+                .name("test").build();
+
+        Movie movie = Movie.builder()
+                .title("test")
+                .genre("test")
+                .length(100)
+                .build();
+
+        Screening screening = Screening.builder()
+                .room(room)
+                .movie(movie)
+                .date(LocalDateTime.of(2021, 11, 11, 11, 11))
+                .build();
+
+        Booking booking = Booking.builder()
+                .screening(screening)
+                .price(1000)
+                .seats(List.of(new Seat(1, 1)))
+                .build();
+
         // When
-        when(bookingService.showPriceForBooking(movieTitle, roomName, date, seats)).thenReturn(expectedMessage);
+        when(bookingService.mapToBooking(movieTitle, roomName, date, seats)).thenReturn(booking);
+        when(bookingService.showPriceForBooking(booking)).thenReturn(expectedMessage);
         String actualMessage = bookingCommands.showPriceFor(movieTitle, roomName, date, seats);
 
         // Then
@@ -113,8 +141,32 @@ public class BookingCommandsTest {
         String expectedString = "test";
         String actualString = "";
 
+        Room room = Room.builder()
+                .numberOfColumns(10)
+                .numberOfRows(10)
+                .name("test").build();
+
+        Movie movie = Movie.builder()
+                .title("test")
+                .genre("test")
+                .length(100)
+                .build();
+
+        Screening screening = Screening.builder()
+                .room(room)
+                .movie(movie)
+                .date(LocalDateTime.of(2021, 11, 11, 11, 11))
+                .build();
+
+        Booking booking = Booking.builder()
+                .screening(screening)
+                .price(1000)
+                .seats(List.of(new Seat(1, 1)))
+                .build();
+
         // When
-        when(bookingService.showPriceForBooking(movieTitle, roomName, date, seats))
+        when(bookingService.mapToBooking(movieTitle, roomName, date, seats)).thenReturn(booking);
+        when(bookingService.showPriceForBooking(booking))
                 .thenThrow(new NotFoundException(expectedString));
 
         actualString = bookingCommands.showPriceFor(movieTitle, roomName, date, seats);

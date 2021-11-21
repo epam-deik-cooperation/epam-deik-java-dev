@@ -59,10 +59,13 @@ public class BookingCommands extends SecuredCommands {
     }
 
     @ShellMethod(value = "show price for movieTitle roomName date seats", key = "show price for")
-    public String showPriceFor(String movieTitle, String roomName, String date, String seats) throws ConflictException {
+    public String showPriceFor(String movieTitle, String roomName, String date, String seats)
+            throws ConflictException {
 
         try {
-            return bookingService.showPriceForBooking(movieTitle, roomName, date, seats);
+            Booking booking = bookingService.mapToBooking(movieTitle, roomName, date, seats);
+
+            return bookingService.showPriceForBooking(booking);
         } catch (NotFoundException e) {
             return e.getMessage();
         }
