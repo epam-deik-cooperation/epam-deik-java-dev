@@ -35,21 +35,30 @@ public class ScreeningCommandsTest {
     private String movieTitle;
     private String roomName;
     private String date;
+    private Screening screening;
 
     @BeforeEach
     void setUp() {
         movieTitle = "test";
         roomName = "test";
         date = "2021-11-11 11:11";
+        screening = Screening.builder()
+                .movie(Movie.builder()
+                        .title(movieTitle).build())
+                .room(Room.builder()
+                        .name(roomName).build())
+                .date(LocalDateTime.of(2021, 11, 11, 11, 11)).build();
     }
 
- /*   @Test
-    public void testCreateScreening() throws ConflictException {
+    @Test
+    public void testCreateScreening() throws ConflictException, NotFoundException {
 
         // Given
 
 
         // When
+        when(screeningService.mapToScreening(movieTitle, roomName, date)).thenReturn(screening);
+
         screeningCommands.createScreening(movieTitle, roomName, date);
 
         // Then
@@ -59,13 +68,15 @@ public class ScreeningCommandsTest {
 
     @Test
     public void testCreateScreeningShouldNotSaveScreeningIfConflictExceptionIsCaught()
-            throws ConflictException {
+            throws ConflictException, NotFoundException {
 
         // Given
 
 
         // When
+        when(screeningService.mapToScreening(movieTitle, roomName, date)).thenReturn(screening);
         doThrow(ConflictException.class).when(screeningService).createScreening(any(Screening.class));
+
         screeningCommands.createScreening(movieTitle, roomName, date);
 
         // Then
@@ -74,21 +85,21 @@ public class ScreeningCommandsTest {
 
     @Test
     public void testCreateScreeningShouldNotSaveScreeningIfNotFoundExceptionIsCaught()
-            throws ConflictException {
+            throws NotFoundException {
 
         // Given
 
 
         // When
-        doThrow(NotFoundException.class).when(screeningService).createScreening(any(Screening.class));
+
+        doThrow(NotFoundException.class).when(screeningService).mapToScreening(movieTitle, roomName, date);
+
         screeningCommands.createScreening(movieTitle, roomName, date);
 
         // Then
         verify(screeningRepository, times(0)).save(any(Screening.class));
     }
 
-
-  */
 
     @Test
     public void testDeleteScreening() throws NotFoundException {
@@ -97,11 +108,12 @@ public class ScreeningCommandsTest {
 
 
         // When
+        when(screeningService.mapToScreening(movieTitle, roomName, date)).thenReturn(screening);
         screeningCommands.deleteScreening(movieTitle, roomName, date);
 
         // Then
         verify(screeningService, times(1))
-                .deleteScreening(anyString(), anyString(), any(LocalDateTime.class));
+                .deleteScreening(any(Screening.class));
     }
 
     @Test
@@ -114,7 +126,7 @@ public class ScreeningCommandsTest {
         // When
         doThrow(NotFoundException.class)
                 .when(screeningService)
-                .deleteScreening(anyString(), anyString(), any(LocalDateTime.class));
+                .mapToScreening(movieTitle, roomName, date);
 
         screeningCommands.deleteScreening(movieTitle, roomName, date);
 

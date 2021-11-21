@@ -196,8 +196,7 @@ public class ScreeningServiceTest {
         //When
         when(screeningRepository.existsByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class)))
                 .thenReturn(true);
-        screeningService.deleteScreening(testScreening.getMovie().getTitle(),
-                testScreening.getRoom().getName(), testScreening.getDate());
+        screeningService.deleteScreening(testScreening);
 
         //Then
         verify(screeningRepository, times(1))
@@ -217,8 +216,7 @@ public class ScreeningServiceTest {
 
         //Then
         assertThrows(NotFoundException.class,
-                () -> screeningService.deleteScreening(testScreening.getMovie().getTitle(),
-                        testScreening.getRoom().getName(), testScreening.getDate()));
+                () -> screeningService.deleteScreening(testScreening));
 
         verify(screeningRepository, times(0))
                 .deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class));

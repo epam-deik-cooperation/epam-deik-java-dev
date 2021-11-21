@@ -21,20 +21,15 @@ public class ScreeningCommands extends SecuredCommands {
     private final MovieService movieService;
     private final RoomService roomService;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @ShellMethod(value = "create screening movieTitle roomName startDate", key = "create screening")
     @ShellMethodAvailability("isAccountAdmin")
     public String createScreening(String movieTitle, String roomName, String startDate) {
 
-        LocalDateTime date = LocalDateTime.parse(startDate, formatter);
-
         try {
-            screeningService.createScreening(Screening.builder()
-                    .movie(movieService.findByTitle(movieTitle))
-                    .room(roomService.findByName(roomName))
-                    .date(date)
-                    .build());
+            Screening screening = screeningService.mapToScreening(movieTitle, roomName, startDate);
+            screeningService.createScreening(screening);
+
         } catch (ConflictException | NotFoundException e) {
             return e.getMessage();
         }
@@ -46,9 +41,10 @@ public class ScreeningCommands extends SecuredCommands {
     @ShellMethodAvailability("isAccountAdmin")
     public String deleteScreening(String movieTitle, String roomName, String startDate) {
 
-        LocalDateTime date = LocalDateTime.parse(startDate, formatter);
         try {
-            screeningService.deleteScreening(movieTitle, roomName, date);
+            Screening screening = screeningService.mapToScreening(movieTitle, roomName, startDate);
+            screeningService.deleteScreening(screening);
+
         } catch (NotFoundException e) {
             return e.getMessage();
         }

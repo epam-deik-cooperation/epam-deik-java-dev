@@ -50,4 +50,6 @@ public class Screening {
                 + room.getName() + ", at "
                 + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
+
+
 }
