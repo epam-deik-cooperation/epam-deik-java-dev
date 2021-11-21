@@ -1,6 +1,7 @@
 package com.epam.training.webshop.service;
 
 import com.epam.training.webshop.model.Coupon;
+import com.epam.training.webshop.model.Order;
 import com.epam.training.webshop.model.Product;
 import com.epam.training.webshop.service.exception.NoSuchProductException;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface ShoppingCartService extends Observable {
 
-    void order();
+    Order order();
 
     double getTotalNetPrice();
 

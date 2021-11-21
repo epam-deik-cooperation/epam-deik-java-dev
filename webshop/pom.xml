@@ -22,6 +22,7 @@
         <junit-jupiter.version>5.7.1</junit-jupiter.version>
         <slf4j.version>1.7.30</slf4j.version>
         <spring.version>5.1.9.RELEASE</spring.version>
+        <spring-shell.version>2.0.1.RELEASE</spring-shell.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -51,6 +52,18 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
+            <version>${spring-shell.version}</version>
         </dependency>
 
         <dependency>
@@ -136,6 +149,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.5.3</version>
+                <configuration>
+                    <mainClass>com.epam.training.webshop.presentation.cli.CliApplication</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -148,5 +164,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

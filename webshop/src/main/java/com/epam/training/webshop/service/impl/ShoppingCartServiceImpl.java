@@ -1,14 +1,15 @@
 package com.epam.training.webshop.service.impl;
 
 import com.epam.training.webshop.model.Cart;
-import com.epam.training.webshop.model.Product;
-import com.epam.training.webshop.service.ShoppingCartService;
-import com.epam.training.webshop.service.exception.NoSuchProductException;
-import com.epam.training.webshop.service.GrossPriceCalculator;
 import com.epam.training.webshop.model.Coupon;
-import com.epam.training.webshop.service.Observer;
+import com.epam.training.webshop.model.Order;
+import com.epam.training.webshop.model.Product;
 import com.epam.training.webshop.repository.CartRepository;
 import com.epam.training.webshop.repository.ProductRepository;
+import com.epam.training.webshop.service.GrossPriceCalculator;
+import com.epam.training.webshop.service.Observer;
+import com.epam.training.webshop.service.ShoppingCartService;
+import com.epam.training.webshop.service.exception.NoSuchProductException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void order() {
+    public Order order() {
         cartRepository.save(cart);
         observers.forEach(observer -> observer.notify(cart));
+        return new Order(cart.getProducts(), getTotalNetPrice(), getTotalGrossPrice());
     }
 
     @Override

@@ -3,12 +3,11 @@ package com.epam.training.webshop.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,15 +18,19 @@ public class Cart {
     @GeneratedValue
     private Long id;
 
-    @OneToMany
-    private List<Product> products;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private final List<Product> products;
 
-    @OneToMany
-    private List<Coupon> coupons;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private final List<Coupon> coupons;
 
     public Cart() {
         this.products = new ArrayList<>();
         this.coupons = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<Product> getProducts() {

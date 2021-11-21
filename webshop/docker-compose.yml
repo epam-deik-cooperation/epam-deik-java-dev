@@ -1,0 +1,14 @@
+services:
+  webshop-db:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: s3CR3t
+      MYSQL_DATABASE: webshop
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

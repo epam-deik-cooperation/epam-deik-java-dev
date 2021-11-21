@@ -1,0 +1,9 @@
+price:
+  tax-rate:
+    hu: 1.27
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/webshop
+    username: root
+    password: s3CR3t
