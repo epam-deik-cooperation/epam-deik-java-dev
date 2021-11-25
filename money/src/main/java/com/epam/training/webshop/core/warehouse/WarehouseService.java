@@ -1,8 +1,8 @@
 package com.epam.training.webshop.core.warehouse;
 
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 
 public interface WarehouseService {
 
-    void packageOrder(Order order);
+    void packageOrder(OrderDto orderDto);
 }

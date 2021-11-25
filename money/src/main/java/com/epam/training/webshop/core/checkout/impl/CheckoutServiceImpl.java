@@ -3,11 +3,11 @@ package com.epam.training.webshop.core.checkout.impl;
 import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
 import com.epam.training.webshop.core.checkout.CheckoutService;
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 import java.util.Objects;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final GrossPriceCalculator grossPriceCalculator;
@@ -19,10 +19,10 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
-    public Order checkout(Cart cart) {
+    public OrderDto checkout(Cart cart) {
         Objects.requireNonNull(cart, "Cart cannot be null during checkout process");
-        Order order = new Order(cart.getProductList(), cart.getAggregatedNetPrice(), grossPriceCalculator.getAggregatedGrossPrice(cart));
-        checkoutObservable.notifyObservers(order);
-        return order;
+        OrderDto orderDto = new OrderDto(cart.getProductList(), cart.getAggregatedNetPrice(), grossPriceCalculator.getAggregatedGrossPrice(cart));
+        checkoutObservable.notifyObservers(orderDto);
+        return orderDto;
     }
 }

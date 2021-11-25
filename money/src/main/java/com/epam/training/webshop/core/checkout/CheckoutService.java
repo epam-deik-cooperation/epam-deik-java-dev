@@ -1,9 +1,9 @@
 package com.epam.training.webshop.core.checkout;
 
 import com.epam.training.webshop.core.cart.Cart;
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 
 public interface CheckoutService {
 
-    Order checkout(Cart cart);
+    OrderDto checkout(Cart cart);
 }

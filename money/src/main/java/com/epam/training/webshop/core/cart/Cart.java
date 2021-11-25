@@ -1,7 +1,7 @@
 package com.epam.training.webshop.core.cart;
 
 import com.epam.training.webshop.core.checkout.CheckoutObserver;
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
 import com.epam.training.webshop.core.product.model.ProductDto;
@@ -47,7 +47,7 @@ public class Cart implements CheckoutObserver {
     }
 
     @Override
-    public void handleOrder(Order order) {
+    public void handleOrder(OrderDto orderDto) {
         productList.clear();
     }
 

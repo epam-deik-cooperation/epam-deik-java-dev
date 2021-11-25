@@ -1,6 +1,6 @@
 package com.epam.training.webshop.core.cart;
 
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.bank.model.CurrencyPair;
 import com.epam.training.webshop.core.finance.money.Money;
@@ -119,15 +119,15 @@ class CartTest {
     @Test
     public void testHandleOrderShouldEmptyTheProductListWhenItIsCalled() {
         // Given
-        Order order = Mockito.mock(Order.class);
+        OrderDto orderDto = Mockito.mock(OrderDto.class);
         Cart underTest = Cart.of(mockBank, TEST_PRODUCT_CHOCOLATE);
         Cart expected = Cart.of(mockBank);
 
         // When
-        underTest.handleOrder(order);
+        underTest.handleOrder(orderDto);
 
         // Then
         Assertions.assertEquals(expected, underTest);
-        Mockito.verifyNoMoreInteractions(mockBank, order);
+        Mockito.verifyNoMoreInteractions(mockBank, orderDto);
     }
 }
