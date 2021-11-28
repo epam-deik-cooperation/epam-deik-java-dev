@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: hu.unideb.inf.ticketservice.command.account.TestSignOutCommand
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s - in hu.unideb.inf.ticketservice.command.account.TestSignOutCommand

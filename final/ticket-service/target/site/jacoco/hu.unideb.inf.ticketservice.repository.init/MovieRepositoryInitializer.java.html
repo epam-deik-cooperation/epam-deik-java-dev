@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovieRepositoryInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.repository.init</a> &gt; <span class="el_source">MovieRepositoryInitializer.java</span></div><h1>MovieRepositoryInitializer.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.repository.init;
+
+import hu.unideb.inf.ticketservice.model.Movie;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+
+//Uncomment the line below to initialize repository
+//@Repository
+public class MovieRepositoryInitializer {
+
+    private final MovieRepository movieRepository;
+
+    @Autowired
+<span class="nc" id="L17">    public MovieRepositoryInitializer(MovieRepository movieRepository) {</span>
+<span class="nc" id="L18">        this.movieRepository = movieRepository;</span>
+<span class="nc" id="L19">    }</span>
+
+<span class="nc" id="L21">    private final List&lt;Movie&gt; initialMovies = List.of(</span>
+<span class="nc" id="L22">            new Movie(&quot;The Nun&quot;,&quot;horror&quot;,135),</span>
+<span class="nc" id="L23">                new Movie(&quot;In Time&quot;,&quot;sc-fi&quot;,101),</span>
+<span class="nc" id="L24">                new Movie(&quot;The Iron Man&quot;,&quot;action&quot;,98)</span>
+        );
+
+    @PostConstruct
+    private void saveMovies() {
+<span class="nc" id="L29">        initialMovies.forEach(movieRepository::save);</span>
+<span class="nc" id="L30">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

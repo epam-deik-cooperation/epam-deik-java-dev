@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateValidationImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.service.impl</a> &gt; <span class="el_source">DateValidationImpl.java</span></div><h1>DateValidationImpl.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.service.impl;
+
+import hu.unideb.inf.ticketservice.model.Room;
+import hu.unideb.inf.ticketservice.model.Screening;
+import hu.unideb.inf.ticketservice.service.DateValidationService;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L12">public class DateValidationImpl implements DateValidationService {</span>
+
+<span class="fc" id="L14">    private static final Integer TIME_NEEDED_IN_BREAK = 10;</span>
+    private static final String PATTERN = &quot;yyyy-MM-dd HH:mm&quot;;
+
+    @Override
+    public boolean isDateValid(String dateString) {
+<span class="fc" id="L19">        boolean valid = true;</span>
+        try {
+<span class="fc" id="L21">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN);</span>
+<span class="fc" id="L22">            LocalDateTime.parse(dateString,formatter);</span>
+<span class="fc" id="L23">        } catch (Exception e) {</span>
+<span class="fc" id="L24">            valid = false;</span>
+<span class="fc" id="L25">        }</span>
+<span class="fc" id="L26">        return valid;</span>
+    }
+
+    @Override
+    public boolean isDateOverlapping(String givenDate, List&lt;Screening&gt; screenings, Room room, Integer movieLength) {
+<span class="fc" id="L31">        List&lt;Screening&gt; screeningsInThatRoom = getScreeningsByRoom(screenings,room);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (!screeningsInThatRoom.isEmpty()) {</span>
+<span class="fc" id="L33">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN);</span>
+<span class="fc" id="L34">            LocalDateTime actualStartDate = LocalDateTime.parse(givenDate, formatter);</span>
+<span class="fc" id="L35">            LocalDateTime actualEndDate = actualStartDate.plusMinutes(movieLength);</span>
+
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            for (Screening s : screeningsInThatRoom) {</span>
+<span class="fc" id="L38">                LocalDateTime start = LocalDateTime.parse(s.getScreeningDate(), formatter);</span>
+<span class="fc" id="L39">                LocalDateTime end = start.plusMinutes(s.getMovie().getNumberOfMinutes());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                if (isInsideGivenDates(actualStartDate, actualEndDate, start, end)) {</span>
+<span class="fc" id="L41">                    return true;</span>
+                }
+<span class="fc" id="L43">            }</span>
+
+        }
+<span class="fc" id="L46">        return false;</span>
+    }
+
+    @Override
+    public boolean isDateInsideBreakTime(String givenDate, List&lt;Screening&gt; screenings, Room room, Integer movieLength) {
+<span class="fc" id="L51">        List&lt;Screening&gt; screeningsInThatRoom = getScreeningsByRoom(screenings,room);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (!screeningsInThatRoom.isEmpty()) {</span>
+<span class="fc" id="L53">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN);</span>
+<span class="fc" id="L54">            LocalDateTime actualStartDate = LocalDateTime.parse(givenDate, formatter);</span>
+<span class="fc" id="L55">            LocalDateTime actualEndDate = actualStartDate.plusMinutes(movieLength);</span>
+
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            for (Screening s : screeningsInThatRoom) {</span>
+<span class="fc" id="L58">                LocalDateTime start = LocalDateTime.parse(s.getScreeningDate(), formatter);</span>
+<span class="fc" id="L59">                LocalDateTime end = start.plusMinutes(s.getMovie().getNumberOfMinutes())</span>
+<span class="fc" id="L60">                        .plusMinutes(TIME_NEEDED_IN_BREAK);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                if (isInsideGivenDates(actualStartDate, actualEndDate, start, end)) {</span>
+<span class="fc" id="L62">                    return true;</span>
+                }
+<span class="nc" id="L64">            }</span>
+
+        }
+<span class="fc" id="L67">        return false;</span>
+    }
+
+
+    private List&lt;Screening&gt; getScreeningsByRoom(List&lt;Screening&gt; screenings, Room room) {
+<span class="fc" id="L72">        return screenings.stream()</span>
+<span class="fc" id="L73">                .filter(s -&gt; s.getRoom().equals(room))</span>
+<span class="fc" id="L74">                .collect(Collectors.toList());</span>
+    }
+
+    private boolean isInsideGivenDates(LocalDateTime toBeCheckedStart,
+                                       LocalDateTime toBeCheckedEnd, LocalDateTime start, LocalDateTime end) {
+<span class="pc bpc" id="L79" title="1 of 4 branches missed.">        if (toBeCheckedStart.isBefore(end) &amp;&amp; toBeCheckedStart.isAfter(start)) {</span>
+<span class="fc" id="L80">            return true;</span>
+        } else {
+<span class="pc bpc" id="L82" title="3 of 4 branches missed.">            return toBeCheckedEnd.isBefore(end) &amp;&amp; toBeCheckedEnd.isAfter(start);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

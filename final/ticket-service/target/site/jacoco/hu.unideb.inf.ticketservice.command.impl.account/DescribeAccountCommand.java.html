@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DescribeAccountCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.command.impl.account</a> &gt; <span class="el_source">DescribeAccountCommand.java</span></div><h1>DescribeAccountCommand.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.command.impl.account;
+
+import hu.unideb.inf.ticketservice.command.Command;
+import hu.unideb.inf.ticketservice.model.user.AbstractUser;
+import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Null;
+import java.util.List;
+
+@Component
+public class DescribeAccountCommand implements Command {
+
+    private final LoggedInUserTrackService service;
+    private static final String DEFAULT_USERNAME = &quot;default&quot;;
+
+    @Autowired
+<span class="fc" id="L19">    public DescribeAccountCommand(LoggedInUserTrackService service) {</span>
+<span class="fc" id="L20">        this.service = service;</span>
+<span class="fc" id="L21">    }</span>
+
+    @Override
+    public String execute(@Null List&lt;String&gt; parameters) {
+<span class="fc" id="L25">        AbstractUser current = service.getCurrentUser();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (current.isPrivileged()) {</span>
+<span class="fc" id="L27">            return &quot;Signed in with privileged account '&quot; + current.getUsername() + &quot;'&quot;;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        } else if (current.getUsername().equals(DEFAULT_USERNAME)) {</span>
+<span class="fc" id="L29">            return &quot;You are not signed in&quot;;</span>
+        } else {
+            //TODO: Implement other users
+<span class="nc" id="L32">            return &quot;This should not be possible yet!&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

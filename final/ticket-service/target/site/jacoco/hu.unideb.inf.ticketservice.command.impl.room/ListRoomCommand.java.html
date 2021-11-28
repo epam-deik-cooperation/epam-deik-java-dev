@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ListRoomCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.command.impl.room</a> &gt; <span class="el_source">ListRoomCommand.java</span></div><h1>ListRoomCommand.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.command.impl.room;
+
+import hu.unideb.inf.ticketservice.command.Command;
+import hu.unideb.inf.ticketservice.model.Room;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Null;
+import java.util.List;
+
+@Component
+public class ListRoomCommand implements Command {
+
+    private final ConnectToRepositoriesService repositoriesService;
+
+    @Autowired
+<span class="fc" id="L18">    public ListRoomCommand(ConnectToRepositoriesService repositoriesService) {</span>
+<span class="fc" id="L19">        this.repositoriesService = repositoriesService;</span>
+<span class="fc" id="L20">    }</span>
+
+    @Override
+    public String execute(@Null List&lt;String&gt; parameters) {
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (repositoriesService.listRooms().isEmpty()) {</span>
+<span class="fc" id="L25">            return &quot;There are no rooms at the moment&quot;;</span>
+        } else {
+<span class="fc" id="L27">            List&lt;Room&gt; rooms = repositoriesService.listRooms();</span>
+<span class="fc" id="L28">            StringBuilder result = new StringBuilder();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            for (int i = 0;i &lt; rooms.size();i++) {</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                if (i + 1 == rooms.size()) {</span>
+<span class="fc" id="L31">                    result.append(rooms.get(i));</span>
+                } else {
+<span class="nc" id="L33">                    result.append(rooms.get(i));</span>
+<span class="nc" id="L34">                    result.append(&quot;\n&quot;);</span>
+                }
+            }
+<span class="fc" id="L37">            return result.toString();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

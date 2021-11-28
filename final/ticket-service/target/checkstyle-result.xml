@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.29">
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\Application.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\Command.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\handler\MovieCommandHandler.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\handler\RoomCommandHandler.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\handler\ScreeningCommandHandler.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\handler\UserCommandHandler.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\account\DescribeAccountCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\account\SignInPrivilegedCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\account\SignOutCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\movie\CreateMovieCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\movie\DeleteMovieCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\movie\ListMoviesCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\movie\UpdateMovieCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\room\CreateRoomCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\room\DeleteRoomCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\room\ListRoomCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\room\UpdateRoomCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\screening\CreateScreeningCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\screening\DeleteScreeningCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\impl\screening\ListScreeningCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\command\PrivilegedCommand.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\configuration\TicketServiceConfiguration.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\console\CustomPromptProvider.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\Movie.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\Room.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\Screening.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\user\AbstractUser.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\user\Administrator.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\user\DefaultUser.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\model\user\User.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\init\MovieRepositoryInitializer.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\init\RoomRepositoryInitializer.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\init\ScreeningRepositoryInitializer.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\MovieRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\RoomRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\ScreeningRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\repository\UserRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\AdminCredentialsProvider.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\connection\ConnectToMovieRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\connection\ConnectToRepositoriesService.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\connection\ConnectToRoomRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\connection\ConnectToScreeningRepository.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\DateValidationService.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\impl\ConnectToRepositoriesServiceImpl.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\impl\DateValidationImpl.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\impl\LoggedInUserTrackImpl.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\LoggedInUserTrackService.java">
+</file>
+<file name="C:\Users\fakod\Desktop\Programok\Java\epam-deik-java-dev\final\ticket-service\src\main\java\hu\unideb\inf\ticketservice\service\ProfileManagementService.java">
+</file>
+</checkstyle>
