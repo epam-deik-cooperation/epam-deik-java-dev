@@ -1,0 +1,14 @@
+hu\unideb\inf\ticketservice\command\account\TestDescribeAccountCommand.class
+hu\unideb\inf\ticketservice\command\account\TestSignOutCommand.class
+hu\unideb\inf\ticketservice\command\movie\TestDeleteMovieCommand.class
+hu\unideb\inf\ticketservice\command\screening\TestCreateScreeningCommand.class
+hu\unideb\inf\ticketservice\command\room\TestCreateRoomCommand.class
+hu\unideb\inf\ticketservice\command\movie\TestCreateMovieCommand.class
+hu\unideb\inf\ticketservice\command\movie\TestListMoviesCommand.class
+hu\unideb\inf\ticketservice\command\movie\TestUpdateMovieCommand.class
+hu\unideb\inf\ticketservice\command\room\TestListRoomsCommand.class
+hu\unideb\inf\ticketservice\command\screening\TestDeleteScreeningCommand.class
+hu\unideb\inf\ticketservice\command\screening\TestListScreeningCommand.class
+hu\unideb\inf\ticketservice\command\account\TestSignInPrivilegedCommand.class
+hu\unideb\inf\ticketservice\command\room\TestUpdateRoomCommand.class
+hu\unideb\inf\ticketservice\command\room\TestDeleteRoomCommand.class

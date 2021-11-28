@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomRepositoryInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.repository.init</a> &gt; <span class="el_source">RoomRepositoryInitializer.java</span></div><h1>RoomRepositoryInitializer.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.repository.init;
+
+import hu.unideb.inf.ticketservice.model.Room;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+
+//Uncomment the line below to initialize repository
+//@Repository
+public class RoomRepositoryInitializer {
+
+    private final RoomRepository roomRepository;
+
+    @Autowired
+<span class="nc" id="L17">    public RoomRepositoryInitializer(RoomRepository roomRepository) {</span>
+<span class="nc" id="L18">        this.roomRepository = roomRepository;</span>
+<span class="nc" id="L19">    }</span>
+
+<span class="nc" id="L21">    private final List&lt;Room&gt; initialRooms = List.of(</span>
+<span class="nc" id="L22">            new Room(&quot;Room1&quot;,10,10),</span>
+<span class="nc" id="L23">            new Room(&quot;Room2&quot;,10,10),</span>
+<span class="nc" id="L24">            new Room(&quot;Room3&quot;,10,20)</span>
+    );
+
+    @PostConstruct
+    private void saveRooms() {
+<span class="nc" id="L29">        initialRooms.forEach(roomRepository::save);</span>
+<span class="nc" id="L30">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

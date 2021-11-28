@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConnectToRepositoriesServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.service.impl</a> &gt; <span class="el_source">ConnectToRepositoriesServiceImpl.java</span></div><h1>ConnectToRepositoriesServiceImpl.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.service.impl;
+
+import hu.unideb.inf.ticketservice.model.Movie;
+import hu.unideb.inf.ticketservice.model.Room;
+import hu.unideb.inf.ticketservice.model.Screening;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+
+import java.util.List;
+
+public class ConnectToRepositoriesServiceImpl implements ConnectToRepositoriesService {
+
+    private final MovieRepository movieRepository;
+    private final RoomRepository roomRepository;
+    private final ScreeningRepository screeningRepository;
+
+    public ConnectToRepositoriesServiceImpl(MovieRepository movieRepository,
+<span class="nc" id="L20">                                            RoomRepository roomRepository, ScreeningRepository screeningRepository) {</span>
+<span class="nc" id="L21">        this.movieRepository = movieRepository;</span>
+<span class="nc" id="L22">        this.roomRepository = roomRepository;</span>
+<span class="nc" id="L23">        this.screeningRepository = screeningRepository;</span>
+<span class="nc" id="L24">    }</span>
+
+    @Override
+    public List&lt;Movie&gt; listMovies() {
+<span class="nc" id="L28">        return movieRepository.findAll();</span>
+    }
+
+    @Override
+    public void createMovie(Movie movie) {
+<span class="nc" id="L33">        List&lt;Movie&gt; movies = listMovies();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (!(movies.contains(movie))) {</span>
+<span class="nc" id="L35">            movieRepository.save(movie);</span>
+        }
+<span class="nc" id="L37">    }</span>
+
+    @Override
+    public void updateMovie(String name, Movie movie) {
+<span class="nc" id="L41">        movieRepository.updateByName(movie.getGenre(),movie.getNumberOfMinutes(),movie.getName());</span>
+<span class="nc" id="L42">    }</span>
+
+    @Override
+    public void deleteMovie(String name) {
+<span class="nc" id="L46">        List&lt;Screening&gt; screeningList = listScreenings();</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        for (Screening s : screeningList) {</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            if (s.getMovie().getName().equals(name)) {</span>
+<span class="nc" id="L49">                screeningRepository.delete(s.getRoom(),s.getMovie(),s.getScreeningDate());</span>
+            }
+<span class="nc" id="L51">        }</span>
+<span class="nc" id="L52">        movieRepository.deleteByName(name);</span>
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    public List&lt;Room&gt; listRooms() {
+<span class="nc" id="L57">        return roomRepository.findAll();</span>
+    }
+
+    @Override
+    public void createRoom(Room room) {
+<span class="nc" id="L62">        List&lt;Room&gt; rooms = listRooms();</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (!(rooms.contains(room))) {</span>
+<span class="nc" id="L64">            roomRepository.save(room);</span>
+        }
+<span class="nc" id="L66">    }</span>
+
+    @Override
+    public void deleteRoom(String name) {
+<span class="nc" id="L70">        List&lt;Screening&gt; screeningList = listScreenings();</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for (Screening s : screeningList) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (s.getRoom().getName().equals(name)) {</span>
+<span class="nc" id="L73">                screeningRepository.delete(s.getRoom(),s.getMovie(),s.getScreeningDate());</span>
+            }
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">        roomRepository.deleteByName(name);</span>
+<span class="nc" id="L77">    }</span>
+
+    @Override
+    public void updateRoom(String name, Room room) {
+<span class="nc" id="L81">        roomRepository.updateByName(room.getNumberOfSeats(), room.getNumberOfRows(),</span>
+<span class="nc" id="L82">                room.getNumberOfColumns(), room.getName());</span>
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public List&lt;Screening&gt; listScreenings() {
+<span class="nc" id="L87">        return screeningRepository.findAll();</span>
+    }
+
+    @Override
+    public void createScreening(Screening screening) {
+<span class="nc" id="L92">        List&lt;Screening&gt; screenings = listScreenings();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (!(screenings.contains(screening))) {</span>
+<span class="nc" id="L94">            screeningRepository.save(screening);</span>
+        }
+<span class="nc" id="L96">    }</span>
+
+    @Override
+    public void deleteScreening(Screening screening) {
+<span class="nc" id="L100">        screeningRepository.delete(screening.getRoom(),screening.getMovie(),screening.getScreeningDate());</span>
+<span class="nc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

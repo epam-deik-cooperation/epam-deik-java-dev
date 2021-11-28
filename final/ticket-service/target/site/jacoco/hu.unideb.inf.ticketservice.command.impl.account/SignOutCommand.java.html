@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignOutCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.command.impl.account</a> &gt; <span class="el_source">SignOutCommand.java</span></div><h1>SignOutCommand.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.command.impl.account;
+
+import hu.unideb.inf.ticketservice.command.Command;
+import hu.unideb.inf.ticketservice.model.user.AbstractUser;
+import hu.unideb.inf.ticketservice.model.user.DefaultUser;
+import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Null;
+import java.util.List;
+
+@Component
+public class SignOutCommand implements Command {
+
+    private final LoggedInUserTrackService service;
+    private static final String DEFAULT_USERNAME = &quot;default&quot;;
+
+    @Autowired
+<span class="fc" id="L20">    public SignOutCommand(LoggedInUserTrackService service) {</span>
+<span class="fc" id="L21">        this.service = service;</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public String execute(@Null List&lt;String&gt; parameters) {
+<span class="fc" id="L26">        AbstractUser current = service.getCurrentUser();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (!(current.getUsername().equals(DEFAULT_USERNAME))) {</span>
+<span class="fc" id="L28">            service.updateCurrentUser(new DefaultUser());</span>
+<span class="fc" id="L29">            return &quot;Signed out&quot;;</span>
+        }
+<span class="fc" id="L31">        return &quot;You are not signed in&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

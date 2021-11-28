@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomCommandHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ticket Service</a> &gt; <a href="index.source.html" class="el_package">hu.unideb.inf.ticketservice.command.handler</a> &gt; <span class="el_source">RoomCommandHandler.java</span></div><h1>RoomCommandHandler.java</h1><pre class="source lang-java linenums">package hu.unideb.inf.ticketservice.command.handler;
+
+import hu.unideb.inf.ticketservice.command.impl.room.CreateRoomCommand;
+import hu.unideb.inf.ticketservice.command.impl.room.DeleteRoomCommand;
+import hu.unideb.inf.ticketservice.command.impl.room.ListRoomCommand;
+import hu.unideb.inf.ticketservice.command.impl.room.UpdateRoomCommand;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+
+import java.util.List;
+
+@ShellComponent
+public class RoomCommandHandler {
+
+    private final CreateRoomCommand createRoomCommand;
+    private final DeleteRoomCommand deleteRoomCommand;
+    private final ListRoomCommand listRoomCommand;
+    private final UpdateRoomCommand updateRoomCommand;
+
+    @Autowired
+    public RoomCommandHandler(CreateRoomCommand createRoomCommand, DeleteRoomCommand deleteRoomCommand,
+<span class="nc" id="L23">                              ListRoomCommand listRoomCommand, UpdateRoomCommand updateRoomCommand) {</span>
+<span class="nc" id="L24">        this.createRoomCommand = createRoomCommand;</span>
+<span class="nc" id="L25">        this.deleteRoomCommand = deleteRoomCommand;</span>
+<span class="nc" id="L26">        this.listRoomCommand = listRoomCommand;</span>
+<span class="nc" id="L27">        this.updateRoomCommand = updateRoomCommand;</span>
+<span class="nc" id="L28">    }</span>
+
+    @ShellMethod(value = &quot;Creates a room&quot;, key = &quot;create room&quot;)
+    public String createRoom(String name, String numberOfRows, String numberOfColumns) {
+<span class="nc" id="L32">        return createRoomCommand.execute(List.of(name,numberOfRows,numberOfColumns));</span>
+    }
+
+    @ShellMethod(value = &quot;Deletes a room&quot;, key = &quot;delete room&quot;)
+    public String deleteRoom(String name) {
+<span class="nc" id="L37">        return deleteRoomCommand.execute(List.of(name));</span>
+    }
+
+    @ShellMethod(value = &quot;Updates a room&quot;, key = &quot;update room&quot;)
+    public String updateRoom(String name, String numberOfRows, String numberOfColumns) {
+<span class="nc" id="L42">        return updateRoomCommand.execute(List.of(name,numberOfRows,numberOfColumns));</span>
+    }
+
+    @ShellMethod(value = &quot;Lists rooms&quot;, key = &quot;list rooms&quot;)
+    public String listRooms() {
+<span class="nc" id="L47">        return listRoomCommand.execute(null);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
