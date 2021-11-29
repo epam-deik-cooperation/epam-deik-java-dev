@@ -3,7 +3,7 @@ package hu.unideb.inf.ticketservice.command.account;
 import hu.unideb.inf.ticketservice.command.impl.account.DescribeAccountCommand;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;

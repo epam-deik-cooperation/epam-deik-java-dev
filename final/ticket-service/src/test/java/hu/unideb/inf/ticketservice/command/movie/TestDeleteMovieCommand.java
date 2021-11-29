@@ -3,8 +3,8 @@ package hu.unideb.inf.ticketservice.command.movie;
 import hu.unideb.inf.ticketservice.command.impl.movie.DeleteMovieCommand;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ public class TestDeleteMovieCommand {
     private LoggedInUserTrackImpl userService;
     private AdminCredentialsProvider credentialsProvider;
     @Mock
-    private ConnectToRepositoriesService repositoriesService;
+    private ConnectToMovieRepository movieRepository;
 
     @BeforeEach
     public void setup()
@@ -31,7 +31,7 @@ public class TestDeleteMovieCommand {
         MockitoAnnotations.openMocks(this);
         credentialsProvider = new AdminCredentialsProvider();
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new DeleteMovieCommand(userService,repositoriesService);
+        underTest = new DeleteMovieCommand(userService, movieRepository);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class TestDeleteMovieCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(repositoriesService).deleteMovie("Movie");
+        Mockito.verify(movieRepository).deleteMovie("Movie");
     }
 
     @Test

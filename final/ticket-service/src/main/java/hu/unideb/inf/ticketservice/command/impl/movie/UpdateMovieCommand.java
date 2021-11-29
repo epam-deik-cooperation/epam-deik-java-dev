@@ -4,7 +4,7 @@ import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.command.PrivilegedCommand;
 import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,25 +14,25 @@ import java.util.List;
 public class UpdateMovieCommand implements Command, PrivilegedCommand {
 
     private final LoggedInUserTrackService userService;
-    private final ConnectToRepositoriesService repositoriesService;
+    private final ConnectToMovieRepository movieRepository;
 
     @Autowired
-    public UpdateMovieCommand(LoggedInUserTrackService userService, ConnectToRepositoriesService repositoriesService) {
+    public UpdateMovieCommand(LoggedInUserTrackService userService, ConnectToMovieRepository movieRepository) {
         this.userService = userService;
-        this.repositoriesService = repositoriesService;
+        this.movieRepository = movieRepository;
     }
 
     @Override
     public String execute(List<String> parameters) {
         if (isAuthorized(userService)) {
             String movieName = parameters.get(0);
-            List<Movie> movieList = repositoriesService.listMovies();
+            List<Movie> movieList = movieRepository.listMovies();
             Movie toBeUpdated = findMovieByName(movieName, movieList);
             if (toBeUpdated == null) {
                 return "No such movie like " + movieName;
             } else {
                 Movie movie = new Movie(movieName, parameters.get(1), Integer.valueOf(parameters.get(2)));
-                repositoriesService.updateMovie(movie.getName(), movie);
+                movieRepository.updateMovie(movie.getName(), movie);
                 return "Alright";
             }
         } else {

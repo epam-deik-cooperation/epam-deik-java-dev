@@ -6,7 +6,9 @@ import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.Screening;
 import hu.unideb.inf.ticketservice.service.DateValidationService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,23 +19,28 @@ import java.util.List;
 public class CreateScreeningCommand implements Command, PrivilegedCommand {
 
     private final LoggedInUserTrackImpl userService;
-    private final ConnectToRepositoriesService repositoriesService;
+    private final ConnectToScreeningRepository screeningRepository;
+    private final ConnectToRoomRepository roomRepository;
+    private final ConnectToMovieRepository movieRepository;
     private final DateValidationService dateValidationService;
 
     @Autowired
     public CreateScreeningCommand(LoggedInUserTrackImpl userService,
-                                  ConnectToRepositoriesService repositoriesService,
-                                   DateValidationService dateValidationService) {
+                                  ConnectToScreeningRepository screeningRepository,
+                                  ConnectToRoomRepository roomRepository, ConnectToMovieRepository movieRepository,
+                                  DateValidationService dateValidationService) {
         this.userService = userService;
-        this.repositoriesService = repositoriesService;
+        this.screeningRepository = screeningRepository;
+        this.roomRepository = roomRepository;
+        this.movieRepository = movieRepository;
         this.dateValidationService = dateValidationService;
     }
 
     @Override
     public String execute(List<String> parameters) {
         if (isAuthorized(userService)) {
-            List<Movie> movies = repositoriesService.listMovies();
-            List<Room> rooms = repositoriesService.listRooms();
+            List<Movie> movies = movieRepository.listMovies();
+            List<Room> rooms = roomRepository.listRooms();
             Movie actualMovie = getMovieByName(parameters.get(0),movies);
             Room actualRoom = getRoomByName(parameters.get(1),rooms);
 
@@ -42,12 +49,12 @@ public class CreateScreeningCommand implements Command, PrivilegedCommand {
                     String date = parameters.get(2);
                     if (dateValidationService.isDateValid(date)) {
                         Screening actualScreening = new Screening(actualMovie, actualRoom,date);
-                        List<Screening> screenings = repositoriesService.listScreenings();
+                        List<Screening> screenings = screeningRepository.listScreenings();
                         if (!dateValidationService.isDateOverlapping(date,screenings,actualRoom,
                                 actualMovie.getNumberOfMinutes())) {
                             if (!dateValidationService.isDateInsideBreakTime(date,screenings,actualRoom,
                                     actualMovie.getNumberOfMinutes())) {
-                                repositoriesService.createScreening(actualScreening);
+                                screeningRepository.createScreening(actualScreening);
                                 return "Alright";
                             } else {
                                 return "This would start in the break period after another screening in this room";

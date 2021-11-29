@@ -1,23 +1,23 @@
 package hu.unideb.inf.ticketservice.service.impl;
 
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 
 public class LoggedInUserTrackImpl implements LoggedInUserTrackService {
 
-    private AbstractUser currentUser;
+    private UserInterface currentUser;
 
-    public LoggedInUserTrackImpl(AbstractUser user) {
+    public LoggedInUserTrackImpl(UserInterface user) {
         currentUser = user;
     }
 
     @Override
-    public AbstractUser getCurrentUser() {
+    public UserInterface getCurrentUser() {
         return currentUser;
     }
 
     @Override
-    public void updateCurrentUser(AbstractUser user) {
+    public void updateCurrentUser(UserInterface user) {
         currentUser = user;
     }
 }

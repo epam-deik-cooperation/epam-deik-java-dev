@@ -1,11 +1,11 @@
 package hu.unideb.inf.ticketservice.service;
 
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
 
 public interface LoggedInUserTrackService {
 
-    AbstractUser getCurrentUser();
+    UserInterface getCurrentUser();
 
-    void updateCurrentUser(AbstractUser user);
+    void updateCurrentUser(UserInterface user);
 
 }

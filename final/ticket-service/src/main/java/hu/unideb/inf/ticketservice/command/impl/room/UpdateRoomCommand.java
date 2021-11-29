@@ -4,7 +4,7 @@ import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.command.PrivilegedCommand;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,26 +14,26 @@ import java.util.List;
 public class UpdateRoomCommand implements Command, PrivilegedCommand {
 
     private final LoggedInUserTrackService userService;
-    private final ConnectToRepositoriesService repositoriesService;
+    private final ConnectToRoomRepository roomRepository;
 
     @Autowired
-    public UpdateRoomCommand(LoggedInUserTrackService userService, ConnectToRepositoriesService repositoriesService) {
+    public UpdateRoomCommand(LoggedInUserTrackService userService, ConnectToRoomRepository roomRepository) {
         this.userService = userService;
-        this.repositoriesService = repositoriesService;
+        this.roomRepository = roomRepository;
     }
 
     @Override
     public String execute(List<String> parameters) {
         if (isAuthorized(userService)) {
             String roomName = parameters.get(0);
-            List<Room> roomList = repositoriesService.listRooms();
+            List<Room> roomList = roomRepository.listRooms();
             Room toBeUpdated = findRoomByName(roomName,roomList);
             if (toBeUpdated == null) {
                 return "No such room like " + roomName;
             } else {
                 Room room = new Room(parameters.get(0), Integer.valueOf(parameters.get(1)),
                         Integer.valueOf(parameters.get(2)));
-                repositoriesService.updateRoom(room.getName(), room);
+                roomRepository.updateRoom(room.getName(), room);
                 return "Alright";
             }
         } else {

@@ -4,8 +4,8 @@ import hu.unideb.inf.ticketservice.command.impl.room.CreateRoomCommand;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ public class TestCreateRoomCommand {
     private CreateRoomCommand underTest;
     private LoggedInUserTrackImpl userService;
     @Mock
-    private ConnectToRepositoriesService repositoriesService;
+    private ConnectToRoomRepository roomRepository;
 
     @BeforeEach
     public void setup()
@@ -32,7 +32,7 @@ public class TestCreateRoomCommand {
         MockitoAnnotations.openMocks(this);
         credentialsProvider = new AdminCredentialsProvider();
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new CreateRoomCommand(userService,repositoriesService);
+        underTest = new CreateRoomCommand(userService, roomRepository);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class TestCreateRoomCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(repositoriesService).createRoom(new Room("Room",10,10));
+        Mockito.verify(roomRepository).createRoom(new Room("Room",10,10));
     }
 
 }

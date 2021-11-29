@@ -2,7 +2,7 @@ package hu.unideb.inf.ticketservice.command.impl.account;
 
 import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

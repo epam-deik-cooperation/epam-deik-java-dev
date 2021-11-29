@@ -2,7 +2,7 @@ package hu.unideb.inf.ticketservice.command.impl.movie;
 
 import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.model.Movie;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +12,16 @@ import java.util.List;
 @Component
 public class ListMoviesCommand implements Command {
 
-    private final ConnectToRepositoriesService repositoriesService;
+    private final ConnectToMovieRepository movieRepository;
 
     @Autowired
-    public ListMoviesCommand(ConnectToRepositoriesService repositoriesService) {
-        this.repositoriesService = repositoriesService;
+    public ListMoviesCommand(ConnectToMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @Override
     public String execute(@Null List<String> parameters) {
-        List<Movie> movies = repositoriesService.listMovies();
+        List<Movie> movies = movieRepository.listMovies();
         if (movies.isEmpty()) {
             return "There are no movies at the moment";
         } else {

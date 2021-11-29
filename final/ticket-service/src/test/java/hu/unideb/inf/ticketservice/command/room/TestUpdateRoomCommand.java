@@ -2,12 +2,12 @@ package hu.unideb.inf.ticketservice.command.room;
 
 import hu.unideb.inf.ticketservice.command.impl.room.UpdateRoomCommand;
 import hu.unideb.inf.ticketservice.model.Room;
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,21 +22,21 @@ import java.util.List;
 public class TestUpdateRoomCommand {
 
     private final AdminCredentialsProvider credentialsProvider = new AdminCredentialsProvider();
-    private final AbstractUser ADMINISTRATOR = new Administrator(credentialsProvider);
+    private final UserInterface ADMINISTRATOR = new Administrator(credentialsProvider);
     private final List<String> PARAMETER_LIST = List.of("Room","10","10");
 
     private UpdateRoomCommand underTest;
     private LoggedInUserTrackService userService;
 
     @Mock
-    private ConnectToRepositoriesService repositoriesService;
+    private ConnectToRoomRepository roomRepository;
 
     @BeforeEach
     public void setup()
     {
         MockitoAnnotations.openMocks(this);
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new UpdateRoomCommand(userService,repositoriesService);
+        underTest = new UpdateRoomCommand(userService, roomRepository);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class TestUpdateRoomCommand {
         final String expected = "Alright";
         final Room room = new Room("Room",10,10);
         final Room roomToBeCalledWith = new Room("Room",10,20);
-        BDDMockito.given(repositoriesService.listRooms()).willReturn(List.of(room));
+        BDDMockito.given(roomRepository.listRooms()).willReturn(List.of(room));
         userService.updateCurrentUser(ADMINISTRATOR);
 
         //When
@@ -54,7 +54,7 @@ public class TestUpdateRoomCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(repositoriesService).updateRoom("Room",roomToBeCalledWith);
+        Mockito.verify(roomRepository).updateRoom("Room",roomToBeCalledWith);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class TestUpdateRoomCommand {
     {
         //Given
         final String expected = "No such room like Room";
-        BDDMockito.given(repositoriesService.listRooms()).willReturn(List.of());
+        BDDMockito.given(roomRepository.listRooms()).willReturn(List.of());
         userService.updateCurrentUser(ADMINISTRATOR);
 
         //When
