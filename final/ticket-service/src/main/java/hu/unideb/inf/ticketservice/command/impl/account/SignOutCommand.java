@@ -14,7 +14,6 @@ import java.util.List;
 public class SignOutCommand implements Command {
 
     private final LoggedInUserTrackService service;
-    private static final String DEFAULT_USERNAME = "default";
 
     @Autowired
     public SignOutCommand(LoggedInUserTrackService service) {
@@ -24,7 +23,7 @@ public class SignOutCommand implements Command {
     @Override
     public String execute(@Null List<String> parameters) {
         UserInterface current = service.getCurrentUser();
-        if (!(current.getUsername().equals(DEFAULT_USERNAME))) {
+        if (!(current.equals(new DefaultUser()))) {
             service.updateCurrentUser(new DefaultUser());
             return "Signed out";
         }

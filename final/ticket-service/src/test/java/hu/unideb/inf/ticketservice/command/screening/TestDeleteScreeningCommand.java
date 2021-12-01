@@ -6,8 +6,9 @@ import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.Screening;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.ScreeningRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +31,14 @@ public class TestDeleteScreeningCommand {
     private LoggedInUserTrackImpl userService;
     
     @Mock
-    private ConnectToScreeningRepository screeningRepository;
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
     {
         MockitoAnnotations.openMocks(this);
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new DeleteScreeningCommand(screeningRepository,userService);
+        underTest = new DeleteScreeningCommand(new ScreeningRepositoryConnection(screeningRepository),userService);
         userService.updateCurrentUser(new Administrator(new AdminCredentialsProvider()));
     }
 
@@ -46,7 +47,7 @@ public class TestDeleteScreeningCommand {
     {
         //Given
         final Screening screening = new Screening(DEFAULT_MOVIE,DEFAULT_ROOM,DEFAULT_DATE);
-        BDDMockito.given(screeningRepository.listScreenings()).willReturn(List.of(screening));
+        BDDMockito.given(screeningRepository.findAll()).willReturn(List.of(screening));
         final String expected = "Alright";
 
         //When
@@ -54,7 +55,7 @@ public class TestDeleteScreeningCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(screeningRepository).deleteScreening(screening);
+        Mockito.verify(screeningRepository).delete(DEFAULT_ROOM,DEFAULT_MOVIE,DEFAULT_DATE);
     }
 
     @Test
@@ -63,7 +64,7 @@ public class TestDeleteScreeningCommand {
         //Given
         final String date = "2021-10-10 10:10";
         final Screening screening = new Screening(DEFAULT_MOVIE,DEFAULT_ROOM,DEFAULT_DATE);
-        BDDMockito.given(screeningRepository.listScreenings()).willReturn(List.of(screening));
+        BDDMockito.given(screeningRepository.findAll()).willReturn(List.of(screening));
         final String expected = "There is no screening with movie " + DEFAULT_MOVIE.getName()
                 + " inside room " + DEFAULT_ROOM.getName() + " at " + date;
 
@@ -79,7 +80,7 @@ public class TestDeleteScreeningCommand {
         //Given
         final String roomName = "RoomName";
         final Screening screening = new Screening(DEFAULT_MOVIE,DEFAULT_ROOM,DEFAULT_DATE);
-        BDDMockito.given(screeningRepository.listScreenings()).willReturn(List.of(screening));
+        BDDMockito.given(screeningRepository.findAll()).willReturn(List.of(screening));
         final String expected = "There is no screening with movie " + DEFAULT_MOVIE.getName()
                 + " inside room " + roomName + " at " + DEFAULT_DATE;
 
@@ -95,7 +96,7 @@ public class TestDeleteScreeningCommand {
         //Given
         final String movieName = "MovieName";
         final Screening screening = new Screening(DEFAULT_MOVIE,DEFAULT_ROOM,DEFAULT_DATE);
-        BDDMockito.given(screeningRepository.listScreenings()).willReturn(List.of(screening));
+        BDDMockito.given(screeningRepository.findAll()).willReturn(List.of(screening));
         final String expected = "There is no screening with movie " + movieName
                 + " inside room " + DEFAULT_ROOM.getName() + " at " + DEFAULT_DATE;
 

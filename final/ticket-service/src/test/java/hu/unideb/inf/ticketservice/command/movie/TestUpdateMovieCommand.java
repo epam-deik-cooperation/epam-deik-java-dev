@@ -5,9 +5,11 @@ import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
 import hu.unideb.inf.ticketservice.model.user.UserInterface;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.MovieRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,14 +31,16 @@ public class TestUpdateMovieCommand {
     private LoggedInUserTrackService userService;
 
     @Mock
-    private ConnectToMovieRepository movieRepository;
+    private MovieRepository movieRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
     {
         MockitoAnnotations.openMocks(this);
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new UpdateMovieCommand(userService, movieRepository);
+        underTest = new UpdateMovieCommand(userService, new MovieRepositoryConnection(movieRepository,screeningRepository));
     }
 
     @Test
@@ -45,8 +49,7 @@ public class TestUpdateMovieCommand {
         //Given
         final String expected = "Alright";
         final Movie movie = new Movie("Movie","genre",156);
-        final Movie movieToBeCalledWith = new Movie("Movie","newGenre",156);
-        BDDMockito.given(movieRepository.listMovies()).willReturn(List.of(movie));
+        BDDMockito.given(movieRepository.findAll()).willReturn(List.of(movie));
         userService.updateCurrentUser(ADMINISTRATOR);
 
         //When
@@ -54,7 +57,7 @@ public class TestUpdateMovieCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(movieRepository).updateMovie("Movie",movieToBeCalledWith);
+        Mockito.verify(movieRepository).updateByName("newGenre",156, "Movie");
     }
 
     @Test
@@ -62,7 +65,7 @@ public class TestUpdateMovieCommand {
     {
         //Given
         final String expected = "No such movie like Movie";
-        BDDMockito.given(movieRepository.listMovies()).willReturn(List.of());
+        BDDMockito.given(movieRepository.findAll()).willReturn(List.of());
         userService.updateCurrentUser(ADMINISTRATOR);
 
         //When

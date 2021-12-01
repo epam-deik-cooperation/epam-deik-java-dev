@@ -2,7 +2,9 @@ package hu.unideb.inf.ticketservice.command.room;
 
 import hu.unideb.inf.ticketservice.command.impl.room.ListRoomCommand;
 import hu.unideb.inf.ticketservice.model.Room;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.RoomRepositoryConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +18,15 @@ public class TestListRoomsCommand {
 
     private ListRoomCommand underTest;
     @Mock
-    private ConnectToRoomRepository roomRepository;
+    private RoomRepository roomRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
     {
         MockitoAnnotations.openMocks(this);
-        underTest = new ListRoomCommand(roomRepository);
+        underTest = new ListRoomCommand(new RoomRepositoryConnection(roomRepository,screeningRepository));
     }
 
     @Test
@@ -30,7 +34,7 @@ public class TestListRoomsCommand {
     {
         //Given
         final Room room = new Room("Room",10,10);
-        BDDMockito.given(roomRepository.listRooms()).willReturn(List.of(room));
+        BDDMockito.given(roomRepository.findAll()).willReturn(List.of(room));
         final String expected = room.toString();
 
         //When

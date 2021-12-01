@@ -2,7 +2,9 @@ package hu.unideb.inf.ticketservice.command.movie;
 
 import hu.unideb.inf.ticketservice.command.impl.movie.ListMoviesCommand;
 import hu.unideb.inf.ticketservice.model.Movie;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.MovieRepositoryConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +18,15 @@ public class TestListMoviesCommand {
 
     private ListMoviesCommand underTest;
     @Mock
-    private ConnectToMovieRepository movieRepository;
+    private MovieRepository movieRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
     {
         MockitoAnnotations.openMocks(this);
-        underTest = new ListMoviesCommand(movieRepository);
+        underTest = new ListMoviesCommand(new MovieRepositoryConnection(movieRepository, screeningRepository));
     }
 
     @Test
@@ -30,7 +34,7 @@ public class TestListMoviesCommand {
     {
         //Given
         final Movie movie = new Movie("Name","genre",156);
-        BDDMockito.given(movieRepository.listMovies()).willReturn(List.of(movie));
+        BDDMockito.given(movieRepository.findAll()).willReturn(List.of(movie));
         final String expected = movie.toString();
 
         //When

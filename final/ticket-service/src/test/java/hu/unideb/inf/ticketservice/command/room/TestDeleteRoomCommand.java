@@ -3,6 +3,9 @@ package hu.unideb.inf.ticketservice.command.room;
 import hu.unideb.inf.ticketservice.command.impl.room.DeleteRoomCommand;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.RoomRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
@@ -23,7 +26,9 @@ public class TestDeleteRoomCommand {
     private DeleteRoomCommand underTest;
     private LoggedInUserTrackImpl userService;
     @Mock
-    private ConnectToRoomRepository roomRepository;
+    private RoomRepository roomRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
@@ -31,7 +36,7 @@ public class TestDeleteRoomCommand {
         MockitoAnnotations.openMocks(this);
         credentialsProvider = new AdminCredentialsProvider();
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new DeleteRoomCommand(userService, roomRepository);
+        underTest = new DeleteRoomCommand(userService, new RoomRepositoryConnection(roomRepository,screeningRepository));
     }
 
     @Test
@@ -46,7 +51,7 @@ public class TestDeleteRoomCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(roomRepository).deleteRoom("Room");
+        Mockito.verify(roomRepository).deleteByName("Room");
     }
 
     @Test

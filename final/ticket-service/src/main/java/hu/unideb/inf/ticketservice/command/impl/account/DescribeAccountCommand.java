@@ -2,6 +2,7 @@ package hu.unideb.inf.ticketservice.command.impl.account;
 
 import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.model.Booking;
+import hu.unideb.inf.ticketservice.model.user.DefaultUser;
 import hu.unideb.inf.ticketservice.model.user.User;
 import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
@@ -15,7 +16,6 @@ import java.util.List;
 public class DescribeAccountCommand implements Command {
 
     private final LoggedInUserTrackService service;
-    private static final String DEFAULT_USERNAME = "default";
 
     @Autowired
     public DescribeAccountCommand(LoggedInUserTrackService service) {
@@ -27,7 +27,7 @@ public class DescribeAccountCommand implements Command {
         UserInterface current = service.getCurrentUser();
         if (current.isPrivileged()) {
             return "Signed in with privileged account '" + current.getUsername() + "'";
-        } else if (current.getUsername().equals(DEFAULT_USERNAME)) {
+        } else if (current.equals(new DefaultUser())) {
             return "You are not signed in";
         } else if (userHasBooking(current)) {
             return "Signed in with account '" + current.getUsername() + "'\n"

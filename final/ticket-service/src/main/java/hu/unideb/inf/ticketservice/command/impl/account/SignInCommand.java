@@ -2,8 +2,8 @@ package hu.unideb.inf.ticketservice.command.impl.account;
 
 import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.model.user.User;
+import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToUserRepository;
-import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +13,10 @@ import java.util.List;
 public class SignInCommand implements Command {
 
     private final ConnectToUserRepository userRepository;
-    private final LoggedInUserTrackImpl userTrackService;
+    private final LoggedInUserTrackService userTrackService;
 
     @Autowired
-    public SignInCommand(ConnectToUserRepository userRepository, LoggedInUserTrackImpl userTrackService) {
+    public SignInCommand(ConnectToUserRepository userRepository, LoggedInUserTrackService userTrackService) {
         this.userRepository = userRepository;
         this.userTrackService = userTrackService;
     }

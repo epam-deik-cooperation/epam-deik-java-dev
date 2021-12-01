@@ -61,14 +61,14 @@ public class BookScreeningCommand implements Command, UserCommand {
                         bookingRepository.saveBooking(booking);
                         ((User)userTrackService.getCurrentUser()).addBooking(booking);
                         return "Seats booked: " + outputListOfSeats(inputSeats) + "; the price for this booking is "
-                                + booking.getPrice();
+                                + booking.getPrice() + " HUF";
                     } else {
-                        return "Seat " + possiblyFalse.getRowNumber() + "," + possiblyFalse.getColumnNumber()
-                                + " does not exist in this room";
+                        return "Seat (" + possiblyFalse.getRowNumber() + "," + possiblyFalse.getColumnNumber()
+                                + ") does not exist in this room";
                     }
                 } else {
-                    return "Seat " + possiblyBooked.getRowNumber() + "," + possiblyBooked.getColumnNumber()
-                            + " is already taken";
+                    return "Seat (" + possiblyBooked.getRowNumber() + "," + possiblyBooked.getColumnNumber()
+                            + ") is already taken";
                 }
             } else {
                 return "There is no screening with movie " + movieName + " in room " + roomName + " at " + date;
