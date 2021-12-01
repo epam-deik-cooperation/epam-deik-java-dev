@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 //Uncomment the line below to initialize repository
-@Repository
+//@Repository
 public class MovieRepositoryInitializer {
 
     private final MovieRepository movieRepository;

@@ -25,6 +25,10 @@ public class Seat {
         return room;
     }
 
+    protected Seat() {
+
+    }
+
     public Seat(Integer row, Integer column, Room room) {
         this.rowNumber = row;
         this.columnNumber = column;
