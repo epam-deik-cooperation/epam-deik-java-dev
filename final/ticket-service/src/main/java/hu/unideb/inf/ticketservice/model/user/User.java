@@ -2,7 +2,11 @@ package hu.unideb.inf.ticketservice.model.user;
 
 import hu.unideb.inf.ticketservice.model.Booking;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +22,7 @@ public class User implements UserInterface {
     private Integer password;
     private boolean privileged;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Booking> bookings;
 
     protected User() {

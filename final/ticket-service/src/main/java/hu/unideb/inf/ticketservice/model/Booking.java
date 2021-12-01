@@ -1,23 +1,30 @@
 package hu.unideb.inf.ticketservice.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Transactional
 public class Booking {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "screening_id")
-    private Screening screening;
-    private Integer price;
+    @OneToOne(cascade = CascadeType.MERGE)
+    private final Screening screening;
+    private final Integer price;
 
-    @OneToMany
-    private List<Seat> seats;
+    @OneToMany(fetch = FetchType.EAGER)
+    private final List<Seat>  seats;
 
     public Booking(Screening screening, Integer price, List<Seat> seats) {
         this.screening = screening;
@@ -39,16 +46,21 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Seats " + seats + " on " + screening.getMovie().getName()
+        return "Seats " + getSeatsOutputString() + " on " + screening.getMovie().getName()
                 + " in room " + screening.getRoom().getName()
                 + " starting at " + screening.getScreeningDate()
                 + " for " + price + " HUF";
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Booking booking = (Booking) o;
         return screening.equals(booking.screening) && price.equals(booking.price) && seats.equals(booking.seats);
     }
@@ -56,5 +68,16 @@ public class Booking {
     @Override
     public int hashCode() {
         return Objects.hash(screening, price, seats);
+    }
+
+
+    private String getSeatsOutputString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Seat s : getSeats()) {
+            stringBuilder.append(s.toString());
+            stringBuilder.append(", ");
+        }
+        stringBuilder.delete(stringBuilder.length() - 2,stringBuilder.length());
+        return stringBuilder.toString();
     }
 }

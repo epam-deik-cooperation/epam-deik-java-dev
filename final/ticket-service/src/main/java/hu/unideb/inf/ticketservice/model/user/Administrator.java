@@ -2,6 +2,8 @@ package hu.unideb.inf.ticketservice.model.user;
 
 import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 
+import java.util.Objects;
+
 public class Administrator implements UserInterface {
 
     private String username;
@@ -27,5 +29,23 @@ public class Administrator implements UserInterface {
     @Override
     public Integer getPasswordHash() {
         return passwordHash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Administrator that = (Administrator) o;
+        return isPrivileged == that.isPrivileged && Objects.equals(username, that.username)
+                && Objects.equals(passwordHash, that.passwordHash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, passwordHash, isPrivileged);
     }
 }

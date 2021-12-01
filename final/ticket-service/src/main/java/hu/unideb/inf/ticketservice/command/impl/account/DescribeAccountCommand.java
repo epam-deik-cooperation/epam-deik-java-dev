@@ -41,10 +41,9 @@ public class DescribeAccountCommand implements Command {
 
     private String listBookings(UserInterface current) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Booking b : ((User) current).getBookings()) {
+        for (Booking b : ((User) current).getBookings()) {
             stringBuilder.append(b.toString());
         }
-        stringBuilder.deleteCharAt(stringBuilder.length()-1);
         return stringBuilder.toString();
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface BookedSeatRepository extends Repository<Seat, Long> {
+public interface SeatRepository extends Repository<Seat, Long> {
 
     List<Seat> findAll();
 

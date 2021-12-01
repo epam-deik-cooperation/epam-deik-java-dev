@@ -7,12 +7,13 @@ import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 //Uncomment the line below to initialize repository
-//@Repository
+@Repository
 public class ScreeningRepositoryInitializer {
 
     private final ConnectToScreeningRepository screeningRepository;

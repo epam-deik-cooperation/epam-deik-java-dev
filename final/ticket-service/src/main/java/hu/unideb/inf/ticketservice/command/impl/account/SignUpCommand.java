@@ -30,7 +30,7 @@ public class SignUpCommand implements Command {
         List<User> users = userRepository.getUserList();
         if (nonMatchingUsername(username, users)) {
             if (!username.equals(DEFAULT_USERNAME)) {
-                if(!username.equals(adminCredentialsProvider.getUsername())) {
+                if (!username.equals(adminCredentialsProvider.getUsername())) {
                     userRepository.saveUser(new User(username, parameters.get(1), false));
                     return "Successfully signed up";
                 } else {

@@ -1,5 +1,7 @@
 package hu.unideb.inf.ticketservice.model.user;
 
+import java.util.Objects;
+
 public class DefaultUser implements UserInterface {
 
     private static final String USERNAME = "default";
@@ -21,5 +23,23 @@ public class DefaultUser implements UserInterface {
     @Override
     public Integer getPasswordHash() {
         return PASSWORD.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUsername(),getPasswordHash());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        DefaultUser that = (DefaultUser) obj;
+        return isPrivileged() == that.isPrivileged() && Objects.equals(getUsername(), that.getUsername())
+                && Objects.equals(getPasswordHash(), that.getPasswordHash());
     }
 }

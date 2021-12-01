@@ -1,6 +1,10 @@
 package hu.unideb.inf.ticketservice.command.handler;
 
-import hu.unideb.inf.ticketservice.command.impl.account.*;
+import hu.unideb.inf.ticketservice.command.impl.account.DescribeAccountCommand;
+import hu.unideb.inf.ticketservice.command.impl.account.SignInCommand;
+import hu.unideb.inf.ticketservice.command.impl.account.SignInPrivilegedCommand;
+import hu.unideb.inf.ticketservice.command.impl.account.SignUpCommand;
+import hu.unideb.inf.ticketservice.command.impl.account.SignOutCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
