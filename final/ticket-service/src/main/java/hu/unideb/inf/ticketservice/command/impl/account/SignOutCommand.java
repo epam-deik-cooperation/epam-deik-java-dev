@@ -1,8 +1,8 @@
 package hu.unideb.inf.ticketservice.command.impl.account;
 
 import hu.unideb.inf.ticketservice.command.Command;
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,6 @@ import java.util.List;
 public class SignOutCommand implements Command {
 
     private final LoggedInUserTrackService service;
-    private static final String DEFAULT_USERNAME = "default";
 
     @Autowired
     public SignOutCommand(LoggedInUserTrackService service) {
@@ -23,8 +22,8 @@ public class SignOutCommand implements Command {
 
     @Override
     public String execute(@Null List<String> parameters) {
-        AbstractUser current = service.getCurrentUser();
-        if (!(current.getUsername().equals(DEFAULT_USERNAME))) {
+        UserInterface current = service.getCurrentUser();
+        if (!(current.equals(new DefaultUser()))) {
             service.updateCurrentUser(new DefaultUser());
             return "Signed out";
         }

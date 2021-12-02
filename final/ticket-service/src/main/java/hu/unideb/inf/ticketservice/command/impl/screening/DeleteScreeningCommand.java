@@ -4,7 +4,7 @@ import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.command.PrivilegedCommand;
 import hu.unideb.inf.ticketservice.model.Screening;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +13,13 @@ import java.util.List;
 @Component
 public class DeleteScreeningCommand implements Command, PrivilegedCommand {
 
-    private final ConnectToRepositoriesService repositoriesService;
+    private final ConnectToScreeningRepository screeningRepository;
     private final LoggedInUserTrackService userService;
 
     @Autowired
-    public DeleteScreeningCommand(ConnectToRepositoriesService repositoriesService,
+    public DeleteScreeningCommand(ConnectToScreeningRepository screeningRepository,
                                   LoggedInUserTrackService userService) {
-        this.repositoriesService = repositoriesService;
+        this.screeningRepository = screeningRepository;
         this.userService = userService;
     }
 
@@ -29,10 +29,10 @@ public class DeleteScreeningCommand implements Command, PrivilegedCommand {
             String movieName = parameters.get(0);
             String roomName = parameters.get(1);
             String date = parameters.get(2);
-            List<Screening> screenings = repositoriesService.listScreenings();
+            List<Screening> screenings = screeningRepository.listScreenings();
             Screening screening = findScreening(movieName,roomName,date,screenings);
             if (screening != null) {
-                repositoriesService.deleteScreening(screening);
+                screeningRepository.deleteScreening(screening);
                 return "Alright";
             } else {
                 return "There is no screening with movie " + movieName + " inside room " + roomName + " at " + date;

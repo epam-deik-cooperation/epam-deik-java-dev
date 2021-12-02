@@ -1,4 +1,4 @@
-package hu.unideb.inf.ticketservice.service;
+package hu.unideb.inf.ticketservice.service.impl;
 
 import org.springframework.stereotype.Service;
 

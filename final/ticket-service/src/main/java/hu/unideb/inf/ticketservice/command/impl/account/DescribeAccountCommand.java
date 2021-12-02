@@ -1,7 +1,10 @@
 package hu.unideb.inf.ticketservice.command.impl.account;
 
 import hu.unideb.inf.ticketservice.command.Command;
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
+import hu.unideb.inf.ticketservice.model.Booking;
+import hu.unideb.inf.ticketservice.model.user.DefaultUser;
+import hu.unideb.inf.ticketservice.model.user.User;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +16,6 @@ import java.util.List;
 public class DescribeAccountCommand implements Command {
 
     private final LoggedInUserTrackService service;
-    private static final String DEFAULT_USERNAME = "default";
 
     @Autowired
     public DescribeAccountCommand(LoggedInUserTrackService service) {
@@ -22,14 +24,30 @@ public class DescribeAccountCommand implements Command {
 
     @Override
     public String execute(@Null List<String> parameters) {
-        AbstractUser current = service.getCurrentUser();
+        UserInterface current = service.getCurrentUser();
         if (current.isPrivileged()) {
             return "Signed in with privileged account '" + current.getUsername() + "'";
-        } else if (current.getUsername().equals(DEFAULT_USERNAME)) {
+        } else if (current.equals(new DefaultUser())) {
             return "You are not signed in";
+        } else if (userHasBooking(current)) {
+            return "Signed in with account '" + current.getUsername() + "'\n"
+                    + "Your previous bookings are\n"
+                    + listBookings(current);
         } else {
-            //TODO: Implement other users
-            return "This should not be possible yet!";
+            return "Signed in with account '" + current.getUsername() + "'\n"
+                    + "You have not booked any tickets yet";
         }
+    }
+
+    private String listBookings(UserInterface current) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Booking b : ((User) current).getBookings()) {
+            stringBuilder.append(b.toString());
+        }
+        return stringBuilder.toString();
+    }
+
+    private boolean userHasBooking(UserInterface current) {
+        return !(((User) current).getBookings().isEmpty());
     }
 }

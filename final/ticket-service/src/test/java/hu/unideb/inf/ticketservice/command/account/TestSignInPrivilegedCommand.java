@@ -1,10 +1,10 @@
 package hu.unideb.inf.ticketservice.command.account;
 
 import hu.unideb.inf.ticketservice.command.impl.account.SignInPrivilegedCommand;
-import hu.unideb.inf.ticketservice.model.user.AbstractUser;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
+import hu.unideb.inf.ticketservice.model.user.UserInterface;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
@@ -32,11 +32,11 @@ public class TestSignInPrivilegedCommand {
     {
         //Given
         final String expected = "Signed in";
-        final AbstractUser expectedUser = new Administrator(credentialsProvider);
+        final UserInterface expectedUser = new Administrator(credentialsProvider);
 
         //When
         final String result = underTest.execute(List.of("admin","admin"));
-        final AbstractUser resultUser = loggedInUserTrackService.getCurrentUser();
+        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);
@@ -48,11 +48,11 @@ public class TestSignInPrivilegedCommand {
     {
         //Given
         final String expected = "Login failed due to incorrect credentials";
-        final AbstractUser expectedUser = loggedInUserTrackService.getCurrentUser();
+        final UserInterface expectedUser = loggedInUserTrackService.getCurrentUser();
 
         //When
         final String result = underTest.execute(List.of("admin","adminWrong"));
-        final AbstractUser resultUser = loggedInUserTrackService.getCurrentUser();
+        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);

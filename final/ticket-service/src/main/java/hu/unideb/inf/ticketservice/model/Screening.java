@@ -16,8 +16,10 @@ public class Screening {
 
     @OneToOne(cascade = CascadeType.MERGE)
     private Movie movie;
+
     @OneToOne(cascade = CascadeType.MERGE)
     private Room room;
+
     private String screeningDate;
 
     protected Screening() {

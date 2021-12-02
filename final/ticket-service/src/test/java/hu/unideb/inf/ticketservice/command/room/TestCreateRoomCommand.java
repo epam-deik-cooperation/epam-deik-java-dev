@@ -4,12 +4,12 @@ import hu.unideb.inf.ticketservice.command.impl.room.CreateRoomCommand;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.RoomRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,7 +24,9 @@ public class TestCreateRoomCommand {
     private CreateRoomCommand underTest;
     private LoggedInUserTrackImpl userService;
     @Mock
-    private ConnectToRepositoriesService repositoriesService;
+    private RoomRepository roomRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
@@ -32,7 +34,7 @@ public class TestCreateRoomCommand {
         MockitoAnnotations.openMocks(this);
         credentialsProvider = new AdminCredentialsProvider();
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new CreateRoomCommand(userService,repositoriesService);
+        underTest = new CreateRoomCommand(userService, new RoomRepositoryConnection(roomRepository,screeningRepository));
     }
 
     @Test
@@ -59,7 +61,7 @@ public class TestCreateRoomCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(repositoriesService).createRoom(new Room("Room",10,10));
+        Mockito.verify(roomRepository).save(new Room("Room",10,10));
     }
 
 }

@@ -4,8 +4,10 @@ import hu.unideb.inf.ticketservice.command.impl.movie.CreateMovieCommand;
 import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.service.AdminCredentialsProvider;
-import hu.unideb.inf.ticketservice.service.connection.ConnectToRepositoriesService;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.MovieRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,9 @@ public class TestCreateMovieCommand {
     private LoggedInUserTrackImpl userService;
     private AdminCredentialsProvider credentialsProvider;
     @Mock
-    private ConnectToRepositoriesService repositoriesService;
+    private MovieRepository movieRepository;
+    @Mock
+    private ScreeningRepository screeningRepository;
 
     @BeforeEach
     public void setup()
@@ -32,7 +36,8 @@ public class TestCreateMovieCommand {
         MockitoAnnotations.openMocks(this);
         credentialsProvider = new AdminCredentialsProvider();
         userService = new LoggedInUserTrackImpl(new DefaultUser());
-        underTest = new CreateMovieCommand(userService,repositoriesService);
+        underTest = new CreateMovieCommand(userService, new MovieRepositoryConnection(movieRepository,
+                screeningRepository));
     }
 
     @Test
@@ -59,7 +64,7 @@ public class TestCreateMovieCommand {
 
         //Then
         Assertions.assertEquals(expected,result);
-        Mockito.verify(repositoriesService).createMovie(new Movie("Movie","genre",156));
+        Mockito.verify(movieRepository).save(new Movie("Movie","genre",156));
     }
 
 }
