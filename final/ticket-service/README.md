@@ -1,8 +1,8 @@
-#Project solution for Java in practice course
+# Project solution for Java in practice course
 
 The task was to implement a simple CL based application, which simulates a simple cinema system.
 
-##Usage
+## Usage
 
 There are 4 ways to run the program. 
 * If you want the program to use in-memory database, use the command below.
@@ -19,7 +19,7 @@ mvn spring-boot:run
 ```
 * Otherwise, use IDE to run and compile.
 
-##Database
+## Database
 The program uses H2 persistent database by default. To use it, follow the instructions below:
 
 * You can connect to the database with `http://localhost:8090/h2` URL. 
@@ -28,7 +28,7 @@ The program uses H2 persistent database by default. To use it, follow the instru
   * `jdbc:h2:mem:ticket-service` if the application started with in-memory database.
 * Insert the correct username, password, and you will see the database.
 
-##Acceptance test score
+## Acceptance test score
 
 The program was tested with the following integration test profiles :
 
