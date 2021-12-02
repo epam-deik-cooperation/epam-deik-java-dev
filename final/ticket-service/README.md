@@ -1,32 +1,38 @@
 #Project solution for Java in practice course
 
-The task was to implement a simple CL based application, which simulates a simple cinema database system.
+The task was to implement a simple CL based application, which simulates a simple cinema system.
 
 ##Usage
 
-There are 3 ways to run the program. 
+There are 4 ways to run the program. 
 * If you want the program to use in-memory database, use the command below.
 ```
 mvn spring-boot:run -D"spring-boot.run.profiles"=ci
 ```
-* If you want the program to use mySQL database, use the command below. This is the default option
+* If you want the program to use in-memory database with pre-initialized tables, use the command below.
+```
+mvn spring-boot:run -D"spring-boot.run.profiles"=init
+```
+* If you want the program to use persistent database, use the command below.
 ```
 mvn spring-boot:run
 ```
 * Otherwise, use IDE to run and compile.
 
 ##Database
-The program uses mySQL persistent database by default. To use it, you need a Docker. After that, follow the instructions below.
+The program uses H2 persistent database by default. To use it, follow the instructions below:
 
-* There is a `docker-compose.yml` file in the project folder, it is for starting up a MySql server, and a phpMyAdmin service.
-* To start the MySql server, and the phpMyAdmin service, please execute the following command: `docker-compose up`
-* To connect to the phpMyAdmin, please visit the localhost:8080 URL and login into the service.
+* You can connect to the database with `http://localhost:8090/h2` URL. 
+* You will see a login page. Insert the right server address which can be
+  * `jdbc:h2:file:./data/db` if the application started with persistent data.
+  * `jdbc:h2:mem:ticket-service` if the application started with in-memory database.
+* Insert the correct username, password, and you will see the database.
 
 ##Acceptance test score
 
-The program tested with the following integration test profiles :
+The program was tested with the following integration test profiles :
 
-* grade2-requirement - Succeeded
-* grade3-requirement - Succeeded
-* grade4-requirement - Succeeded
-* grade5-requirement - Failed
+* ``grade2-requirement`` - Succeeded
+* ``grade3-requirement`` - Succeeded
+* ``grade4-requirement`` - Succeeded
+* ``grade5-requirement`` - Failed

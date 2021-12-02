@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/ticketservice
-    username: root
-    password: s3CR3t
