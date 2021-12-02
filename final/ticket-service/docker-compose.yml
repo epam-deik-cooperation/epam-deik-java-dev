@@ -1,0 +1,14 @@
+services:
+  tecket-service-db:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ticketservice
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

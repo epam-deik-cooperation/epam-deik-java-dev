@@ -20,16 +20,20 @@ public class Booking {
     private Long id;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    private final Screening screening;
-    private final Integer price;
+    private Screening screening;
+    private Integer price;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private final List<Seat>  seats;
+    private List<Seat>  seats;
 
     public Booking(Screening screening, Integer price, List<Seat> seats) {
         this.screening = screening;
         this.price = price;
         this.seats = seats;
+    }
+
+    protected Booking() {
+
     }
 
     public Screening getScreening() {

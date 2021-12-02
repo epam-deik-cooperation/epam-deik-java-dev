@@ -3,13 +3,14 @@ package hu.unideb.inf.ticketservice.repository.init;
 import hu.unideb.inf.ticketservice.model.user.User;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-//Uncomment the line below to initialize repository
-//@Repository
+@Profile("init")
+@Repository
 public class UserRepositoryInitializer {
 
     private final ConnectToUserRepository userRepository;
