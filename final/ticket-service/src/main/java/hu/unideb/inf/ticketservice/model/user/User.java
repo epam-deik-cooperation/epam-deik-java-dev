@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class User {
     protected Integer password;
     protected boolean privileged;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Booking> bookings;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<Booking> bookings = new ArrayList<>();
 
     protected User() {
 
@@ -33,7 +34,6 @@ public class User {
         this.username = username;
         this.password = password.hashCode();
         this.privileged = privileged;
-        bookings = new ArrayList<>();
     }
 
     public void addBooking(Booking booking) {
@@ -62,8 +62,7 @@ public class User {
         }
         User that = (User) o;
         return privileged == that.privileged && Objects.equals(username, that.username)
-                && Objects.equals(password, that.password)
-                && Objects.equals(bookings.size(), that.bookings.size());
+                && Objects.equals(password, that.password);
     }
 
     @Override

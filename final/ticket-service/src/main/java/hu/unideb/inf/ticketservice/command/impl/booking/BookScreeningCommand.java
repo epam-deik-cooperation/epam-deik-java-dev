@@ -65,8 +65,9 @@ public class BookScreeningCommand implements Command, UserCommand {
                         Integer price = priceService.calculatePrice(componentList, inputSeats.size());
                         Booking booking = new Booking(screening,price,inputSeats);
                         inputSeats.forEach(bookedSeatRepository::saveSeat);
-                        bookingRepository.saveBooking(booking);
                         userTrackService.getCurrentUser().addBooking(booking);
+                        bookingRepository.saveBooking(booking);
+                        userRepository.saveUser(userTrackService.getCurrentUser());
                         return "Seats booked: " + outputListOfSeats(inputSeats) + "; the price for this booking is "
                                 + price + " " + priceService.getCurrency();
                     } else {
