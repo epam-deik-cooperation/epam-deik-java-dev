@@ -4,16 +4,19 @@ import hu.unideb.inf.ticketservice.command.impl.booking.BookScreeningCommand;
 import hu.unideb.inf.ticketservice.model.*;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
 import hu.unideb.inf.ticketservice.model.user.User;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.repository.BookingRepository;
 import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
 import hu.unideb.inf.ticketservice.repository.SeatRepository;
+import hu.unideb.inf.ticketservice.repository.UserRepository;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
+import hu.unideb.inf.ticketservice.service.PriceService;
 import hu.unideb.inf.ticketservice.service.SeatValidationService;
 import hu.unideb.inf.ticketservice.service.connection.impl.BookedSeatRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.connection.impl.BookingRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.connection.impl.ScreeningRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.UserRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
+import hu.unideb.inf.ticketservice.service.impl.PriceServiceImpl;
 import hu.unideb.inf.ticketservice.service.impl.SeatValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,9 +39,13 @@ public class TestBookScreeningCommand {
     private BookScreeningCommand underTest;
     private SeatValidationService seatValidationService;
     private LoggedInUserTrackService loggedInUserTrack;
+    private PriceService priceService;
 
     @Mock
     private SeatRepository bookedSeatRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private BookingRepository bookingRepository;
@@ -49,12 +56,14 @@ public class TestBookScreeningCommand {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        priceService = new PriceServiceImpl();
         seatValidationService = new SeatValidator(new BookedSeatRepositoryConnection(bookedSeatRepository));
-        UserInterface user = new User("Test", "Test", false);
+        User user = new User("Test", "Test", false);
         loggedInUserTrack = new LoggedInUserTrackImpl(user);
         underTest = new BookScreeningCommand(new BookedSeatRepositoryConnection(bookedSeatRepository),
                 new BookingRepositoryConnection(bookingRepository), seatValidationService,
-                new ScreeningRepositoryConnection(screeningRepository), loggedInUserTrack);
+                new ScreeningRepositoryConnection(screeningRepository), loggedInUserTrack,
+                new UserRepositoryConnection(userRepository), priceService);
     }
 
     @Test

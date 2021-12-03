@@ -5,13 +5,15 @@ import hu.unideb.inf.ticketservice.command.UserCommand;
 import hu.unideb.inf.ticketservice.model.Booking;
 import hu.unideb.inf.ticketservice.model.Screening;
 import hu.unideb.inf.ticketservice.model.Seat;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.model.user.User;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
+import hu.unideb.inf.ticketservice.service.PriceService;
 import hu.unideb.inf.ticketservice.service.SeatValidationService;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToBookedSeatRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToBookingRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,25 +22,28 @@ import java.util.List;
 @Component
 public class BookScreeningCommand implements Command, UserCommand {
 
-    private static final Integer BASE_PRICE_PER_SEAT = 1500;
-
     private final ConnectToBookedSeatRepository bookedSeatRepository;
     private final ConnectToBookingRepository bookingRepository;
     private final SeatValidationService seatValidationService;
     private final ConnectToScreeningRepository screeningRepository;
     private final LoggedInUserTrackService userTrackService;
+    private final ConnectToUserRepository userRepository;
+    private final PriceService priceService;
 
     @Autowired
     public BookScreeningCommand(ConnectToBookedSeatRepository bookedSeatRepository,
                                 ConnectToBookingRepository bookingRepository,
                                 SeatValidationService seatValidationService,
                                 ConnectToScreeningRepository screeningRepository,
-                                LoggedInUserTrackService userTrackService) {
+                                LoggedInUserTrackService userTrackService, ConnectToUserRepository userRepository,
+                                PriceService priceService) {
         this.bookedSeatRepository = bookedSeatRepository;
         this.bookingRepository = bookingRepository;
         this.seatValidationService = seatValidationService;
         this.screeningRepository = screeningRepository;
         this.userTrackService = userTrackService;
+        this.userRepository = userRepository;
+        this.priceService = priceService;
     }
 
     @Override
@@ -55,13 +60,15 @@ public class BookScreeningCommand implements Command, UserCommand {
                 if (possiblyBooked == null) {
                     Seat possiblyFalse = seatValidationService.isSeatValid(inputSeats, screening.getRoom());
                     if (possiblyFalse == null) {
-                        Booking booking = new Booking(screening,inputSeats.size() * BASE_PRICE_PER_SEAT,
-                                inputSeats);
+                        List<PriceComponent> componentList = List.of(screening.getMovie().getComponent(),
+                                screening.getRoom().getComponent(), screening.getComponent());
+                        Integer price = priceService.calculatePrice(componentList, inputSeats.size());
+                        Booking booking = new Booking(screening,price,inputSeats);
                         inputSeats.forEach(bookedSeatRepository::saveSeat);
                         bookingRepository.saveBooking(booking);
-                        ((User)userTrackService.getCurrentUser()).addBooking(booking);
+                        userTrackService.getCurrentUser().addBooking(booking);
                         return "Seats booked: " + outputListOfSeats(inputSeats) + "; the price for this booking is "
-                                + booking.getPrice() + " HUF";
+                                + price + " " + priceService.getCurrency();
                     } else {
                         return "Seat (" + possiblyFalse.getRowNumber() + "," + possiblyFalse.getColumnNumber()
                                 + ") does not exist in this room";

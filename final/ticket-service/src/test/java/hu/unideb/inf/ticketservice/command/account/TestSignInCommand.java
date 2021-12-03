@@ -3,7 +3,6 @@ package hu.unideb.inf.ticketservice.command.account;
 import hu.unideb.inf.ticketservice.command.impl.account.SignInCommand;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
 import hu.unideb.inf.ticketservice.model.user.User;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.repository.UserRepository;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.connection.impl.UserRepositoryConnection;
@@ -43,7 +42,7 @@ public class TestSignInCommand {
 
         //When
         final String result = underTest.execute(List.of("Test","Test"));
-        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
+        final User resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);
@@ -57,11 +56,11 @@ public class TestSignInCommand {
         final String expected = "Login failed due to incorrect credentials";
         final User user = new User("Test", "Test", false);
         BDDMockito.given(userRepository.findAll()).willReturn(List.of(user));
-        final UserInterface expectedUser = new DefaultUser();
+        final User expectedUser = new DefaultUser();
 
         //When
         final String result = underTest.execute(List.of("Test","TestPass"));
-        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
+        final User resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);

@@ -1,14 +1,14 @@
 package hu.unideb.inf.ticketservice.repository;
 
-import hu.unideb.inf.ticketservice.model.component.Component;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface ComponentRepository extends Repository<Component, Long> {
+public interface ComponentRepository extends Repository<PriceComponent, Long> {
 
-    List<Component> findAll();
+    List<PriceComponent> findAll();
 
-    void save(Component component);
+    void save(PriceComponent component);
 
 }

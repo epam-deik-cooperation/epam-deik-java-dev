@@ -1,6 +1,6 @@
 package hu.unideb.inf.ticketservice.model.component;
 
-public class DefaultComponent extends Component{
+public class DefaultComponent extends PriceComponent {
 
     public DefaultComponent() {
         super("default",0);

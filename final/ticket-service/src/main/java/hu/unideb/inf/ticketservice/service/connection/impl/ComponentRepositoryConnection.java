@@ -1,6 +1,6 @@
 package hu.unideb.inf.ticketservice.service.connection.impl;
 
-import hu.unideb.inf.ticketservice.model.component.Component;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import hu.unideb.inf.ticketservice.repository.ComponentRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToComponentRepository;
 
@@ -15,12 +15,12 @@ public class ComponentRepositoryConnection implements ConnectToComponentReposito
     }
 
     @Override
-    public List<Component> getComponents() {
+    public List<PriceComponent> getComponents() {
         return componentRepository.findAll();
     }
 
     @Override
-    public void saveComponent(Component component) {
+    public void saveComponent(PriceComponent component) {
         componentRepository.save(component);
     }
 }

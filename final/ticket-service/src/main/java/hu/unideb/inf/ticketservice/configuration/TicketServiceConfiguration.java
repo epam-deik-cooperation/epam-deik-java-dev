@@ -1,13 +1,29 @@
 package hu.unideb.inf.ticketservice.configuration;
 
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
-import hu.unideb.inf.ticketservice.repository.*;
-import hu.unideb.inf.ticketservice.service.DateValidationService;
+import hu.unideb.inf.ticketservice.model.user.User;
+import hu.unideb.inf.ticketservice.repository.BookingRepository;
+import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
+import hu.unideb.inf.ticketservice.repository.SeatRepository;
+import hu.unideb.inf.ticketservice.repository.MovieRepository;
+import hu.unideb.inf.ticketservice.repository.RoomRepository;
+import hu.unideb.inf.ticketservice.repository.ComponentRepository;
+import hu.unideb.inf.ticketservice.repository.UserRepository;
 import hu.unideb.inf.ticketservice.service.SeatValidationService;
-import hu.unideb.inf.ticketservice.service.connection.*;
-import hu.unideb.inf.ticketservice.service.connection.impl.*;
-import hu.unideb.inf.ticketservice.service.impl.DateValidationImpl;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToScreeningRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToUserRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToComponentRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToBookingRepository;
+import hu.unideb.inf.ticketservice.service.connection.ConnectToBookedSeatRepository;
+import hu.unideb.inf.ticketservice.service.connection.impl.BookingRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.BookedSeatRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.ScreeningRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.UserRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.RoomRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.MovieRepositoryConnection;
+import hu.unideb.inf.ticketservice.service.connection.impl.ComponentRepositoryConnection;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
 import hu.unideb.inf.ticketservice.service.impl.SeatValidator;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +32,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TicketServiceConfiguration {
     @Bean
-    public LoggedInUserTrackImpl loggedInUserTrackImpl(UserInterface defaultUser) {
+    public LoggedInUserTrackImpl loggedInUserTrackImpl(User defaultUser) {
         return new LoggedInUserTrackImpl(defaultUser);
     }
 
     @Bean
-    public UserInterface defaultUser() {
+    public User defaultUser() {
         return new DefaultUser();
     }
 
@@ -64,7 +80,7 @@ public class TicketServiceConfiguration {
     }
 
     @Bean
-    ConnectToComponentRepository componentRepository(ComponentRepository componentRepository) {
+    ConnectToComponentRepository component(ComponentRepository componentRepository) {
         return new ComponentRepositoryConnection(componentRepository);
     }
 

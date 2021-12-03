@@ -18,6 +18,8 @@
     <name>Ticket Service</name>
     <description>A simple cinema ticket booking and administrating tool. / Solution project for "Java in practice" class. </description>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>16</java.version>
         <surefire-maven-plugin.version>3.0.0-M5</surefire-maven-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>

@@ -2,6 +2,7 @@ package hu.unideb.inf.ticketservice.service.connection.impl;
 
 import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.Screening;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import hu.unideb.inf.ticketservice.repository.MovieRepository;
 import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToMovieRepository;
@@ -45,5 +46,10 @@ public class MovieRepositoryConnection implements ConnectToMovieRepository {
             }
         }
         movieRepository.deleteByName(name);
+    }
+
+    @Override
+    public void updateComponent(String name, PriceComponent component) {
+        movieRepository.updateComponent(name,component);
     }
 }

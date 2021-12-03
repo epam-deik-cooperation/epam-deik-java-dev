@@ -1,6 +1,8 @@
 package hu.unideb.inf.ticketservice.service;
 
-import hu.unideb.inf.ticketservice.model.component.Component;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
+
+import java.util.List;
 
 public interface PriceService {
 
@@ -10,5 +12,5 @@ public interface PriceService {
 
     String getCurrency();
 
-    Integer calculatePrice(Component component);
+    Integer calculatePrice(List<PriceComponent> components, Integer numberOfSeats);
 }

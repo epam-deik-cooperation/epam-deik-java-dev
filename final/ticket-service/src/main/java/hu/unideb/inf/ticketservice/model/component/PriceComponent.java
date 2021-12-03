@@ -3,10 +3,12 @@ package hu.unideb.inf.ticketservice.model.component;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.transaction.Transactional;
 import java.util.Objects;
 
 @Entity
-public class Component {
+@Transactional
+public class PriceComponent {
 
     @Id
     @GeneratedValue
@@ -15,12 +17,12 @@ public class Component {
     protected String name;
     protected Integer price;
 
-    public Component(String name, Integer price) {
+    public PriceComponent(String name, Integer price) {
         this.name = name;
         this.price = price;
     }
 
-    protected Component() {
+    protected PriceComponent() {
 
     }
 
@@ -40,7 +42,7 @@ public class Component {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Component component = (Component) o;
+        PriceComponent component = (PriceComponent) o;
         return Objects.equals(name, component.name) && Objects.equals(price, component.price);
     }
 

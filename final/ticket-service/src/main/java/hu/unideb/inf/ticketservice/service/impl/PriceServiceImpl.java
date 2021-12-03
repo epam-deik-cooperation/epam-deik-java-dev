@@ -1,8 +1,12 @@
 package hu.unideb.inf.ticketservice.service.impl;
 
-import hu.unideb.inf.ticketservice.model.component.Component;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import hu.unideb.inf.ticketservice.service.PriceService;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class PriceServiceImpl implements PriceService {
 
     private final String currency = "HUF";
@@ -24,7 +28,11 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public Integer calculatePrice(Component component) {
-        return basePrice + component.getPrice();
+    public Integer calculatePrice(List<PriceComponent> components, Integer numberOfSeats) {
+        Integer sumOfComponents = 0;
+        for (PriceComponent component : components) {
+            sumOfComponents += component.getPrice();
+        }
+        return sumOfComponents + (numberOfSeats * basePrice);
     }
 }

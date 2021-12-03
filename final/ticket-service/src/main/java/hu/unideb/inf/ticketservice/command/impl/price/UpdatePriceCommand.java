@@ -4,6 +4,7 @@ import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.command.PrivilegedCommand;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.PriceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class UpdatePriceCommand implements Command, PrivilegedCommand {
     private final PriceService priceService;
     private final LoggedInUserTrackService userTrackService;
 
+    @Autowired
     public UpdatePriceCommand(PriceService priceService, LoggedInUserTrackService userTrackService) {
         this.priceService = priceService;
         this.userTrackService = userTrackService;

@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User implements UserInterface {
+public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String username;
-    private Integer password;
-    private boolean privileged;
+    protected String username;
+    protected Integer password;
+    protected boolean privileged;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Booking> bookings;
@@ -44,17 +44,10 @@ public class User implements UserInterface {
         return bookings;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
-    public Integer getPasswordHash() {
-        return password;
-    }
-
-    @Override
     public boolean isPrivileged() {
         return privileged;
     }
@@ -69,7 +62,8 @@ public class User implements UserInterface {
         }
         User that = (User) o;
         return privileged == that.privileged && Objects.equals(username, that.username)
-                && Objects.equals(password, that.password);
+                && Objects.equals(password, that.password)
+                && Objects.equals(bookings.size(), that.bookings.size());
     }
 
     @Override

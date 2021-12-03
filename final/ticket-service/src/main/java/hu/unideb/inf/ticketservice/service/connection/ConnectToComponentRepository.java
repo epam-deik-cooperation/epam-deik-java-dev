@@ -1,13 +1,13 @@
 package hu.unideb.inf.ticketservice.service.connection;
 
-import hu.unideb.inf.ticketservice.model.component.Component;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 
 import java.util.List;
 
 public interface ConnectToComponentRepository {
 
-    List<Component> getComponents();
+    List<PriceComponent> getComponents();
 
-    void saveComponent(Component component);
+    void saveComponent(PriceComponent component);
 
 }

@@ -3,6 +3,7 @@ package hu.unideb.inf.ticketservice.repository;
 import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.Screening;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -20,4 +21,9 @@ public interface ScreeningRepository extends Repository<Screening,Long> {
     @Modifying
     @Query("delete from Screening e where e.room = ?1 and e.movie = ?2 and e.screeningDate = ?3")
     void delete(Room roomId, Movie movieId, String date);
+
+    @Modifying
+    @Query("update Screening e set e.component = ?4 where e.room = ?1 and e.movie = ?2 and e.screeningDate = ?3")
+    void updateComponent(Room room, Movie movie, String date, PriceComponent priceComponent);
+
 }
