@@ -1,10 +1,14 @@
 package hu.unideb.inf.ticketservice.model;
 
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
+import hu.unideb.inf.ticketservice.model.component.DefaultComponent;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.CascadeType;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +24,9 @@ public class Room {
     private Integer numberOfRows;
     private Integer numberOfColumns;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private PriceComponent component;
+
     protected Room() {
 
     }
@@ -29,6 +36,15 @@ public class Room {
         this.numberOfSeats = numberOfRows * numberOfColumns;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
+        component = new DefaultComponent();
+    }
+
+    public PriceComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(PriceComponent component) {
+        this.component = component;
     }
 
     public String getName() {
@@ -62,11 +78,14 @@ public class Room {
             return false;
         }
         Room room = (Room) o;
-        return Objects.equals(name, room.name);
+        return Objects.equals(name, room.name) && Objects.equals(numberOfSeats, room.numberOfSeats)
+                && Objects.equals(numberOfColumns, room.numberOfColumns)
+                && Objects.equals(numberOfRows, room.numberOfRows)
+                && Objects.equals(component, room.component);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, numberOfSeats, numberOfRows, numberOfColumns);
+        return Objects.hash(id, name, numberOfSeats, numberOfRows, numberOfColumns, component);
     }
 }

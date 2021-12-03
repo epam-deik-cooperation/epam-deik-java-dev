@@ -3,12 +3,14 @@ package hu.unideb.inf.ticketservice.service.impl;
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.Screening;
 import hu.unideb.inf.ticketservice.service.DateValidationService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class DateValidationImpl implements DateValidationService {
 
     private static final Integer TIME_NEEDED_IN_BREAK = 10;

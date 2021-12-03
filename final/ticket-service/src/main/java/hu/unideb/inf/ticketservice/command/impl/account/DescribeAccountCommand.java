@@ -4,7 +4,6 @@ import hu.unideb.inf.ticketservice.command.Command;
 import hu.unideb.inf.ticketservice.model.Booking;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
 import hu.unideb.inf.ticketservice.model.user.User;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ public class DescribeAccountCommand implements Command {
 
     @Override
     public String execute(@Null List<String> parameters) {
-        UserInterface current = service.getCurrentUser();
+        User current = service.getCurrentUser();
         if (current.isPrivileged()) {
             return "Signed in with privileged account '" + current.getUsername() + "'";
         } else if (current.equals(new DefaultUser())) {
@@ -39,15 +38,15 @@ public class DescribeAccountCommand implements Command {
         }
     }
 
-    private String listBookings(UserInterface current) {
+    private String listBookings(User current) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Booking b : ((User) current).getBookings()) {
+        for (Booking b : current.getBookings()) {
             stringBuilder.append(b.toString());
         }
         return stringBuilder.toString();
     }
 
-    private boolean userHasBooking(UserInterface current) {
-        return !(((User) current).getBookings().isEmpty());
+    private boolean userHasBooking(User current) {
+        return !(current.getBookings().isEmpty());
     }
 }

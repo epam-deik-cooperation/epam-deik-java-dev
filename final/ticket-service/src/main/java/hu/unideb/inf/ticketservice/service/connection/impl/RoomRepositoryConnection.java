@@ -2,6 +2,7 @@ package hu.unideb.inf.ticketservice.service.connection.impl;
 
 import hu.unideb.inf.ticketservice.model.Room;
 import hu.unideb.inf.ticketservice.model.Screening;
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
 import hu.unideb.inf.ticketservice.repository.RoomRepository;
 import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
 import hu.unideb.inf.ticketservice.service.connection.ConnectToRoomRepository;
@@ -46,5 +47,10 @@ public class RoomRepositoryConnection implements ConnectToRoomRepository {
     public void updateRoom(String name, Room room) {
         roomRepository.updateByName(room.getNumberOfSeats(), room.getNumberOfRows(),
                 room.getNumberOfColumns(), room.getName());
+    }
+
+    @Override
+    public void updateComponent(String name, PriceComponent component) {
+        roomRepository.updateComponent(name, component);
     }
 }

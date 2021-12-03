@@ -3,7 +3,7 @@ package hu.unideb.inf.ticketservice.command.account;
 import hu.unideb.inf.ticketservice.command.impl.account.SignOutCommand;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
+import hu.unideb.inf.ticketservice.model.user.User;
 import hu.unideb.inf.ticketservice.service.impl.AdminCredentialsProvider;
 import hu.unideb.inf.ticketservice.service.LoggedInUserTrackService;
 import hu.unideb.inf.ticketservice.service.impl.LoggedInUserTrackImpl;
@@ -30,12 +30,12 @@ public class TestSignOutCommand {
     {
         //Given
         final String expected = "Signed out";
-        final UserInterface expectedUser = loggedInUserTrackService.getCurrentUser();
+        final User expectedUser = loggedInUserTrackService.getCurrentUser();
         loggedInUserTrackService.updateCurrentUser(new Administrator(credentialsProvider));
 
         //When
         final String result = underTest.execute(null);
-        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
+        final User resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);
@@ -47,11 +47,11 @@ public class TestSignOutCommand {
     {
         //Given
         final String expected = "You are not signed in";
-        final UserInterface expectedUser = loggedInUserTrackService.getCurrentUser();
+        final User expectedUser = loggedInUserTrackService.getCurrentUser();
 
         //When
         final String result = underTest.execute(null);
-        final UserInterface resultUser = loggedInUserTrackService.getCurrentUser();
+        final User resultUser = loggedInUserTrackService.getCurrentUser();
 
         //Then
         Assertions.assertEquals(expected,result);

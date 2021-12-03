@@ -6,24 +6,25 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User implements UserInterface {
+public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String username;
-    private Integer password;
-    private boolean privileged;
+    protected String username;
+    protected Integer password;
+    protected boolean privileged;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Booking> bookings;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<Booking> bookings = new ArrayList<>();
 
     protected User() {
 
@@ -33,7 +34,6 @@ public class User implements UserInterface {
         this.username = username;
         this.password = password.hashCode();
         this.privileged = privileged;
-        bookings = new ArrayList<>();
     }
 
     public void addBooking(Booking booking) {
@@ -44,17 +44,10 @@ public class User implements UserInterface {
         return bookings;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
-    public Integer getPasswordHash() {
-        return password;
-    }
-
-    @Override
     public boolean isPrivileged() {
         return privileged;
     }

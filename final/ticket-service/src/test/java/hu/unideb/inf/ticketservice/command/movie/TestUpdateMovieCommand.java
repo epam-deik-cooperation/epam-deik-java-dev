@@ -4,7 +4,7 @@ import hu.unideb.inf.ticketservice.command.impl.movie.UpdateMovieCommand;
 import hu.unideb.inf.ticketservice.model.Movie;
 import hu.unideb.inf.ticketservice.model.user.Administrator;
 import hu.unideb.inf.ticketservice.model.user.DefaultUser;
-import hu.unideb.inf.ticketservice.model.user.UserInterface;
+import hu.unideb.inf.ticketservice.model.user.User;
 import hu.unideb.inf.ticketservice.repository.MovieRepository;
 import hu.unideb.inf.ticketservice.repository.ScreeningRepository;
 import hu.unideb.inf.ticketservice.service.connection.impl.MovieRepositoryConnection;
@@ -24,7 +24,7 @@ import java.util.List;
 public class TestUpdateMovieCommand {
 
     private final AdminCredentialsProvider credentialsProvider = new AdminCredentialsProvider();
-    private final UserInterface ADMINISTRATOR = new Administrator(credentialsProvider);
+    private final User ADMINISTRATOR = new Administrator(credentialsProvider);
     private final List<String> PARAMETER_LIST = List.of("Movie","genre","156");
 
     private UpdateMovieCommand underTest;

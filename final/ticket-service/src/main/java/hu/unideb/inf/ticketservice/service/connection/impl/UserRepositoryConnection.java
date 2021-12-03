@@ -23,4 +23,5 @@ public class UserRepositoryConnection implements ConnectToUserRepository {
     public List<User> getUserList() {
         return userRepository.findAll();
     }
+
 }

@@ -1,9 +1,12 @@
 package hu.unideb.inf.ticketservice.model;
 
+import hu.unideb.inf.ticketservice.model.component.PriceComponent;
+import hu.unideb.inf.ticketservice.model.component.DefaultComponent;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.CascadeType;
 import java.util.Objects;
 
@@ -14,13 +17,15 @@ public class Screening {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     private Movie movie;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     private Room room;
-
     private String screeningDate;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private PriceComponent component;
 
     protected Screening() {
 
@@ -30,6 +35,15 @@ public class Screening {
         this.movie = movie;
         this.room = room;
         this.screeningDate = screeningDate;
+        component = new DefaultComponent();
+    }
+
+    public void setComponent(PriceComponent component) {
+        this.component = component;
+    }
+
+    public PriceComponent getComponent() {
+        return component;
     }
 
     public Movie getMovie() {
@@ -59,12 +73,13 @@ public class Screening {
             return false;
         }
         Screening screening = (Screening) o;
-        return Objects.equals(movie, screening.movie) && Objects.equals(room, screening.room)
+        return Objects.equals(component, screening.component) && Objects.equals(movie, screening.movie)
+                && Objects.equals(room, screening.room)
                 && Objects.equals(screeningDate, screening.screeningDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, movie, room, screeningDate);
+        return Objects.hash(id, movie, room, screeningDate, component);
     }
 }
