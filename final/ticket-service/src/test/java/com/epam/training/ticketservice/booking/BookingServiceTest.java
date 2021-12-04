@@ -75,7 +75,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void createBookingShouldThrowNotFoundExceptionIfSeatDoesNotExistInRoom() {
+    public void testCreateBookingShouldThrowNotFoundExceptionIfSeatDoesNotExistInRoom() {
 
         // Given
         testBooking.setSeats(List.of(new Seat(11, 10)));
@@ -91,7 +91,7 @@ public class BookingServiceTest {
 
 
     @Test
-    public void createBookingShouldThrowConflictExceptionIfSeatIsAlreadyBooked() {
+    public void testCreateBookingShouldThrowConflictExceptionIfSeatIsAlreadyBooked() {
 
         // Given
         List<Booking> testBookingList = new ArrayList<>();

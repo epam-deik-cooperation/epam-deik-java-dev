@@ -68,7 +68,7 @@ public class AccountCommandsTest {
     }
 
     @Test
-    public void describeAccountShouldReturnUserDescriptionIfUserWithUserRoleIsSignedIn() throws NotFoundException {
+    public void testDescribeAccountShouldReturnUserDescriptionIfUserWithUserRoleIsSignedIn() throws NotFoundException {
 
         // Given
         Authentication authentication = new TestingAuthenticationToken(
@@ -96,7 +96,7 @@ public class AccountCommandsTest {
     }
 
     @Test
-    public void describeAccountShouldReturnYouAreNotSignedInIfNobodyHasSignedIn() throws NotFoundException {
+    public void testDescribeAccountShouldReturnYouAreNotSignedInIfNobodyHasSignedIn() throws NotFoundException {
 
         // Given
         String expectedDescription = "You are not signed in";
