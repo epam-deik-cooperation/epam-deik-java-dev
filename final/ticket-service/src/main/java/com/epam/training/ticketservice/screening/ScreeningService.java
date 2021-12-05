@@ -35,7 +35,7 @@ public class ScreeningService {
 
         return !((startDateToCheck.isBefore(endDate.plusMinutes(breakTime)) && startDateToCheck.isAfter(startDate))
                 || (endDateToCheck.isBefore(endDate) && endDateToCheck.isAfter(startDate)))
-                && startDate != startDateToCheck && endDate != endDateToCheck;
+                && !(startDate.equals(startDateToCheck) || endDate.equals(endDateToCheck));
     }
 
     private boolean validateScreening(Screening screening) {
