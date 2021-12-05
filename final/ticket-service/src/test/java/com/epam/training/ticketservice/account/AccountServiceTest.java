@@ -76,5 +76,46 @@ public class AccountServiceTest {
         verify(accountRepository, times(1)).save(account);
     }
 
+    @Test
+    public void testCreateAccountShouldThrowIllegalArgumentExceptionWhenUserNameIsBlank() {
+
+        // Given
+        String userName = "";
+        String password = "test";
+        Account account = Account.builder()
+                .userName(userName)
+                .password(password)
+                .accountType(AccountType.USER)
+                .build();
+
+        // When
+
+        // Then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> accountService.createAccount(userName, password));
+        verify(accountRepository, times(0)).save(account);
+
+    }
+
+
+    @Test
+    public void testCreateAccountShouldThrowIllegalArgumentExceptionWhenPasswordIsBlank() {
+
+        // Given
+        String userName = "test";
+        String password = "";
+        Account account = Account.builder()
+                .userName(userName)
+                .password(password)
+                .accountType(AccountType.USER)
+                .build();
+
+        // When
+
+        // Then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> accountService.createAccount(userName, password));
+        verify(accountRepository, times(0)).save(account);
+
+    }
+
 
 }

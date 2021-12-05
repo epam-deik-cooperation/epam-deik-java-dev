@@ -18,13 +18,15 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTest {
 
-    private Room testRoom;
 
     @Mock
     private RoomRepository roomRepository;
 
     @InjectMocks
     private RoomService roomService;
+
+
+    private Room testRoom;
 
     @BeforeEach
     void setUp() {
@@ -146,4 +148,35 @@ public class RoomServiceTest {
         // Then
         verify(roomRepository, times(1)).findByNameContainingIgnoreCase(testRoom.getName());
     }
+
+    @Test
+    public void testFindByNameShouldThrowNotFoundExceptionIfRoomDoesNotExistWithSuchName() {
+
+        // Given
+
+        // When
+        when(roomRepository.findByNameContainingIgnoreCase(testRoom.getName())).thenReturn(null);
+
+        // Then
+        assertThrows(NotFoundException.class, () -> roomService.findByName(testRoom.getName()));
+
+    }
+
+    @Test
+    public void testMapToRoomShouldReturnRoomObjectWithGivenProperties() {
+
+        // Given
+        int columns = testRoom.getNumberOfColumns();
+        int rows = testRoom.getNumberOfRows();
+        String roomName = testRoom.getName();
+        Room expectedRoom = testRoom;
+
+        // When
+        Room actualRoom = roomService.mapToRoom(roomName, rows, columns);
+
+        // Then
+        assertEquals(expectedRoom, actualRoom);
+
+    }
+
 }

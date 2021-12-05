@@ -8,6 +8,7 @@ import com.epam.training.ticketservice.room.Room;
 import com.epam.training.ticketservice.room.Seat;
 import com.epam.training.ticketservice.screening.Screening;
 import javassist.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,6 @@ import static org.mockito.Mockito.*;
 public class BookingCommandsTest {
 
     private Account account;
-    private Booking booking;
     private String movieTitle;
     private String roomName;
     private String date;
@@ -91,6 +91,56 @@ public class BookingCommandsTest {
 
         // Then
         verify(bookingService, times(1)).createBooking(testBooking);
+    }
+
+    @Test
+    public void testBookShouldCatchAndReturnNotFoundExceptionMessageWhenThrownFromService()
+            throws ConflictException, NotFoundException {
+
+        // Given
+        Booking testBooking = Booking.builder()
+                .price(2000)
+                .seats(List.of(new Seat(1, 1)))
+                .build();
+
+        String expectedMessage = "test";
+        NotFoundException e = new NotFoundException(expectedMessage);
+
+        // When
+        doThrow(e).when(bookingService).createBooking(any(Booking.class));
+        when(accountService.findByUserName(anyString())).thenReturn(account);
+        when(bookingService.mapToBooking(movieTitle, roomName, date, seats, account)).thenReturn(testBooking);
+
+
+        String actualMessage = bookingCommands.book(movieTitle, roomName, date, seats);
+
+        // Then
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void testBookShouldCatchAndReturnConflictExceptionMessageWhenThrownFromService()
+            throws ConflictException, NotFoundException {
+
+        // Given
+        Booking testBooking = Booking.builder()
+                .price(2000)
+                .seats(List.of(new Seat(1, 1)))
+                .build();
+
+        String expectedMessage = "test";
+        ConflictException e = new ConflictException(expectedMessage);
+
+        // When
+        doThrow(e).when(bookingService).createBooking(any(Booking.class));
+        when(accountService.findByUserName(anyString())).thenReturn(account);
+        when(bookingService.mapToBooking(movieTitle, roomName, date, seats, account)).thenReturn(testBooking);
+
+
+        String actualMessage = bookingCommands.book(movieTitle, roomName, date, seats);
+
+        // Then
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test

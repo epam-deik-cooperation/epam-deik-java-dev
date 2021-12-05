@@ -65,6 +65,19 @@ public class MovieServiceTest {
     }
 
     @Test
+    public void testFindByTitleShouldThrowNotFoundExceptionIfNoMovieWasFoundWithGivenTitle() {
+
+        // Given
+
+        // When
+        when(movieRepository.findByTitleContainingIgnoreCase(testMovie.getTitle())).thenReturn(null);
+
+        // Then
+        assertThrows(NotFoundException.class, () -> movieService.findByTitle(testMovie.getTitle()));
+
+    }
+
+    @Test
     public void testCreateMovie() throws AlreadyExistsException {
 
         //Given
@@ -148,6 +161,22 @@ public class MovieServiceTest {
         //Then
         assertThrows(NotFoundException.class, () -> movieService.deleteMovie(testMovie.getTitle()));
         verify(movieRepository, times(0)).deleteByTitleContainingIgnoreCase(testMovie.getTitle());
+    }
+
+    @Test
+    public void testMapToMovieShouldReturnMovieObjectWithGivenProperties() {
+
+        // Given
+        String title = testMovie.getTitle();
+        String genre = testMovie.getGenre();
+        Integer length = testMovie.getLength();
+        Movie expectedMovie = testMovie;
+
+        // When
+        Movie actualMovie = movieService.mapToMovie(title, genre, length);
+
+        // Then
+        assertEquals(expectedMovie, actualMovie);
     }
 
 

@@ -2,7 +2,9 @@ package com.epam.training.ticketservice.screening;
 
 import com.epam.training.ticketservice.exception.ConflictException;
 import com.epam.training.ticketservice.movie.Movie;
+import com.epam.training.ticketservice.movie.MovieService;
 import com.epam.training.ticketservice.room.Room;
+import com.epam.training.ticketservice.room.RoomService;
 import javassist.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +29,12 @@ public class ScreeningServiceTest {
     @Mock
     private ScreeningRepository screeningRepository;
 
+    @Mock
+    private MovieService movieService;
+
+    @Mock
+    private RoomService roomService;
+
     @InjectMocks
     private ScreeningService screeningService;
 
@@ -35,6 +42,7 @@ public class ScreeningServiceTest {
     private Movie testMovie;
     private Screening testScreening;
     private List<Screening> testList;
+    private LocalDateTime testDate;
 
 
     @BeforeEach
@@ -51,11 +59,12 @@ public class ScreeningServiceTest {
                 .length(100)
                 .build();
 
+        testDate = LocalDateTime.of(2000, Month.APRIL, 30, 9, 50);
 
         testScreening = Screening.builder()
                 .room(testRoom)
                 .movie(testMovie)
-                .date(LocalDateTime.of(2000, Month.APRIL, 30, 9, 50))
+                .date(testDate)
                 .build();
 
         testList = List.of(Screening.builder()
@@ -220,6 +229,26 @@ public class ScreeningServiceTest {
 
         verify(screeningRepository, times(0))
                 .deleteByMovie_TitleContainingIgnoreCaseAndRoom_NameContainingIgnoreCaseAndDate(anyString(), anyString(), any(LocalDateTime.class));
+    }
+
+    @Test
+    public void testMapToScreeningShouldSucceedWhenPropertiesAreValid() throws NotFoundException {
+
+        // Given
+        String movieTitle = testMovie.getTitle();
+        String roomName = testRoom.getName();
+        String date = testDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        Screening expectedScreening = testScreening;
+
+        // When
+        when(movieService.findByTitle(movieTitle)).thenReturn(testMovie);
+        when(roomService.findByName(roomName)).thenReturn(testRoom);
+
+        Screening actualScreening = screeningService.mapToScreening(movieTitle, roomName, date);
+
+        // Then
+        assertEquals(expectedScreening, actualScreening);
+
     }
 
 }
