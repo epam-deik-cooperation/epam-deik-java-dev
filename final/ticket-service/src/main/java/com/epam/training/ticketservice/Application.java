@@ -9,7 +9,8 @@ public class Application {
     public static void main(String[] args) {
 
         //Workaround for the illegal argument exception thrown when trying to register both exit and quit
-        var arguments = StringUtils.concatenateStringArrays(args, new String[]{"--spring.shell.command.quit.enabled=false"});
+        var arguments = StringUtils.concatenateStringArrays(args,
+                new String[]{"--spring.shell.command.quit.enabled=false"});
         SpringApplication.run(Application.class, arguments);
     }
 }

@@ -3,7 +3,6 @@ package com.epam.training.ticketservice.businesslogic.account;
 import com.epam.training.ticketservice.models.user.User;
 import com.epam.training.ticketservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
@@ -47,9 +46,9 @@ public class AccountService implements IAccountService {
             return "You are not signed in";
         }
         if (currentUser.getRole().equals(User.Role.ADMIN)) {
-            return "Signed in with privileged account '" +
-                    currentUser.getUsername() +
-                    "'";
+            return "Signed in with privileged account '"
+                    + currentUser.getUsername()
+                    + "'";
         }
         return "USER role handling is not yet implemented";
     }
@@ -58,6 +57,7 @@ public class AccountService implements IAccountService {
     public Optional<User> getCurrentUser() {
         return Optional.ofNullable(currentUser);
     }
+
     public Optional<User> getByName(String username) {
         return userRepository.findByUsername(username);
     }
