@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.models.screening;
 
 import com.epam.training.ticketservice.models.movie.Movie;
 import com.epam.training.ticketservice.models.room.Room;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class Screening {
 
     @Id
@@ -37,22 +39,5 @@ public class Screening {
         this.movie = movie;
         this.room = room;
         this.dateTime = dateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-            return false;
-        }
-        Screening screening = (Screening) o;
-        return id != null && Objects.equals(id, screening.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

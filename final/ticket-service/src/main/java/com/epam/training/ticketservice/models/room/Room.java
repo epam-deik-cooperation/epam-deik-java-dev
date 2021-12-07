@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.models.room;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class Room {
 
     @Id
@@ -37,22 +39,5 @@ public class Room {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-            return false;
-        }
-        Room room = (Room) o;
-        return id != null && Objects.equals(id, room.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }
