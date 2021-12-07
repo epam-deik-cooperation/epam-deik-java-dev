@@ -4,7 +4,6 @@ import com.epam.training.ticketservice.models.movie.Movie;
 import com.epam.training.ticketservice.models.room.Room;
 import com.epam.training.ticketservice.models.screening.Screening;
 import com.epam.training.ticketservice.repositories.ScreeningRepository;
-import com.epam.training.ticketservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
