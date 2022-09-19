@@ -1,17 +1,13 @@
 package com.epam.training.money;
 
 import static java.lang.Integer.signum;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.epam.training.money.impl.Money;
 import java.util.Currency;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import com.epam.training.money.impl.Money;
 
 public class MoneyIT {
 
@@ -29,8 +25,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(369.3));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        Assertions.assertEquals(369.3, result.how_much());
+        Assertions.assertEquals(HUF_CURRENCY, result.what());
     }
 
     @Test
@@ -43,8 +39,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(121.0));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        Assertions.assertEquals(121.0, result.how_much());
+        Assertions.assertEquals(HUF_CURRENCY, result.what());
     }
 
     @Test
@@ -57,9 +53,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result, nullValue());
+        Assertions.assertNull(result);
     }
-
 
     @ParameterizedTest
     @CsvSource({"249, 1, -1", "249.3, 1, 0", "250, 0, 1"})
@@ -72,7 +67,7 @@ public class MoneyIT {
         Integer result = underTest.compareTo(moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        Assertions.assertEquals(expectedSignum, signum(result));
     }
 
     @ParameterizedTest
@@ -86,7 +81,7 @@ public class MoneyIT {
         Integer result = underTest.compareTo(moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        Assertions.assertEquals(expectedSignum, signum(result));
     }
 
     @Test
@@ -99,7 +94,6 @@ public class MoneyIT {
         Integer result = underTest.compareTo(moneyToCompareWith);
 
         // Then
-        assertThat(result, nullValue());
+        Assertions.assertNull(result);
     }
-
 }
