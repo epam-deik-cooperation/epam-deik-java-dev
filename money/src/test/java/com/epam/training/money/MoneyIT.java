@@ -25,8 +25,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        Assertions.assertEquals(369.3, result.how_much());
-        Assertions.assertEquals(HUF_CURRENCY, result.what());
+        Assertions.assertEquals(369.3, result.getAmount());
+        Assertions.assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
@@ -39,8 +39,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        Assertions.assertEquals(121.0, result.how_much());
-        Assertions.assertEquals(HUF_CURRENCY, result.what());
+        Assertions.assertEquals(121.0, result.getAmount());
+        Assertions.assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
@@ -50,10 +50,8 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd);
-
         // Then
-        Assertions.assertNull(result);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd));
     }
 
     @ParameterizedTest
@@ -91,9 +89,7 @@ public class MoneyIT {
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
-
         // Then
-        Assertions.assertNull(result);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith));
     }
 }
