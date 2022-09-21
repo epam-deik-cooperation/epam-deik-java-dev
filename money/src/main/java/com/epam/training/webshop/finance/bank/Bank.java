@@ -1,5 +1,6 @@
-package com.epam.training.money.impl;
+package com.epam.training.webshop.finance.bank;
 
+import com.epam.training.webshop.finance.bank.model.CurrencyPair;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class Bank {
     }
 
     public Optional<Double> getExchangeRate(CurrencyPair currencyPair) {
-        return Optional.ofNullable(exchangeRateMap.get(currencyPair));
+        return currencyPair.getCurrencyFrom().equals(currencyPair.getCurrencyTo())
+            ? Optional.of(1D)
+            : Optional.ofNullable(exchangeRateMap.get(currencyPair));
     }
 }

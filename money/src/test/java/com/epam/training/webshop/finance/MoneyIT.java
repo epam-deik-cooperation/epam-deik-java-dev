@@ -1,8 +1,11 @@
-package com.epam.training.money;
+package com.epam.training.webshop.finance;
 
 import static java.lang.Integer.signum;
 
-import com.epam.training.money.impl.Money;
+import com.epam.training.webshop.finance.bank.Bank;
+import com.epam.training.webshop.finance.exception.UnknownCurrencyConversionException;
+import com.epam.training.webshop.finance.money.Money;
+import com.epam.training.webshop.finance.money.comparator.MoneyComparator;
 import java.util.Currency;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,28 +18,28 @@ public class MoneyIT {
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
     private static final Currency GBP_CURRENCY = Currency.getInstance("GBP");
 
+    private final Bank bank = new Bank();
+    private final MoneyComparator moneyComparator = new MoneyComparator(bank);
+
     @Test
-    public void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
-        // Given
+    public void testAddShouldReturnExpectedResultWhenDifferentCurrencyIsUsed() {
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, USD_CURRENCY);
 
-        // When
-        Money result = underTest.add(moneyToAdd);
+        Money result = underTest.add(moneyToAdd, bank);
 
-        // Then
         Assertions.assertEquals(369.3, result.getAmount());
         Assertions.assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
-    public void testAddReturnsExpectedResultWhenMatchingCurrencyIsUsed() {
+    public void testAddShouldReturnExpectedResultWhenMatchingCurrencyIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, HUF_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd);
+        Money result = underTest.add(moneyToAdd, bank);
 
         // Then
         Assertions.assertEquals(121.0, result.getAmount());
@@ -44,25 +47,25 @@ public class MoneyIT {
     }
 
     @Test
-    public void testAddReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testAddShouldThrowUnknownCurrencyConversionExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
         // When
         // Then
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd));
+        Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> underTest.add(moneyToAdd, bank));
     }
 
     @ParameterizedTest
     @CsvSource({"249, 1, -1", "249.3, 1, 0", "250, 0, 1"})
-    public void testCompareToReturnsExpectedResultWhenDifferentCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
+    public void testCompareShouldReturnExpectedResultWhenDifferentCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, USD_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
+        int result = moneyComparator.compare(underTest, moneyToCompareWith);
 
         // Then
         Assertions.assertEquals(expectedSignum, signum(result));
@@ -70,26 +73,26 @@ public class MoneyIT {
 
     @ParameterizedTest
     @CsvSource({"0, 100, -1", "100, 100, 0", "100, 0, 1"})
-    public void testCompareToReturnsExpectedResultWhenMatchingCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
+    public void testCompareShouldReturnExpectedResultWhenMatchingCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, HUF_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
+        int result = moneyComparator.compare(underTest, moneyToCompareWith);
 
         // Then
         Assertions.assertEquals(expectedSignum, signum(result));
     }
 
     @Test
-    public void testCompareToReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testCompareShouldThrowUnknownCurrencyConversionExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
 
         // When
         // Then
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith));
+        Assertions.assertThrows(UnknownCurrencyConversionException.class, () -> moneyComparator.compare(underTest, moneyToCompareWith));
     }
 }
