@@ -32,4 +32,36 @@ class MoneyComparatorTest {
         Assertions.assertEquals(1, actual);
         Mockito.verify(bank).getExchangeRate(currencyPair);
     }
+
+    @Test
+    void testCompareShouldReturnNegativeNumberWhenTheFirstMoneyToCompareIsSmallerThanSecond() {
+        // Given
+        Money money1 = new Money(120, HUF_CURRENCY);
+        Money money2 = new Money(1200, USD_CURRENCY);
+        CurrencyPair currencyPair = new CurrencyPair(USD_CURRENCY, HUF_CURRENCY);
+        Mockito.when(bank.getExchangeRate(currencyPair)).thenReturn(Optional.of(10.0));
+
+        // When
+        int actual = underTest.compare(money1, money2);
+
+        // Then
+        Assertions.assertEquals(-1, actual);
+        Mockito.verify(bank).getExchangeRate(currencyPair);
+    }
+
+    @Test
+    void testCompareShouldReturnZeroWhenTheTwoMoneyAreEqual() {
+        // Given
+        Money money1 = new Money(120, HUF_CURRENCY);
+        Money money2 = new Money(12, USD_CURRENCY);
+        CurrencyPair currencyPair = new CurrencyPair(USD_CURRENCY, HUF_CURRENCY);
+        Mockito.when(bank.getExchangeRate(currencyPair)).thenReturn(Optional.of(10.0));
+
+        // When
+        int actual = underTest.compare(money1, money2);
+
+        // Then
+        Assertions.assertEquals(0, actual);
+        Mockito.verify(bank).getExchangeRate(currencyPair);
+    }
 }
