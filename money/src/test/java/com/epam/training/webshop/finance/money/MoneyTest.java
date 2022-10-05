@@ -6,6 +6,8 @@ import java.util.Currency;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -81,5 +83,48 @@ class MoneyTest {
     void testConvertShouldThrowNullPointerExceptionWhenBankIsNull() {
         // Given - When - Then
         Assertions.assertThrows(NullPointerException.class, () -> underTest.convert(HUF_CURRENCY, null));
+    }
+
+    @Test
+    void testSubtractShouldThrowNullPointerExceptionWhenMoneyToSubtractIsNull() {
+        // Given - When - Then
+        Assertions.assertThrows(NullPointerException.class, () -> underTest.subtract(null, mockBank));
+    }
+
+    @Test
+    void testSubtractShouldThrowNullPointerExceptionWhenBankIsNull() {
+        // Given
+        Money moneyToSubtract = new Money(100, HUF_CURRENCY);
+
+        // When - Then
+        Assertions.assertThrows(NullPointerException.class, () -> underTest.subtract(moneyToSubtract, null));
+    }
+
+    @Test
+    void testSubtractShouldReturnExpectedResultWhenParametersAreValid() {
+        // Given
+        Money moneyToSubtract = new Money(30, HUF_CURRENCY);
+        Money expected = new Money(170, HUF_CURRENCY);
+        Mockito.when(mockBank.getExchangeRate(ArgumentMatchers.any())).thenReturn(Optional.of(1.0));
+
+        // When
+        Money actual = underTest.subtract(moneyToSubtract, mockBank);
+
+        // Then
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"1,300", "0,0", "-1,-300"})
+    void testMultiplyShouldReturnsExpectedResultWhenTheMultiplierIsAValidNumber(double multiplier, double expectedValue) {
+        // Given
+        Money underTest = new Money(300, HUF_CURRENCY);
+        Money expected = new Money(expectedValue, HUF_CURRENCY);
+
+        // When
+        Money actual = underTest.multiply(multiplier);
+
+        // Then
+        Assertions.assertEquals(expected, actual);
     }
 }

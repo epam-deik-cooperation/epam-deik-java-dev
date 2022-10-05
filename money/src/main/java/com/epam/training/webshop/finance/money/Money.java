@@ -20,6 +20,17 @@ public class Money {
         return new Money(amount + convertedMoney.getAmount(), currency);
     }
 
+    public Money subtract(Money moneyToSubtract, Bank bank) {
+        Objects.requireNonNull(moneyToSubtract, "MoneyToSubtract cannot be null!");
+        Objects.requireNonNull(bank, "Bank cannot be null!");
+        Money convertedMoney = moneyToSubtract.convert(currency, bank);
+        return new Money(amount - convertedMoney.getAmount(), currency);
+    }
+
+    public Money multiply(double multiplier) {
+        return new Money(amount * multiplier, currency);
+    }
+
     public Money convert(Currency currencyTo, Bank bank) {
         Objects.requireNonNull(currencyTo, "CurrencyTo cannot be null!");
         Objects.requireNonNull(bank, "Bank cannot be null!");
