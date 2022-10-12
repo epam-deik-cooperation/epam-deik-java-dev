@@ -1,6 +1,6 @@
 package com.epam.training.webshop;
 
-import com.epam.training.webshop.interpreter.CommandLineInterpreterFactory;
+import com.epam.training.webshop.ui.interpreter.CommandLineInterpreterFactory;
 
 public class Application {
 
