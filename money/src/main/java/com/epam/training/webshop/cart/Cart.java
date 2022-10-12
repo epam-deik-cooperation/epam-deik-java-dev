@@ -31,6 +31,12 @@ public class Cart {
         }
     }
 
+    public void removeProduct(Product product) {
+        if (product != null) {
+            productList.remove(product);
+        }
+    }
+
     public Money getAggregatedNetPrice() {
         Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
         for (Product product : productList) {
@@ -41,5 +47,9 @@ public class Cart {
 
     public List<Product> getProductList() {
         return productList;
+    }
+
+    public void clearCart() {
+        productList.clear();
     }
 }
