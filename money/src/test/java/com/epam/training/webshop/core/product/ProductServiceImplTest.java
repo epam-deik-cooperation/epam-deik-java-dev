@@ -6,11 +6,18 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ProductServiceImplTest {
 
-    private final ProductService underTest = new ProductServiceImpl();
+    private ProductServiceImpl underTest;
+
+    @BeforeEach
+    void setUp() {
+        underTest = new ProductServiceImpl();
+        underTest.initProducts();
+    }
 
     @Test
     void testGetProductListShouldReturnAStaticListWithTwoElements() {
