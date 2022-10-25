@@ -1,4 +1,4 @@
-package com.epam.training.webshop.ui.configuration;
+package com.epam.training.webshop.core.configuration;
 
 import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
@@ -7,9 +7,6 @@ import com.epam.training.webshop.core.cart.grossprice.impl.HungarianTaxGrossPric
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.product.ProductService;
 import com.epam.training.webshop.core.product.ProductServiceImpl;
-import com.epam.training.webshop.ui.command.AbstractCommand;
-import com.epam.training.webshop.ui.interpreter.CommandLineInterpreter;
-import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,10 +31,5 @@ public class ApplicationConfiguration {
     @Bean
     public GrossPriceCalculator grossPriceCalculator() {
         return new HungarianTaxGrossPriceDecorator(new GrossPriceCalculatorImpl());
-    }
-
-    @Bean
-    public CommandLineInterpreter commandLineInterpreter(Set<AbstractCommand> abstractCommands) {
-        return new CommandLineInterpreter(abstractCommands);
     }
 }

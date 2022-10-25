@@ -11,14 +11,18 @@ import org.springframework.stereotype.Component;
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final GrossPriceCalculator grossPriceCalculator;
+    private final CheckoutObservable checkoutObservable;
 
     @Autowired
-    public CheckoutServiceImpl(GrossPriceCalculator grossPriceCalculator) {
+    public CheckoutServiceImpl(GrossPriceCalculator grossPriceCalculator, CheckoutObservable checkoutObservable) {
         this.grossPriceCalculator = grossPriceCalculator;
+        this.checkoutObservable = checkoutObservable;
     }
 
     @Override
     public Order checkout(Cart cart) {
-        return new Order(cart.getProductList(), cart.getAggregatedNetPrice(), grossPriceCalculator.getAggregatedGrossPrice(cart));
+        Order order = new Order(cart.getProductList(), cart.getAggregatedNetPrice(), grossPriceCalculator.getAggregatedGrossPrice(cart));
+        checkoutObservable.notifyObservers(order);
+        return order;
     }
 }
