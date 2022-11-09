@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="taxi" />
+        <module name="ticket-service-acceptance-tests" />
+        <module name="money" />
+        <module name="ticket-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="money" target="11" />
+      <module name="taxi" target="11" />
+      <module name="ticket-service" target="11" />
+      <module name="ticket-service-acceptance-tests" target="11" />
+      <module name="ticket-service-parent" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="money" options="-parameters" />
+    </option>
+  </component>
+</project>
