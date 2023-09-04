@@ -13,7 +13,7 @@
 
     <properties>
         <cucumber.version>6.9.1</cucumber.version>
-        <junit.version>5.7.1</junit.version>
+        <junit-jupiter.version>5.7.1</junit-jupiter.version>
         <guava.version>30.0-jre</guava.version>
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
@@ -39,13 +39,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
+            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
+            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
