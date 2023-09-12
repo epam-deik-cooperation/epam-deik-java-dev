@@ -267,7 +267,7 @@ Sátántangó (drama, 450 minutes), screened in room Pedersoli, at 2021-03-15 11
 #### Általános követelmények a forráskóddal és az alkalmazással kapcsolatban
 
 * A kettes jegy minden követelménye teljesül
-* Az `mvn clean verify -p requirements-grade3` sikeresen lefut 
+* Az `mvn clean verify -P requirements-grade3` sikeresen lefut 
 a `ticket-service-parent` projekten. Ehhez a kettes érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
     * Nincsenek checkstyle warning-ok.
@@ -281,7 +281,7 @@ feltételeken túl a következők szükségesek:
 * Az alkalmazás által használt adatbázis Spring profilok segítségével módosítható.
     * Alapértelmezetten az alkalmazás egy olyan adatbázist használ, amely az alkalmazás futásai között is megőrzi az állapotát
     * A `ci` profil esetén az alkalmazás beágyazott in-memory adatbázist használ 
-* Az `mvn clean verify -p requirements-grade4` sikeresen lefut 
+* Az `mvn clean verify -P requirements-grade4` sikeresen lefut 
 a `ticket-service-parent` projekten. Ehhez a hármas érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
     * Legalább 50%-os unit teszt branch és line coverage az egész `ticket-service` modulra vonatkoztatva.
@@ -381,7 +381,7 @@ book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
 #### Általános követelmények a forráskóddal és az alkalmazással kapcsolatban
 
 * A négyes érdemjegy eléréséhez tartozó összes követelmény teljesül
-* Az `mvn clean verify -p requirements-grade5` sikeresen lefut 
+* Az `mvn clean verify -P requirements-grade5` sikeresen lefut 
 a `ticket-service-parent` projekten. Ehhez a négyes érdemjegy eléréséhez szükséges 
 feltételeken túl a következők szükségesek:
     * Legalább 70%-os unit teszt branch és line coverage az egész `ticket-service` modulra vonatkoztatva.
