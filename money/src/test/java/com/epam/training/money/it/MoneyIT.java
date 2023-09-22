@@ -1,17 +1,14 @@
-package com.epam.training.money;
+package com.epam.training.money.it;
 
 import static java.lang.Integer.signum;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.epam.training.money.Money;
 import java.util.Currency;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import com.epam.training.money.impl.Money;
 
 public class MoneyIT {
 
@@ -29,8 +26,8 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(369.3));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        assertEquals(369.3, result.getAmount());
+        assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
@@ -43,23 +40,19 @@ public class MoneyIT {
         Money result = underTest.add(moneyToAdd);
 
         // Then
-        assertThat(result.how_much(), equalTo(121.0));
-        assertThat(result.what(), equalTo(HUF_CURRENCY));
+        assertEquals(121.0, result.getAmount());
+        assertEquals(HUF_CURRENCY, result.getCurrency());
     }
 
     @Test
-    public void testAddReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testAddThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
 
-        // When
-        Money result = underTest.add(moneyToAdd);
-
-        // Then
-        assertThat(result, nullValue());
+        // When - Then
+        assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd));
     }
-
 
     @ParameterizedTest
     @CsvSource({"249, 1, -1", "249.3, 1, 0", "250, 0, 1"})
@@ -72,7 +65,7 @@ public class MoneyIT {
         Integer result = underTest.compareTo(moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        assertEquals(expectedSignum, signum(result));
     }
 
     @ParameterizedTest
@@ -86,20 +79,16 @@ public class MoneyIT {
         Integer result = underTest.compareTo(moneyToCompareWith);
 
         // Then
-        assertThat(signum(result), equalTo(expectedSignum));
+        assertEquals(expectedSignum, signum(result));
     }
 
     @Test
-    public void testCompareToReturnsNullWhenCurrencyWithUnknownRateIsUsed() {
+    public void testCompareToThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
 
-        // When
-        Integer result = underTest.compareTo(moneyToCompareWith);
-
-        // Then
-        assertThat(result, nullValue());
+        // When - Then
+        assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith));
     }
-
 }
