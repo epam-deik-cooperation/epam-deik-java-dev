@@ -1,36 +1,43 @@
-package com.epam.training.money.it;
+package com.epam.training.money;
 
 import static java.lang.Integer.signum;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.epam.training.money.Money;
 import com.epam.training.money.bank.Bank;
-import com.epam.training.money.bank.StaticBank;
+import com.epam.training.money.model.CurrencyPair;
 import java.util.Currency;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
-public class MoneyIT {
+public class MoneyTest {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
     private static final Currency GBP_CURRENCY = Currency.getInstance("GBP");
-    private static final Bank BANK = new StaticBank();
+    private static final CurrencyPair VALID_PAIR = new CurrencyPair(USD_CURRENCY, HUF_CURRENCY);
+    private static final CurrencyPair INVALID_PAIR = new CurrencyPair(GBP_CURRENCY, HUF_CURRENCY);
+
+    private final Bank bank = Mockito.mock(Bank.class);
 
     @Test
     public void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, USD_CURRENCY);
+        Mockito.when(bank.getExchangeRate(VALID_PAIR)).thenReturn(Optional.of(10.0));
 
         // When
-        Money result = underTest.add(moneyToAdd, BANK);
+        Money result = underTest.add(moneyToAdd, bank);
 
         // Then
-        assertEquals(369.3, result.amount());
+        assertEquals(130.0, result.amount());
         assertEquals(HUF_CURRENCY, result.currency());
+        Mockito.verify(bank).getExchangeRate(VALID_PAIR);
+        Mockito.verifyNoMoreInteractions(bank);
     }
 
     @Test
@@ -40,11 +47,12 @@ public class MoneyIT {
         Money moneyToAdd = new Money(1, HUF_CURRENCY);
 
         // When
-        Money result = underTest.add(moneyToAdd, BANK);
+        Money result = underTest.add(moneyToAdd, bank);
 
         // Then
         assertEquals(121.0, result.amount());
         assertEquals(HUF_CURRENCY, result.currency());
+        Mockito.verifyNoInteractions(bank);
     }
 
     @Test
@@ -52,9 +60,11 @@ public class MoneyIT {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
+        Mockito.when(bank.getExchangeRate(INVALID_PAIR)).thenReturn(Optional.empty());
 
         // When - Then
-        assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd, BANK));
+        assertThrows(UnsupportedOperationException.class, () -> underTest.add(moneyToAdd, bank));
+        Mockito.verify(bank).getExchangeRate(INVALID_PAIR);
     }
 
     @ParameterizedTest
@@ -63,12 +73,15 @@ public class MoneyIT {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, USD_CURRENCY);
+        Mockito.when(bank.getExchangeRate(VALID_PAIR)).thenReturn(Optional.of(249.3));
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith, BANK);
+        Integer result = underTest.compareTo(moneyToCompareWith, bank);
 
         // Then
         assertEquals(expectedSignum, signum(result));
+        Mockito.verify(bank).getExchangeRate(VALID_PAIR);
+        Mockito.verifyNoMoreInteractions(bank);
     }
 
     @ParameterizedTest
@@ -79,10 +92,11 @@ public class MoneyIT {
         Money moneyToCompareWith = new Money(secondValue, HUF_CURRENCY);
 
         // When
-        Integer result = underTest.compareTo(moneyToCompareWith, BANK);
+        Integer result = underTest.compareTo(moneyToCompareWith, bank);
 
         // Then
         assertEquals(expectedSignum, signum(result));
+        Mockito.verifyNoInteractions(bank);
     }
 
     @Test
@@ -90,8 +104,10 @@ public class MoneyIT {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
+        Mockito.when(bank.getExchangeRate(INVALID_PAIR)).thenReturn(Optional.empty());
 
         // When - Then
-        assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith, BANK));
+        assertThrows(UnsupportedOperationException.class, () -> underTest.compareTo(moneyToCompareWith, bank));
+        Mockito.verify(bank).getExchangeRate(INVALID_PAIR);
     }
 }

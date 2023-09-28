@@ -1,45 +1,26 @@
 package com.epam.training.money;
 
 import com.epam.training.money.bank.Bank;
-import com.epam.training.money.bank.StaticBank;
 import com.epam.training.money.model.CurrencyPair;
 import java.util.Currency;
 
-public class Money {
+public record Money(double amount, Currency currency) {
 
-    private double amount;
-    private final Currency currency;
-    private final Bank bank = new StaticBank();
-
-    public Money(double amount, Currency currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public Money add(Money moneyToAdd) {
+    public Money add(Money moneyToAdd, Bank bank) {
         if (isNotTheSameCurrency(moneyToAdd)) {
-            moneyToAdd = convert(moneyToAdd);
+            moneyToAdd = convert(moneyToAdd, bank);
         }
-        this.amount += moneyToAdd.amount;
-        return this;
+        return new Money(this.amount + moneyToAdd.amount, this.currency);
     }
 
-    public Integer compareTo(Money moneyToCompare) {
+    public Integer compareTo(Money moneyToCompare, Bank bank) {
         if (isNotTheSameCurrency(moneyToCompare)) {
-            moneyToCompare = convert(moneyToCompare);
+            moneyToCompare = convert(moneyToCompare, bank);
         }
         return Double.compare(this.amount, moneyToCompare.amount);
     }
 
-    private Money convert(Money moneyToConvert) {
+    private Money convert(Money moneyToConvert, Bank bank) {
         CurrencyPair pair = new CurrencyPair(moneyToConvert.currency, this.currency);
         Double exchangeRate = bank.getExchangeRate(pair)
                 .orElseThrow(() -> new UnsupportedOperationException("Can't find exchange rate!"));
