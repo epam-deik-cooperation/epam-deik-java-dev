@@ -13,6 +13,10 @@ public record Money(double amount, Currency currency) {
         return new Money(this.amount + moneyToAdd.amount, this.currency);
     }
 
+    public Money multiply(double multiplier) {
+        return new Money(this.amount * multiplier, this.currency);
+    }
+
     public Integer compareTo(Money moneyToCompare, Bank bank) {
         if (isNotTheSameCurrency(moneyToCompare)) {
             moneyToCompare = convert(moneyToCompare, bank);

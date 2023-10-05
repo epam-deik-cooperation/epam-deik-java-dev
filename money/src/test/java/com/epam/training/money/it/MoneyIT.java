@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class MoneyIT {
+class MoneyIT {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
     private static final Currency USD_CURRENCY = Currency.getInstance("USD");
@@ -20,7 +20,7 @@ public class MoneyIT {
     private static final Bank BANK = new StaticBank();
 
     @Test
-    public void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
+    void testAddReturnsExpectedResultWhenDifferentCurrencyIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, USD_CURRENCY);
@@ -34,7 +34,7 @@ public class MoneyIT {
     }
 
     @Test
-    public void testAddReturnsExpectedResultWhenMatchingCurrencyIsUsed() {
+    void testAddReturnsExpectedResultWhenMatchingCurrencyIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, HUF_CURRENCY);
@@ -48,7 +48,7 @@ public class MoneyIT {
     }
 
     @Test
-    public void testAddThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
+    void testAddThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToAdd = new Money(1, GBP_CURRENCY);
@@ -59,7 +59,7 @@ public class MoneyIT {
 
     @ParameterizedTest
     @CsvSource({"249, 1, -1", "249.3, 1, 0", "250, 0, 1"})
-    public void testCompareToReturnsExpectedResultWhenDifferentCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
+    void testCompareToReturnsExpectedResultWhenDifferentCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, USD_CURRENCY);
@@ -73,7 +73,7 @@ public class MoneyIT {
 
     @ParameterizedTest
     @CsvSource({"0, 100, -1", "100, 100, 0", "100, 0, 1"})
-    public void testCompareToReturnsExpectedResultWhenMatchingCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
+    void testCompareToReturnsExpectedResultWhenMatchingCurrencyIsUsed(double firstValue, double secondValue, int expectedSignum) {
         // Given
         Money underTest = new Money(firstValue, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(secondValue, HUF_CURRENCY);
@@ -86,7 +86,7 @@ public class MoneyIT {
     }
 
     @Test
-    public void testCompareToThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
+    void testCompareToThrowsExceptionWhenCurrencyWithUnknownRateIsUsed() {
         // Given
         Money underTest = new Money(120, HUF_CURRENCY);
         Money moneyToCompareWith = new Money(1, GBP_CURRENCY);
