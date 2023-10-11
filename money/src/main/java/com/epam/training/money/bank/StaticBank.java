@@ -24,7 +24,7 @@ public class StaticBank implements Bank {
     @Override
     public Optional<Double> getExchangeRate(CurrencyPair pair) {
         return pair.from().equals(pair.to())
-                ? Optional.of(1.0)
-                : Optional.ofNullable(exchangeRateMap.get(pair));
+            ? Optional.of(1.0)
+            : Optional.ofNullable(exchangeRateMap.get(pair));
     }
 }

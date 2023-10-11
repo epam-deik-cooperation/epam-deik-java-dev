@@ -3,41 +3,51 @@ package com.epam.training.money.cart;
 import com.epam.training.money.Money;
 import com.epam.training.money.bank.Bank;
 import com.epam.training.money.product.Product;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Currency;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Cart {
 
     private final Bank bank;
-    private final List<Product> productList;
+
+    @Getter
+    private final Map<Product, Integer> productMap;
 
     public static Cart createEmptyCart(Bank bank) {
-        return new Cart(bank, new ArrayList<>());
+        return new Cart(bank, new HashMap<>());
     }
 
-    public static Cart createCart(Bank bank, Product... products) {
-        return new Cart(bank, Arrays.asList(products));
-    }
-
-    public void addProduct(Product product) {
-        if (product != null) {
-            productList.add(product);
+    public void addProduct(Product product, int amount) {
+        if (product != null && amount > 0) {
+            productMap.merge(product, amount, Integer::sum);
         }
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public void removeProduct(Product product) {
+        productMap.remove(product);
+    }
+
+    public boolean containsProduct(Product product) {
+        return productMap.containsKey(product);
+    }
+
+    public void clear() {
+        productMap.clear();
+    }
+
+    public boolean isEmpty() {
+        return productMap.isEmpty();
     }
 
     public Money getAggregatedNetPrice() {
         Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
-        for (Product product : productList) {
-            aggregatedPrice = aggregatedPrice.add(product.getNetPrice(), bank);
+        for (Map.Entry<Product, Integer> entry : productMap.entrySet()) {
+            aggregatedPrice = aggregatedPrice.add(entry.getKey().getNetPrice().multiply(entry.getValue()), bank);
         }
         return aggregatedPrice;
     }
