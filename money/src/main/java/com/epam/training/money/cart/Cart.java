@@ -24,14 +24,30 @@ public class Cart {
 
     public void addProduct(Product product, int amount) {
         if (product != null && amount > 0) {
-            productMap.put(product, amount);
+            productMap.merge(product, amount, Integer::sum);
         }
+    }
+
+    public void removeProduct(Product product) {
+        productMap.remove(product);
+    }
+
+    public boolean containsProduct(Product product) {
+        return productMap.containsKey(product);
+    }
+
+    public void clear() {
+        productMap.clear();
+    }
+
+    public boolean isEmpty() {
+        return productMap.isEmpty();
     }
 
     public Money getAggregatedNetPrice() {
         Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
-        for (Map.Entry<Product, Integer> product : productMap.entrySet()) {
-            aggregatedPrice = aggregatedPrice.add(product.getKey().getNetPrice().multiply(product.getValue()), bank);
+        for (Map.Entry<Product, Integer> entry : productMap.entrySet()) {
+            aggregatedPrice = aggregatedPrice.add(entry.getKey().getNetPrice().multiply(entry.getValue()), bank);
         }
         return aggregatedPrice;
     }

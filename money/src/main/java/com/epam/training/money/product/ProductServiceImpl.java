@@ -10,9 +10,18 @@ public class ProductServiceImpl implements ProductService {
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
 
     private final List<Product> productList = List.of(
-            new Product("Pentium3", new Money(500, HUF_CURRENCY)),
-            new Product("Pentium4", new Money(5000, HUF_CURRENCY)),
-            new Product("Pentium5", new Money(50000, HUF_CURRENCY))
+        Product.builder()
+            .withName("Pentium3")
+            .withNetPrice(new Money(500, HUF_CURRENCY))
+            .build(),
+        Product.builder()
+            .withName("Pentium4")
+            .withNetPrice(new Money(5000, HUF_CURRENCY))
+            .build(),
+        Product.builder()
+            .withName("Pentium5")
+            .withNetPrice(new Money(50000, HUF_CURRENCY))
+            .build()
     );
 
     @Override
@@ -23,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> getProductByName(String productName) {
         return productList.stream()
-                .filter(product -> product.getName().equals(productName))
-                .findFirst();
+            .filter(product -> product.getName().equals(productName))
+            .findFirst();
     }
 }

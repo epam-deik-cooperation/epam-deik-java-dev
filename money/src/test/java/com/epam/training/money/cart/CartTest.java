@@ -1,6 +1,7 @@
 package com.epam.training.money.cart;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -17,8 +18,14 @@ import org.junit.jupiter.api.Test;
 
 class CartTest {
 
-    private static final Product HUF_PRODUCT = new Product("diploma", new Money(5000, Currency.getInstance("HUF")));
-    private static final Product USD_PRODUCT = new Product("diploma", new Money(5000, Currency.getInstance("USD")));
+    private static final Product HUF_PRODUCT = Product.builder()
+        .withName("diploma")
+        .withNetPrice(new Money(5000, Currency.getInstance("HUF")))
+        .build();
+    private static final Product USD_PRODUCT = Product.builder()
+        .withName("diploma")
+        .withNetPrice(new Money(5000, Currency.getInstance("USD")))
+        .build();
 
     private final Bank mockBank = mock(Bank.class);
     private final Cart underTest = Cart.createEmptyCart(mockBank);
@@ -45,8 +52,7 @@ class CartTest {
 
     @Test
     void testAddProductShouldStoreTheProductWhenItIsNotNull() {
-        // Given
-        // When
+        // Given - When
         underTest.addProduct(HUF_PRODUCT, 1);
 
         // Then
@@ -56,8 +62,7 @@ class CartTest {
 
     @Test
     void testGetAggregatedNetPriceShouldReturnZeroPriceWhenNoItemsAreInTheCart() {
-        // Given
-        // When
+        // Given - When
         Money result = underTest.getAggregatedNetPrice();
 
         // Then
@@ -68,7 +73,8 @@ class CartTest {
     @Test
     void testGetAggregatedNetPriceShouldReturnCorrectPriceWhenCurrenciesAreTheSame() {
         // Given
-        underTest.addProduct(HUF_PRODUCT, 15);
+        underTest.addProduct(HUF_PRODUCT, 10);
+        underTest.addProduct(HUF_PRODUCT, 5);
 
         // When
         Money result = underTest.getAggregatedNetPrice();
@@ -90,5 +96,71 @@ class CartTest {
         // Then
         assertEquals(100000, result.amount());
         verify(mockBank).getExchangeRate(any());
+    }
+
+    @Test
+    void testRemoveProductShouldRemoveItFromTheCartWhenItIsNotNull() {
+        // Given
+        underTest.addProduct(HUF_PRODUCT, 10);
+
+        // When
+        underTest.removeProduct(HUF_PRODUCT);
+
+        // Then
+        assertFalse(underTest.containsProduct(HUF_PRODUCT));
+    }
+
+    @Test
+    void testClearShouldRemoveEveryProductFromTheCart() {
+        // Given
+        underTest.addProduct(HUF_PRODUCT, 10);
+
+        // When
+        underTest.clear();
+
+        // Then
+        assertTrue(underTest.isEmpty());
+    }
+
+    @Test
+    void testContainsProductShouldReturnTrueWhenCartContainsTheGivenProduct() {
+        // Given
+        underTest.addProduct(HUF_PRODUCT, 10);
+
+        // When
+        boolean actual = underTest.containsProduct(HUF_PRODUCT);
+
+        // Then
+        assertTrue(actual);
+    }
+
+    @Test
+    void testContainsProductShouldReturnFalseWhenCartDoesNotContainTheGivenProduct() {
+        // Given - When
+        boolean actual = underTest.containsProduct(HUF_PRODUCT);
+
+        // Then
+        assertFalse(actual);
+    }
+
+    @Test
+    void testIsEmptyShouldReturnFalseWhenCartIsNotEmpty() {
+        // Given
+        underTest.addProduct(HUF_PRODUCT, 10);
+
+        // When
+        boolean actual = underTest.isEmpty();
+
+        // Then
+        assertFalse(actual);
+    }
+
+    @Test
+    void testIsEmptyShouldReturnTrueWhenCartIsEmpty() {
+        // Given - When
+        boolean actual = underTest.isEmpty();
+
+        // Then
+        assertTrue(actual);
     }
 }

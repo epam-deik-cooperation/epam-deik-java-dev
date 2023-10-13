@@ -27,7 +27,7 @@ public record Money(double amount, Currency currency) {
     private Money convert(Money moneyToConvert, Bank bank) {
         CurrencyPair pair = new CurrencyPair(moneyToConvert.currency, this.currency);
         Double exchangeRate = bank.getExchangeRate(pair)
-                .orElseThrow(() -> new UnsupportedOperationException("Can't find exchange rate!"));
+            .orElseThrow(() -> new UnsupportedOperationException("Can't find exchange rate!"));
         return new Money(moneyToConvert.amount * exchangeRate, moneyToConvert.currency);
     }
 
