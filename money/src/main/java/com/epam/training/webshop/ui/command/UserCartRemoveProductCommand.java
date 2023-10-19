@@ -3,16 +3,17 @@ package com.epam.training.webshop.ui.command;
 import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.product.ProductService;
 import com.epam.training.webshop.core.product.model.Product;
-import com.epam.training.webshop.ui.session.Session;
 import java.util.Optional;
 
 public class UserCartRemoveProductCommand extends AbstractCommand {
 
     private final ProductService productService;
+    private final Cart cart;
 
-    public UserCartRemoveProductCommand(ProductService productService) {
+    public UserCartRemoveProductCommand(ProductService productService, Cart cart) {
         super("user", "cart", "removeProduct");
         this.productService = productService;
+        this.cart = cart;
     }
 
     @Override
@@ -22,7 +23,6 @@ public class UserCartRemoveProductCommand extends AbstractCommand {
         if (product.isEmpty()) {
             return productName + " is not found!";
         }
-        Cart cart = Session.INSTANCE.getCart();
         if (cart.containsProduct(product.get())) {
             cart.removeProduct(product.get());
             return "Product removed from the cart!";

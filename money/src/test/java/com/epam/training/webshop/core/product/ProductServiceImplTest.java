@@ -7,11 +7,18 @@ import com.epam.training.webshop.core.finance.money.Money;
 import com.epam.training.webshop.core.product.model.Product;
 import java.util.Currency;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ProductServiceImplTest {
 
-    private final ProductService underTest = new ProductServiceImpl();
+    private ProductServiceImpl underTest;
+
+    @BeforeEach
+    void setUp() {
+        underTest = new ProductServiceImpl();
+        underTest.initProducts();
+    }
 
     @Test
     void testGetProductByNameShouldReturnHypoWhenInputProductNameIsHypo() {
