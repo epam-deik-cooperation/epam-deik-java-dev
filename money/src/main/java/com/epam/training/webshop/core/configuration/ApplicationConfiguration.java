@@ -8,9 +8,6 @@ import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.bank.StaticBank;
 import com.epam.training.webshop.core.product.ProductService;
 import com.epam.training.webshop.core.product.ProductServiceImpl;
-import com.epam.training.webshop.ui.command.AbstractCommand;
-import com.epam.training.webshop.ui.interpreter.CommandLineInterpreter;
-import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,10 +32,5 @@ public class ApplicationConfiguration {
     @Bean
     public GrossPriceCalculator calculator() {
         return new HungarianTaxGrossPriceDecorator(new GrossPriceCalculatorImpl());
-    }
-
-    @Bean
-    public CommandLineInterpreter commandLineInterpreter(Set<AbstractCommand> abstractCommandSet) {
-        return new CommandLineInterpreter(abstractCommandSet);
     }
 }
