@@ -18,7 +18,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <checkstyle-config-dir>checkstyle</checkstyle-config-dir>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-        <checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
+        <checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
         <surefire-maven-plugin.version>3.0.0-M5</surefire-maven-plugin.version>
         <junit-jupiter.version>5.7.1</junit-jupiter.version>
     </properties>
@@ -66,8 +66,6 @@
                 <version>${checkstyle-maven-plugin.version}</version>
                 <configuration>
                     <configLocation>${checkstyle-config-dir}/checkstyle.xml</configLocation>
-                    <suppressionsLocation>${checkstyle-config-dir}/suppressions.xml</suppressionsLocation>
-                    <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failOnViolation>${requirements.fail-build-on-checkstyle-error}</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
