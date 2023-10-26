@@ -11,8 +11,11 @@ import org.springframework.stereotype.Component;
 public class CheckoutService {
 
     private final GrossPriceCalculator calculator;
+    private final CheckoutObservable checkoutObservable;
 
     public Order checkout(Cart cart) {
-        return new Order(cart.getProductMap(), cart.getAggregatedNetPrice(), calculator.getAggregatedGrossPrice(cart));
+        Order order = new Order(cart.getProductMap(), cart.getAggregatedNetPrice(), calculator.getAggregatedGrossPrice(cart));
+        checkoutObservable.notifyObservers(order);
+        return order;
     }
 }

@@ -9,4 +9,6 @@ public interface ProductService {
     List<Product> getProductList();
 
     Optional<Product> getProductByName(String name);
+
+    void createProduct(Product product);
 }

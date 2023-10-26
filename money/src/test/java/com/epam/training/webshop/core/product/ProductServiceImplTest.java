@@ -58,4 +58,20 @@ class ProductServiceImplTest {
         assertTrue(actual.isEmpty());
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testCreateProductShouldStoreTheGivenProductWhenTheInputProductIsValid() {
+        // Given
+        Product expected = new Product.Builder()
+            .withName("Retek")
+            .withNetPrice(new Money(230.0, Currency.getInstance("HUF")))
+            .build();
+
+        // When
+        underTest.createProduct(expected);
+
+        // Then
+        Product actual = underTest.getProductByName("Retek").get();
+        assertEquals(expected, actual);
+    }
 }

@@ -1,5 +1,7 @@
 package com.epam.training.webshop.core.cart;
 
+import com.epam.training.webshop.core.checkout.CheckoutObserver;
+import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
 import com.epam.training.webshop.core.product.model.Product;
@@ -11,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Cart {
+public class Cart implements CheckoutObserver {
 
     private final Bank bank;
 
@@ -50,5 +52,10 @@ public class Cart {
             aggregatedPrice = aggregatedPrice.add(entry.getKey().getNetPrice().multiply(entry.getValue()), bank);
         }
         return aggregatedPrice;
+    }
+
+    @Override
+    public void handleOrder(Order order) {
+        clear();
     }
 }

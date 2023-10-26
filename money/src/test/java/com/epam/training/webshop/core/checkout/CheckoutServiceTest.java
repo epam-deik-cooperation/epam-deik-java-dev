@@ -27,6 +27,9 @@ class CheckoutServiceTest {
     @Mock
     private Cart cart;
 
+    @Mock
+    private CheckoutObservable checkoutObservable;
+
     @InjectMocks
     private CheckoutService underTest;
 
@@ -49,5 +52,6 @@ class CheckoutServiceTest {
         verify(cart).getProductMap();
         verify(cart).getAggregatedNetPrice();
         verify(calculator).getAggregatedGrossPrice(cart);
+        verify(checkoutObservable).notifyObservers(expected);
     }
 }
