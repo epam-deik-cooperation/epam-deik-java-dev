@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring-shell-starter.version>2.1.13</spring-shell-starter.version>
+        <spring-shell-starter.version>2.1.3</spring-shell-starter.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
     </properties>
