@@ -21,9 +21,15 @@
         <checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
         <surefire-maven-plugin.version>3.0.0-M5</surefire-maven-plugin.version>
         <junit-jupiter.version>5.7.1</junit-jupiter.version>
+        <spring-shell-starter.version>2.1.3</spring-shell-starter.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
+            <version>${spring-shell-starter.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
