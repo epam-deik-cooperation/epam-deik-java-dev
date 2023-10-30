@@ -15,8 +15,11 @@ public class LogSystem {
         return logged;
     }
 
-    public boolean LogOut(){
+    public void LogOut(){
         admin.setLogged(false);
-        return false;
+    }
+
+    public boolean isLoggedIn() {
+        return admin.isLogged();
     }
 }
