@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 public class Admin {
     private String username = "admin";
     private String password = "admin";
+    private boolean logged = false;
 }
