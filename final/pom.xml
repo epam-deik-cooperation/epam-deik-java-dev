@@ -4,20 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.17</version>
-    </parent>
-
     <groupId>com.epam.training.ticketservice</groupId>
     <artifactId>ticket-service-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- DO NOT MODIFY THIS VERSION! -->
+        <version>2.7.17</version>
+    </parent>
+
     <properties>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <java.version>17</java.version>
     </properties>
 
     <modules>
@@ -44,6 +44,7 @@
                 <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
                 <requirements.jacoco-line-coverage>0.4</requirements.jacoco-line-coverage>
                 <requirements.jacoco-branch-coverage>0.4</requirements.jacoco-branch-coverage>
+                <!--suppress UnresolvedMavenProperty -->
                 <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement</requirements.cucumber-tags>
             </properties>
         </profile>
@@ -53,6 +54,7 @@
                 <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
                 <requirements.jacoco-line-coverage>0.5</requirements.jacoco-line-coverage>
                 <requirements.jacoco-branch-coverage>0.5</requirements.jacoco-branch-coverage>
+                <!--suppress UnresolvedMavenProperty -->
                 <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement or @grade4-requirement
                 </requirements.cucumber-tags>
             </properties>
@@ -63,11 +65,11 @@
                 <requirements.fail-build-on-checkstyle-error>true</requirements.fail-build-on-checkstyle-error>
                 <requirements.jacoco-line-coverage>0.7</requirements.jacoco-line-coverage>
                 <requirements.jacoco-branch-coverage>0.7</requirements.jacoco-branch-coverage>
+                <!--suppress UnresolvedMavenProperty -->
                 <requirements.cucumber-tags>@grade2-requirement or @grade3-requirement or @grade4-requirement or
                     @grade5-requirement
                 </requirements.cucumber-tags>
             </properties>
         </profile>
     </profiles>
-
 </project>
