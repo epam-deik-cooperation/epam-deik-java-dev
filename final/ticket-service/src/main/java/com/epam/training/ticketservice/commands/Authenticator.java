@@ -31,9 +31,16 @@ public class Authenticator {
     public String signOut(){
         if(admin.isLogged()) {
             logSystem.LogOut();
-            return "Successfully signed out";
+            return "Successfully signed out.";
         }else {
             return "Already signed out.";
         }
+    }
+
+    @ShellMethod(key = "describe account", value = "Returns the current signed in user")
+    public String describeAccount(){
+        if(admin.isLogged()) {
+            return "Signed in with privileged account " + admin.getUsername();
+        }else return "You are not signed in.";
     }
 }
