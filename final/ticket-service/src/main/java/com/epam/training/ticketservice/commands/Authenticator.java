@@ -26,4 +26,14 @@ public class Authenticator {
         }
         else return "Login failed due to incorrect credentials.";
     }
+
+    @ShellMethod(key = "sign out", value = "Signs out")
+    public String signOut(){
+        if(admin.isLogged()) {
+            logSystem.LogOut();
+            return "Successfully signed out";
+        }else {
+            return "Already signed out.";
+        }
+    }
 }

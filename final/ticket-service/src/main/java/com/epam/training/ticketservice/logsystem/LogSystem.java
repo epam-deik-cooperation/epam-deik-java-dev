@@ -14,4 +14,9 @@ public class LogSystem {
         admin.setLogged(logged);
         return logged;
     }
+
+    public boolean LogOut(){
+        admin.setLogged(false);
+        return false;
+    }
 }
