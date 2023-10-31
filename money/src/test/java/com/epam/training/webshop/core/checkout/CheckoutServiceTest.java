@@ -8,7 +8,7 @@ import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
 import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Map;
@@ -36,7 +36,7 @@ class CheckoutServiceTest {
     @Test
     void testCheckoutShouldReturnWithAnOrderWhenCartIsNotNull() {
         // Given
-        Map<Product, Integer> productMap = Collections.emptyMap();
+        Map<ProductDto, Integer> productMap = Collections.emptyMap();
         Money netPrice = new Money(1.0, Currency.getInstance("USD"));
         Money grossPrice = new Money(2.0, Currency.getInstance("USD"));
         when(cart.getProductMap()).thenReturn(productMap);

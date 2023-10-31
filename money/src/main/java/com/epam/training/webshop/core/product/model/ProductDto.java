@@ -4,7 +4,7 @@ import com.epam.training.webshop.core.finance.money.Money;
 import lombok.Value;
 
 @Value
-public class Product {
+public class ProductDto {
 
     private final String name;
     private final Money netPrice;
@@ -28,8 +28,8 @@ public class Product {
             return this;
         }
 
-        public Product build() {
-            return new Product(name, netPrice);
+        public ProductDto build() {
+            return new ProductDto(name, netPrice);
         }
     }
 }

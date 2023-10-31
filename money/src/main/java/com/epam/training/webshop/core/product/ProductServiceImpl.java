@@ -1,53 +1,55 @@
 package com.epam.training.webshop.core.product;
 
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
+import com.epam.training.webshop.core.product.persistence.Product;
+import com.epam.training.webshop.core.product.persistence.ProductRepository;
 import java.util.Currency;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
+    private final ProductRepository productRepository;
 
-    private List<Product> productList;
-
-    public void initProducts() {
-        productList = new LinkedList<>(List.of(
-            Product.builder()
-                .withName("Banana")
-                .withNetPrice(new Money(500, HUF_CURRENCY))
-                .build(),
-            Product.builder()
-                .withName("Kecske")
-                .withNetPrice(new Money(2000, HUF_CURRENCY))
-                .build(),
-            Product.builder()
-                .withName("Krumpli")
-                .withNetPrice(new Money(600, HUF_CURRENCY))
-                .build(),
-            Product.builder()
-                .withName("Hypo")
-                .withNetPrice(new Money(300, HUF_CURRENCY))
-                .build()
-        ));
+    @Override
+    public List<ProductDto> getProductList() {
+        return productRepository.findAll()
+            .stream()
+            .map(this::mapEntityToDto)
+            .toList();
     }
 
     @Override
-    public List<Product> getProductList() {
-        return productList;
+    public Optional<ProductDto> getProductByName(String productName) {
+        return mapEntityToDto(productRepository.findByName(productName));
     }
 
     @Override
-    public Optional<Product> getProductByName(String productName) {
-        return productList.stream()
-            .filter(product -> product.getName().equals(productName))
-            .findFirst();
+    public void createProduct(ProductDto productDto) {
+        Product product = new Product(
+            productDto.getName(),
+            productDto.getNetPrice().amount(),
+            productDto.getNetPrice().currency().getCurrencyCode()
+        );
+        productRepository.save(product);
     }
 
-    @Override
-    public void createProduct(Product product) {
-        productList.add(product);
+    private ProductDto mapEntityToDto(Product product) {
+        return ProductDto.builder()
+            .withName(product.getName())
+            .withNetPrice(new Money(
+                product.getNetPriceAmount(),
+                Currency.getInstance(product.getNetPriceCurrencyCode()))
+            )
+            .build();
+    }
+
+    private Optional<ProductDto> mapEntityToDto(Optional<Product> product) {
+        return product.map(this::mapEntityToDto);
     }
 }

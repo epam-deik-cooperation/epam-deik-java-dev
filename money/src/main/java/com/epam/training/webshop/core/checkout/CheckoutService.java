@@ -14,7 +14,11 @@ public class CheckoutService {
     private final CheckoutObservable checkoutObservable;
 
     public Order checkout(Cart cart) {
-        Order order = new Order(cart.getProductMap(), cart.getAggregatedNetPrice(), calculator.getAggregatedGrossPrice(cart));
+        Order order = new Order(
+            cart.getProductMap(),
+            cart.getAggregatedNetPrice(),
+            calculator.getAggregatedGrossPrice(cart)
+        );
         checkoutObservable.notifyObservers(order);
         return order;
     }

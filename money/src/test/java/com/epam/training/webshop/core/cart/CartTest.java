@@ -8,14 +8,14 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.Currency;
 import org.junit.jupiter.api.Test;
 
 class CartTest {
 
     private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
-    private static final Product HUF_PRODUCT = Product.builder()
+    private static final ProductDto HUF_PRODUCT = ProductDto.builder()
         .withName("productName")
         .withNetPrice(new Money(10, HUF_CURRENCY))
         .build();
