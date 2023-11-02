@@ -39,9 +39,25 @@ public class MovieCommands {
         return "Movie was not found.";
     }
 
+    @ShellMethodAvailability("isAvailable")
+    @ShellMethod(key = "delete movie", value = "Deletes an existing movie")
+    public String movieDeleter(String movieName){
+        for (Movie movie : movies.getMovies()) {
+            if (movie.getName().equals(movieName)){
+                movies.getMovies().remove(movie);
+                return "Movie deleted successfully.";
+            }
+        }
+        return "Movie was not found.";
+    }
+
     @ShellMethod(key = "list movies", value = "Lists all created movies")
     public String listMovies(){
-        return movies.getMovies().toString();
+        if(!movies.getMovies().isEmpty()){
+            return movies.getMovies().toString();
+        }else {
+            return "There are no movies at the moment";
+        }
     }
 
     public Availability isAvailable(){
