@@ -2,7 +2,7 @@ package com.epam.training.webshop.core.checkout;
 
 import com.epam.training.webshop.core.cart.Cart;
 import com.epam.training.webshop.core.cart.grossprice.GrossPriceCalculator;
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +13,13 @@ public class CheckoutService {
     private final GrossPriceCalculator calculator;
     private final CheckoutObservable checkoutObservable;
 
-    public Order checkout(Cart cart) {
-        Order order = new Order(
+    public OrderDto checkout(Cart cart) {
+        OrderDto orderDto = new OrderDto(
             cart.getProductMap(),
             cart.getAggregatedNetPrice(),
             calculator.getAggregatedGrossPrice(cart)
         );
-        checkoutObservable.notifyObservers(order);
-        return order;
+        checkoutObservable.notifyObservers(orderDto);
+        return orderDto;
     }
 }

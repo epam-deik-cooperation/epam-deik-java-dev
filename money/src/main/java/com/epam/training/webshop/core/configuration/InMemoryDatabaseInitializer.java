@@ -6,10 +6,12 @@ import com.epam.training.webshop.core.user.persistence.User;
 import com.epam.training.webshop.core.user.persistence.UserRepository;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!prod")
 public class InMemoryDatabaseInitializer {
 
     private final UserRepository userRepository;
@@ -20,7 +22,7 @@ public class InMemoryDatabaseInitializer {
         User admin = new User("admin", "admin", User.Role.ADMIN);
         userRepository.save(admin);
 
-        Product hypo = new Product("Liszt", 100.0, "HUF");
+        Product hypo = new Product("Hypo", 100.0, "HUF");
         productRepository.save(hypo);
     }
 }

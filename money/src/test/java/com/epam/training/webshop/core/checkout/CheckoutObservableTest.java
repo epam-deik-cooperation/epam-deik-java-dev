@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import com.epam.training.webshop.core.checkout.model.Order;
+import com.epam.training.webshop.core.checkout.model.OrderDto;
 import com.epam.training.webshop.core.finance.money.Money;
 import java.util.Collections;
 import java.util.Currency;
@@ -20,15 +20,15 @@ class CheckoutObservableTest {
         // Given
         Money netPrice = new Money(1.0, USD_CURRENCY);
         Money grossPrice = new Money(2.0, USD_CURRENCY);
-        Order order = new Order(Collections.emptyMap(), netPrice, grossPrice);
+        OrderDto orderDto = new OrderDto(Collections.emptyMap(), netPrice, grossPrice);
         CheckoutObserver checkoutObserver = mock(CheckoutObserver.class);
         CheckoutObservable underTest = new CheckoutObservable(List.of(checkoutObserver));
 
         // When
-        underTest.notifyObservers(order);
+        underTest.notifyObservers(orderDto);
 
         // Then
-        verify(checkoutObserver).handleOrder(order);
+        verify(checkoutObserver).handleOrder(orderDto);
         verifyNoMoreInteractions(checkoutObserver);
     }
 }
