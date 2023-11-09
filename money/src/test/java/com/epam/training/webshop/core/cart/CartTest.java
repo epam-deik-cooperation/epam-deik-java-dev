@@ -11,18 +11,18 @@ import static org.mockito.Mockito.when;
 
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.Currency;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class CartTest {
 
-    private static final Product HUF_PRODUCT = Product.builder()
+    private static final ProductDto HUF_PRODUCT = ProductDto.builder()
         .withName("diploma")
         .withNetPrice(new Money(5000, Currency.getInstance("HUF")))
         .build();
-    private static final Product USD_PRODUCT = Product.builder()
+    private static final ProductDto USD_PRODUCT = ProductDto.builder()
         .withName("diploma")
         .withNetPrice(new Money(5000, Currency.getInstance("USD")))
         .build();

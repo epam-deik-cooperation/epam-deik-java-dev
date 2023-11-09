@@ -2,76 +2,82 @@ package com.epam.training.webshop.core.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
+import com.epam.training.webshop.core.product.persistence.Product;
+import com.epam.training.webshop.core.product.persistence.ProductRepository;
 import java.util.Currency;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ProductServiceImplTest {
 
-    private ProductServiceImpl underTest;
+    private static final Product ENTITY = new Product("Pentium3", 500.0, "HUF");
+    private static final ProductDto DTO = new ProductDto.Builder()
+        .withName("Pentium3")
+        .withNetPrice(new Money(500.0, Currency.getInstance("HUF")))
+        .build();
 
-    @BeforeEach
-    void setUp() {
-        underTest = new ProductServiceImpl();
-        underTest.initProducts();
-    }
+    private final ProductRepository productRepository = mock(ProductRepository.class);
+    private final ProductServiceImpl underTest = new ProductServiceImpl(productRepository);
 
     @Test
     void testGetProductByNameShouldReturnTheProductWhenItExists() {
         // Given
-        Product expected = new Product("Pentium3", new Money(500, Currency.getInstance("HUF")));
+        when(productRepository.findByName("Pentium3")).thenReturn(Optional.of(ENTITY));
+        Optional<ProductDto> expected = Optional.of(DTO);
 
         // When
-        Optional<Product> actual = underTest.getProductByName("Pentium3");
+        Optional<ProductDto> actual = underTest.getProductByName("Pentium3");
 
         // Then
-        assertTrue(actual.isPresent());
-        assertEquals(expected, actual.get());
+        assertEquals(expected, actual);
+        verify(productRepository).findByName("Pentium3");
     }
 
     @Test
     void testGetProductByNameShouldReturnOptionalEmptyWhenInputProductNameDoesNotExist() {
         // Given
-        Optional<Product> expected = Optional.empty();
+        when(productRepository.findByName("SSD")).thenReturn(Optional.empty());
+        Optional<ProductDto> expected = Optional.empty();
 
         // When
-        Optional<Product> actual = underTest.getProductByName("SSD");
+        Optional<ProductDto> actual = underTest.getProductByName("SSD");
 
         // Then
         assertTrue(actual.isEmpty());
         assertEquals(expected, actual);
+        verify(productRepository).findByName("SSD");
     }
 
     @Test
     void testGetProductByNameShouldReturnOptionalEmptyWhenInputProductNameIsNull() {
         // Given
-        Optional<Product> expected = Optional.empty();
+        when(productRepository.findByName(null)).thenReturn(Optional.empty());
+        Optional<ProductDto> expected = Optional.empty();
 
         // When
-        Optional<Product> actual = underTest.getProductByName(null);
+        Optional<ProductDto> actual = underTest.getProductByName(null);
 
         // Then
         assertTrue(actual.isEmpty());
         assertEquals(expected, actual);
+        verify(productRepository).findByName(null);
     }
 
     @Test
     void testCreateProductShouldStoreTheGivenProductWhenTheInputProductIsValid() {
         // Given
-        Product expected = new Product.Builder()
-            .withName("Retek")
-            .withNetPrice(new Money(230.0, Currency.getInstance("HUF")))
-            .build();
+        when(productRepository.save(ENTITY)).thenReturn(ENTITY);
 
         // When
-        underTest.createProduct(expected);
+        underTest.createProduct(DTO);
 
         // Then
-        Product actual = underTest.getProductByName("Retek").get();
-        assertEquals(expected, actual);
+        verify(productRepository).save(ENTITY);
     }
 }

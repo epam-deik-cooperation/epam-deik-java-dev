@@ -4,7 +4,7 @@ import com.epam.training.webshop.core.checkout.CheckoutObserver;
 import com.epam.training.webshop.core.checkout.model.Order;
 import com.epam.training.webshop.core.finance.bank.Bank;
 import com.epam.training.webshop.core.finance.money.Money;
-import com.epam.training.webshop.core.product.model.Product;
+import com.epam.training.webshop.core.product.model.ProductDto;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,24 +18,24 @@ public class Cart implements CheckoutObserver {
     private final Bank bank;
 
     @Getter
-    private final Map<Product, Integer> productMap;
+    private final Map<ProductDto, Integer> productMap;
 
     public static Cart createEmptyCart(Bank bank) {
         return new Cart(bank, new HashMap<>());
     }
 
-    public void addProduct(Product product, int amount) {
-        if (product != null && amount > 0) {
-            productMap.merge(product, amount, Integer::sum);
+    public void addProduct(ProductDto productDto, int amount) {
+        if (productDto != null && amount > 0) {
+            productMap.merge(productDto, amount, Integer::sum);
         }
     }
 
-    public void removeProduct(Product product) {
-        productMap.remove(product);
+    public void removeProduct(ProductDto productDto) {
+        productMap.remove(productDto);
     }
 
-    public boolean containsProduct(Product product) {
-        return productMap.containsKey(product);
+    public boolean containsProduct(ProductDto productDto) {
+        return productMap.containsKey(productDto);
     }
 
     public void clear() {
@@ -48,7 +48,7 @@ public class Cart implements CheckoutObserver {
 
     public Money getAggregatedNetPrice() {
         Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
-        for (Map.Entry<Product, Integer> entry : productMap.entrySet()) {
+        for (Map.Entry<ProductDto, Integer> entry : productMap.entrySet()) {
             aggregatedPrice = aggregatedPrice.add(entry.getKey().getNetPrice().multiply(entry.getValue()), bank);
         }
         return aggregatedPrice;
