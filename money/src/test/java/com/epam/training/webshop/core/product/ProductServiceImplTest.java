@@ -11,6 +11,7 @@ import com.epam.training.webshop.core.product.model.ProductDto;
 import com.epam.training.webshop.core.product.persistence.Product;
 import com.epam.training.webshop.core.product.persistence.ProductRepository;
 import java.util.Currency;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -79,5 +80,18 @@ class ProductServiceImplTest {
 
         // Then
         verify(productRepository).save(ENTITY);
+    }
+
+    @Test
+    void testGetProductListShouldReturnTheAvailableProducts() {
+        // Given
+        when(productRepository.findAll()).thenReturn(List.of(ENTITY));
+
+        // When
+        List<ProductDto> actual = underTest.getProductList();
+
+        // Then
+        verify(productRepository).findAll();
+        assertEquals(1, actual.size());
     }
 }
