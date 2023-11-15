@@ -6,10 +6,12 @@ import com.epam.training.webshop.core.user.persistence.User;
 import com.epam.training.webshop.core.user.persistence.UserRepository;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!prod")
 public class InMemoryDatabaseInitializer {
 
     private final UserRepository userRepository;
