@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
-import com.epam.training.ticketservice.core.repository.UserRepo;
+import com.epam.training.ticketservice.core.repository.UserRepository;
 import com.epam.training.ticketservice.core.model.User;
 import com.epam.training.ticketservice.core.service.interfaces.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserServiceInterface {
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
     private User loggedInUser = null;
 
     public User getLoggedInUser() {
@@ -20,7 +20,7 @@ public class UserServiceImplementation implements UserServiceInterface {
 
     @Override
     public String login(String name, String password) {
-        Optional<User> user = userRepo.findByNameAndPassword(name, password);
+        Optional<User> user = userRepository.findByNameAndPassword(name, password);
         if (user.isEmpty()){
             return "Login failed due to incorrect credentials";
         }else {

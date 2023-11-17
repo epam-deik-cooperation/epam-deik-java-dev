@@ -25,4 +25,9 @@ public class Movie {
         this.movieGenre = movieGenre;
         this.watchTime = watchTime;
     }
+
+    @Override
+    public String toString() {
+        return movieName + " (" + movieGenre + ", " + watchTime + " minutes)";
+    }
 }

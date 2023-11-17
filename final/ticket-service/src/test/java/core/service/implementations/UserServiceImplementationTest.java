@@ -1,7 +1,7 @@
-package core.user;
+package core.service.implementations;
 
 import com.epam.training.ticketservice.core.model.User;
-import com.epam.training.ticketservice.core.repository.UserRepo;
+import com.epam.training.ticketservice.core.repository.UserRepository;
 import com.epam.training.ticketservice.core.service.implementations.UserServiceImplementation;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +14,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class UserServiceImplementationTest {
-    private final UserRepo userRepo = mock(UserRepo.class);
-    private final UserServiceImplementation testUserServiceImplementation = new UserServiceImplementation(userRepo);
+    private final UserRepository userRepository = mock(UserRepository.class);
+    private final UserServiceImplementation testUserServiceImplementation = new UserServiceImplementation(userRepository);
     @Test
     void testLoginShouldSetLoggedInUserWhenUsernameAndPasswordAreCorrect(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         String actual = testUserServiceImplementation.login(user.getName(), user.getPassword());
@@ -47,7 +47,7 @@ public class UserServiceImplementationTest {
     void testLoginShouldReturnAlreadySignedInWhenUserAlreadySignedIn(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         testUserServiceImplementation.login(user.getName(), user.getPassword());
@@ -62,7 +62,7 @@ public class UserServiceImplementationTest {
     void testLogoutShouldReturnNotSignedInWhenUserNotSignedIn(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         String actual = testUserServiceImplementation.logout();
@@ -76,7 +76,7 @@ public class UserServiceImplementationTest {
     void testLogoutShouldReturnSignedOutWhenUserSignedIn(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         testUserServiceImplementation.login(user.getName(), user.getPassword());
@@ -91,7 +91,7 @@ public class UserServiceImplementationTest {
     void testDescribeAccountShouldReturnAccountInformationWhenUserSignedIn(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         testUserServiceImplementation.login(user.getName(), user.getPassword());
@@ -106,7 +106,7 @@ public class UserServiceImplementationTest {
     void testDescribeAccountShouldReturnAccountInformationWhenUserNotSignedIn(){
         //Given
         User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepo.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
 
         //When
         String actual = testUserServiceImplementation.describeAccount();
