@@ -16,9 +16,9 @@ public class RoomServiceImplementation implements RoomServiceInterface {
 
     @Override
     public String roomCreate(String roomName, int chairRow, int chairCol) {
-        if (roomRepository.findByRoomName(roomName).isPresent()){
+        if (roomRepository.findByRoomName(roomName).isPresent()) {
             return "The room is already existed";
-        }else {
+        } else {
             Room room = new Room(roomName, chairRow, chairCol);
             roomRepository.save(room);
             return "The room created successfully";
@@ -27,24 +27,24 @@ public class RoomServiceImplementation implements RoomServiceInterface {
 
     @Override
     public String roomUpdate(String roomName, int chairRow, int chairCol) {
-        if (roomRepository.findByRoomName(roomName).isPresent()){
+        if (roomRepository.findByRoomName(roomName).isPresent()) {
             Room room = roomRepository.findByRoomName(roomName).get();
             room.setChairRow(chairRow);
             room.setChairCol(chairCol);
             roomRepository.save(room);
             return "The room was updated successfully";
-        }else {
+        } else {
             return "The room does not exists";
         }
     }
 
     @Override
     public String roomDelete(String roomName) {
-        if (roomRepository.findByRoomName(roomName).isPresent()){
+        if (roomRepository.findByRoomName(roomName).isPresent()) {
             Room room = roomRepository.findByRoomName(roomName).get();
             roomRepository.delete(room);
             return "The room was deleted successfully";
-        }else {
+        } else {
             return "The room does not exists";
         }
     }
@@ -52,14 +52,14 @@ public class RoomServiceImplementation implements RoomServiceInterface {
     @Override
     public String roomList() {
         List<Room> rooms = roomRepository.findAll();
-        if(!rooms.isEmpty()){
+        if (!rooms.isEmpty()) {
             StringBuilder roomsReturned = new StringBuilder();
             StringJoiner joiner = new StringJoiner("\n");
             for (Room room : rooms) {
                 joiner.add(room.toString());
             }
             return  roomsReturned.append(joiner).toString();
-        }else {
+        } else {
             return "There are no rooms at the moment";
         }
     }

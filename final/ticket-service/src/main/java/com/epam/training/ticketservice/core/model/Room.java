@@ -30,9 +30,9 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room " + roomName +
-                " with " + (chairRow * chairCol) +
-                " seats, " + chairRow +
-                " rows and " + chairCol + " columns";
+        return "Room " + roomName
+                + " with " + (chairRow * chairCol)
+                + " seats, " + chairRow
+                + " rows and " + chairCol + " columns";
     }
 }

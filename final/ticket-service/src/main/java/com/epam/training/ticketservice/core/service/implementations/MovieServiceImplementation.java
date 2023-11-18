@@ -13,11 +13,12 @@ import java.util.StringJoiner;
 @RequiredArgsConstructor
 public class MovieServiceImplementation implements MovieServiceInterface {
     private final MovieRepository movieRepository;
+
     @Override
     public String movieCreate(String movieName, String movieGenre, int watchTime) {
-        if (movieRepository.findByMovieName(movieName).isPresent()){
+        if (movieRepository.findByMovieName(movieName).isPresent()) {
             return "The movie is already existed";
-        }else {
+        } else {
             Movie movie = new Movie(movieName, movieGenre, watchTime);
             movieRepository.save(movie);
             return "The movie created successfully";
@@ -26,39 +27,39 @@ public class MovieServiceImplementation implements MovieServiceInterface {
 
     @Override
     public String movieUpdate(String movieName, String movieGenre, int watchTime) {
-        if (movieRepository.findByMovieName(movieName).isPresent()){
+        if (movieRepository.findByMovieName(movieName).isPresent()) {
             Movie movie = movieRepository.findByMovieName(movieName).get();
             movie.setMovieGenre(movieGenre);
             movie.setWatchTime(watchTime);
             movieRepository.save(movie);
             return "The movie was updated successfully";
-        }else {
+        } else {
             return "The movie does not exists";
         }
     }
 
     @Override
     public String movieDelete(String movieName) {
-        if (movieRepository.findByMovieName(movieName).isPresent()){
+        if (movieRepository.findByMovieName(movieName).isPresent()) {
             Movie movie = movieRepository.findByMovieName(movieName).get();
             movieRepository.delete(movie);
             return "The movie was deleted successfully";
-        }else {
+        } else {
             return "The movie does not exists";
         }
     }
 
     @Override
     public String movieList() {
-        List <Movie> movies = movieRepository.findAll();
-        if(!movies.isEmpty()){
+        List<Movie> movies = movieRepository.findAll();
+        if (!movies.isEmpty()) {
             StringBuilder moviesReturned = new StringBuilder();
             StringJoiner joiner = new StringJoiner("\n");
             for (Movie movie : movies) {
                 joiner.add(movie.toString());
             }
-            return  moviesReturned.append(joiner).toString();
-        }else {
+            return moviesReturned.append(joiner).toString();
+        } else {
             return "There are no movies at the moment";
         }
     }

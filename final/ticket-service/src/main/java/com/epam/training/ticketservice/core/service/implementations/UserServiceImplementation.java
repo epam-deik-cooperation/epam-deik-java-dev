@@ -21,13 +21,13 @@ public class UserServiceImplementation implements UserServiceInterface {
     @Override
     public String login(String name, String password) {
         Optional<User> user = userRepository.findByNameAndPassword(name, password);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             return "Login failed due to incorrect credentials";
-        }else {
-            if (loggedInUser == null){
+        } else {
+            if (loggedInUser == null) {
                 loggedInUser = new User(user.get().getName(), user.get().getPassword(), user.get().getRole());
                 return "Successfully signed in";
-            }else {
+            } else {
                 return "User already signed in";
             }
         }
@@ -35,9 +35,9 @@ public class UserServiceImplementation implements UserServiceInterface {
 
     @Override
     public String logout() {
-        if (loggedInUser == null){
+        if (loggedInUser == null) {
             return "You are not signed in";
-        }else {
+        } else {
             loggedInUser = null;
             return "Successfully signed out";
         }
@@ -45,9 +45,9 @@ public class UserServiceImplementation implements UserServiceInterface {
 
     @Override
     public String describeAccount() {
-        if (loggedInUser == null){
+        if (loggedInUser == null) {
             return "You are not signed in";
-        }else{
+        } else {
             return "Signed in with privileged account '" + loggedInUser.getName() + "'";
         }
     }
