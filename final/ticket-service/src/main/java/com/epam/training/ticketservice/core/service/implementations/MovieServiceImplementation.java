@@ -51,12 +51,15 @@ public class MovieServiceImplementation implements MovieServiceInterface {
     @Override
     public String movieList() {
         List <Movie> movies = movieRepository.findAll();
-        StringBuilder moviesReturned = new StringBuilder();
-        StringJoiner joiner = new StringJoiner("\n");
-        for (Movie movie : movies) {
-            joiner.add(movie.toString());
+        if(!movies.isEmpty()){
+            StringBuilder moviesReturned = new StringBuilder();
+            StringJoiner joiner = new StringJoiner("\n");
+            for (Movie movie : movies) {
+                joiner.add(movie.toString());
+            }
+            return  moviesReturned.append(joiner).toString();
+        }else {
+            return "There are no movies at the moment";
         }
-        moviesReturned.append(joiner);
-        return  moviesReturned.toString();
     }
 }

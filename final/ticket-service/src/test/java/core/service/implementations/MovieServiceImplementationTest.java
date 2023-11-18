@@ -5,7 +5,6 @@ import com.epam.training.ticketservice.core.repository.MovieRepository;
 import com.epam.training.ticketservice.core.service.implementations.MovieServiceImplementation;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

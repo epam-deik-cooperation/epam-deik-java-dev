@@ -34,7 +34,7 @@ public class MovieCommand {
 
     @ShellMethod(key = "list movies", value = "Lists all created movies")
     public String listMovies(){
-        return movieServiceImplementation.movieList().toString();
+        return movieServiceImplementation.movieList();
     }
 
     public Availability isAvailable(){
