@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.UserDto;
 import com.epam.training.ticketservice.core.repository.UserRepository;
 import com.epam.training.ticketservice.core.model.User;
 import com.epam.training.ticketservice.core.service.interfaces.UserServiceInterface;
@@ -12,43 +13,32 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserServiceInterface {
     private final UserRepository userRepository;
-    private User loggedInUser = null;
+    private UserDto loggedInUser = null;
 
-    public User getLoggedInUser() {
-        return loggedInUser;
+    @Override
+    public Optional<UserDto> login(String name, String password) {
+        Optional<User> user = userRepository.findByUserName(name);
+        if (user.isPresent() && isValidCredentials(user.get(), password)) {
+            loggedInUser = new UserDto(user.get().getUserName(), user.get().getRole());
+            return describeAccount();
+        }
+        return Optional.empty();
     }
 
     @Override
-    public String login(String name, String password) {
-        Optional<User> user = userRepository.findByNameAndPassword(name, password);
-        if (user.isEmpty()) {
-            return "Login failed due to incorrect credentials";
-        } else {
-            if (loggedInUser == null) {
-                loggedInUser = new User(user.get().getName(), user.get().getPassword(), user.get().getRole());
-                return "Successfully signed in";
-            } else {
-                return "User already signed in";
-            }
-        }
+    public boolean isValidCredentials(User user, String password) {
+        return user.getPassword().equals(password) && user.getRole().equals(User.Role.ADMIN);
     }
 
     @Override
-    public String logout() {
-        if (loggedInUser == null) {
-            return "You are not signed in";
-        } else {
-            loggedInUser = null;
-            return "Successfully signed out";
-        }
+    public Optional<UserDto> logout() {
+        Optional<UserDto> user = describeAccount();
+        loggedInUser = null;
+        return user;
     }
 
     @Override
-    public String describeAccount() {
-        if (loggedInUser == null) {
-            return "You are not signed in";
-        } else {
-            return "Signed in with privileged account '" + loggedInUser.getName() + "'";
-        }
+    public Optional<UserDto> describeAccount() {
+        return Optional.ofNullable(loggedInUser);
     }
 }

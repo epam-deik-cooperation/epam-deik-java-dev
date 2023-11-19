@@ -1,118 +1,90 @@
 package core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.UserDto;
 import com.epam.training.ticketservice.core.model.User;
 import com.epam.training.ticketservice.core.repository.UserRepository;
 import com.epam.training.ticketservice.core.service.implementations.UserServiceImplementation;
+import com.epam.training.ticketservice.core.service.interfaces.UserServiceInterface;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class UserServiceImplementationTest {
     private final UserRepository userRepository = mock(UserRepository.class);
-    private final UserServiceImplementation testUserServiceImplementation = new UserServiceImplementation(userRepository);
+    private final UserServiceInterface underTest = new UserServiceImplementation(userRepository);
+    User admin = new User("admin", "admin", User.Role.ADMIN);
+    User dummy = new User("dummy", "dummy", User.Role.USER);
     @Test
     void testLoginShouldSetLoggedInUserWhenUsernameAndPasswordAreCorrect(){
-        //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        // Given
+        when(userRepository.findByUserName(admin.getUserName())).thenReturn(Optional.of(admin));
 
-        //When
-        String actual = testUserServiceImplementation.login(user.getName(), user.getPassword());
+        // When
+        Optional<UserDto> actual = underTest.login(admin.getUserName(), admin.getPassword());
 
-        //Then
-        assertEquals("Successfully signed in", actual);
-        assertEquals(user, testUserServiceImplementation.getLoggedInUser());
+        // Then
+        assertTrue(actual.isPresent());
+        assertEquals(admin.getUserName(), actual.get().userName());
+        assertEquals(User.Role.ADMIN, actual.get().role());
+        verify(userRepository).findByUserName(admin.getUserName());
     }
 
     @Test
-    void testLoginShouldReturnIncorrectCredentialsWhenUsernameAndPasswordAreNotCorrect(){
+    void testLoginShouldReturnOptionalEmptyWhenUsernameAndPasswordAreNotCorrect(){
         //Given
-        User user = new User("dummy", "dummy", User.Role.USER);
+        Optional<UserDto> excepted = Optional.empty();
+        when(userRepository.findByUserName("dummy")).thenReturn(Optional.empty());
 
         //When
-        String actual = testUserServiceImplementation.login(user.getName(), user.getPassword());
+        Optional<UserDto> actual = underTest.login(dummy.getUserName(), dummy.getPassword());
 
         //Then
-        assertEquals("Login failed due to incorrect credentials", actual);
-        assertNull(testUserServiceImplementation.getLoggedInUser());
+        assertEquals(excepted, actual);
+        verify(userRepository).findByUserName("dummy");
     }
 
     @Test
-    void testLoginShouldReturnAlreadySignedInWhenUserAlreadySignedIn(){
-        //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+    void testLoginShouldReturnOptionalUserDtoEmptyWhenRoleIsNotAdmin() {
+        // Given
+        when(userRepository.findByUserName("dummy")).thenReturn(Optional.of(dummy));
 
-        //When
-        testUserServiceImplementation.login(user.getName(), user.getPassword());
-        String actual = testUserServiceImplementation.login(user.getName(), user.getPassword());
+        // When
+        Optional<UserDto> actual = underTest.login(dummy.getUserName(), "wrong-password");
 
-        //Then
-        assertEquals("User already signed in", actual);
-        assertEquals(user, testUserServiceImplementation.getLoggedInUser());
+        // Then
+        assertTrue(actual.isEmpty());
+        verify(userRepository).findByUserName("dummy");
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
-    void testLogoutShouldReturnNotSignedInWhenUserNotSignedIn(){
-        //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+    void testIsValidCredentialsShouldReturnFalseForInvalidCredentials() {
+        // Given
 
-        //When
-        String actual = testUserServiceImplementation.logout();
+        // When
+        boolean isValid = underTest.isValidCredentials(dummy, dummy.getPassword());
 
-        //Then
-        assertEquals("You are not signed in", actual);
-        assertNull(testUserServiceImplementation.getLoggedInUser());
+        // Then
+        assertFalse(isValid);
     }
 
     @Test
-    void testLogoutShouldReturnSignedOutWhenUserSignedIn(){
+    void testLogoutShouldReturnOptionalEmptyWhenUserNotSignedIn(){
         //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
+        Optional<UserDto> excepted = Optional.empty();
 
         //When
-        testUserServiceImplementation.login(user.getName(), user.getPassword());
-        String actual = testUserServiceImplementation.logout();
+        Optional<UserDto> actual = underTest.logout();
 
         //Then
-        assertEquals("Successfully signed out", actual);
-        assertNull(testUserServiceImplementation.getLoggedInUser());
-    }
-
-    @Test
-    void testDescribeAccountShouldReturnAccountInformationWhenUserSignedIn(){
-        //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
-
-        //When
-        testUserServiceImplementation.login(user.getName(), user.getPassword());
-        String actual = testUserServiceImplementation.describeAccount();
-
-        //Then
-        assertEquals("Signed in with privileged account 'admin'", actual);
-        assertEquals(user, testUserServiceImplementation.getLoggedInUser());
-    }
-
-    @Test
-    void testDescribeAccountShouldReturnAccountInformationWhenUserNotSignedIn(){
-        //Given
-        User user = new User("admin", "admin", User.Role.ADMIN);
-        when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(Optional.of(user));
-
-        //When
-        String actual = testUserServiceImplementation.describeAccount();
-
-        //Then
-        assertEquals("You are not signed in", actual);
-        assertNull(testUserServiceImplementation.getLoggedInUser());
+        assertEquals(excepted, actual);
     }
 }

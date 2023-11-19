@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.core.model;
 
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -24,10 +25,5 @@ public class Movie {
         this.movieName = movieName;
         this.movieGenre = movieGenre;
         this.watchTime = watchTime;
-    }
-
-    @Override
-    public String toString() {
-        return movieName + " (" + movieGenre + ", " + watchTime + " minutes)";
     }
 }

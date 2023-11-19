@@ -1,49 +1,61 @@
 package core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.RoomDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Movie;
 import com.epam.training.ticketservice.core.model.Room;
 import com.epam.training.ticketservice.core.repository.RoomRepository;
 import com.epam.training.ticketservice.core.service.implementations.RoomServiceImplementation;
+import com.epam.training.ticketservice.core.service.interfaces.RoomServiceInterface;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class RoomServiceImplementationTest {
-    Room room = new Room("Apollo", 10, 10);
     private final RoomRepository roomRepository = mock(RoomRepository.class);
-    private final RoomServiceImplementation testRoomServiceImplementation = new RoomServiceImplementation(roomRepository);
+    private final RoomServiceInterface underTest = new RoomServiceImplementation(roomRepository);
+    Room room = new Room("Apollo", 10, 10);
+    Room roomUpdated = new Room("Apollo", 8, 8);
 
     @Test
-    void testRoomCreateShouldStoreTheGivenRoomWhenTheInputMovieIsNotExisting(){
-        //Given
-        when(roomRepository.save(room)).thenReturn(room);
+    void testRoomCreateShouldSaveRoomWhenRoomDoesIsNotExisting() throws AlreadyExists {
+        // Given
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.empty());
 
-        //When
-        String actual = testRoomServiceImplementation.roomCreate(room.getRoomName(), room.getChairRow(),
-                room.getChairCol());
+        // When
+        underTest.roomCreate(room.getRoomName(), room.getChairRow(), room.getChairCol());
 
-        //Then
-        assertEquals("The room created successfully", actual);
-        verify(roomRepository).save(room);
+        // Then
+        verify(roomRepository).save(any(Room.class));
     }
 
     @Test
-    void testRoomCreateShouldNotStoreTheGivenRoomWhenTheInputMovieIsExisting(){
+    void testRoomCreateShouldNotStoreTheGivenRoomWhenTheInputRoomAlreadyExists() {
         //Given
         when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
 
-        //When
-        String actual = testRoomServiceImplementation.roomCreate(room.getRoomName(), room.getChairRow(),
-                room.getChairCol());
+        // When/Then
+        assertThrows(AlreadyExists.class, () -> underTest.roomCreate(room.getRoomName(),
+                room.getChairRow(), room.getChairCol()));
+        verify(roomRepository, never()).save(any(Room.class));
+    }
 
-        //Then
-        assertEquals("The room is already existed", actual);
-        verify(roomRepository, never()).save(room);
+    @Test
+    void testRoomUpdateShouldUpdateTheGivenRoomWhenTheStoredRoomIsExisting() throws DoesNotExists {
+        // Given
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(roomRepository.save(room)).thenReturn(room);
+
+        // When
+        underTest.roomUpdate(room.getRoomName(), roomUpdated.getChairRow(), roomUpdated.getChairCol());
+
+        // Then
+        verify(roomRepository).save(room);
     }
 
     @Test
@@ -51,28 +63,24 @@ public class RoomServiceImplementationTest {
         // Given
         when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.empty());
 
-        // When
-        String actual = testRoomServiceImplementation.roomUpdate(room.getRoomName(),
-                8, 8);
-
-        // Then
-        assertEquals("The room does not exists", actual);
+        // When/Then
+        assertThrows(DoesNotExists.class, () -> underTest.roomUpdate(room.getRoomName(),
+                roomUpdated.getChairRow(), roomUpdated.getChairCol()));
         verify(roomRepository, never()).save(room);
     }
 
     @Test
-    void testRoomUpdateShouldUpdateTheGivenRoomWhenTheStoredRoomIsExisting() {
+    void testRoomDeleteShouldDeleteTheGivenRoomWhenTheStoredRoomIsExisting() throws DoesNotExists {
         // Given
         when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
-        when(roomRepository.save(room)).thenReturn(room);
+        doNothing().when(roomRepository).delete(room);
 
         // When
-        String actual = testRoomServiceImplementation.roomUpdate(room.getRoomName(),
-                8, 8);
+        underTest.roomDelete(room.getRoomName());
 
         // Then
-        assertEquals("The room was updated successfully", actual);
-        verify(roomRepository).save(room);
+        verify(roomRepository, never()).save(room);
+        verify(roomRepository).delete(room);
     }
 
     @Test
@@ -80,51 +88,36 @@ public class RoomServiceImplementationTest {
         // Given
         when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.empty());
 
-        // When
-        String actual = testRoomServiceImplementation.roomDelete(room.getRoomName());
-
-        // Then
-        assertEquals("The room does not exists", actual);
+        // When/Then
+        assertThrows(DoesNotExists.class, () -> underTest.roomDelete(room.getRoomName()));
         verify(roomRepository, never()).save(room);
         verify(roomRepository, never()).delete(room);
     }
 
     @Test
-    void testRoomDeleteShouldDeleteTheGivenRoomWhenTheStoredRoomIsExisting() {
+    void testRoomListShouldReturnRoomListWhenARoomIsSaved() {
         // Given
-        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
-        doNothing().when(roomRepository).delete(room);
+        when(roomRepository.findAll()).thenReturn(Collections.singletonList(room));
 
         // When
-        String actual = testRoomServiceImplementation.roomDelete(room.getRoomName());
+        List<RoomDto> actual = underTest.roomList();
 
         // Then
-        assertEquals("The room was deleted successfully", actual);
-        verify(roomRepository, never()).save(room);
-        verify(roomRepository).delete(room);
+        verify(roomRepository).findAll();
+        assertEquals(1, actual.size());
+        assertEquals(room.getRoomName(), actual.get(0).getRoomName());
+        assertEquals(room.getChairRow(), actual.get(0).getChairRow());
+        assertEquals(room.getChairCol(), actual.get(0).getChairCol());
     }
 
     @Test
-    void testRoomListShouldReturnRoomsListWhenARoomIsSaved() {
-        // Given
-        List<Room> roomList = Collections.singletonList(room);
-        when(roomRepository.findAll()).thenReturn(roomList);
-
-        // When
-        String actual = testRoomServiceImplementation.roomList();
-
-        // Then
-        assertEquals("Room Apollo with 100 seats, 10 rows and 10 columns", actual);
-    }
-
-    @Test
-    void testRoomListShouldReturnNoRoomsWhenRoomListIsEmpty() {
+    void testRoomListShouldReturnEmptyListWhenRoomListIsEmpty() {
         // Given
 
         // When
-        String actual = testRoomServiceImplementation.roomList();
+        List<RoomDto> actual = underTest.roomList();
 
         // Then
-        assertEquals("There are no rooms at the moment", actual);
+        assertEquals(emptyList(), actual);
     }
 }

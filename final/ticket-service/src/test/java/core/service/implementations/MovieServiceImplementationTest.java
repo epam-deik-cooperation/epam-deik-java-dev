@@ -1,16 +1,24 @@
 package core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.MovieDto;
+import com.epam.training.ticketservice.core.dto.RoomDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Movie;
+import com.epam.training.ticketservice.core.model.Room;
 import com.epam.training.ticketservice.core.repository.MovieRepository;
 import com.epam.training.ticketservice.core.service.implementations.MovieServiceImplementation;
+import com.epam.training.ticketservice.core.service.interfaces.MovieServiceInterface;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -19,36 +27,44 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 
 public class MovieServiceImplementationTest {
-    Movie movie = new Movie("Terminator", "Action", 108);
     private final MovieRepository movieRepository = mock(MovieRepository.class);
-    private final MovieServiceImplementation testMovieServiceImplementation = new MovieServiceImplementation(movieRepository);
-
+    private final MovieServiceInterface underTest = new MovieServiceImplementation(movieRepository);
+    Movie movie = new Movie("Terminator", "Action", 108);
+    Movie movieUpdated = new Movie("Terminator", "Drama", 120);
     @Test
-    void testMovieCreateShouldStoreTheGivenMovieWhenTheInputMovieIsNotExisting(){
-        //Given
-        when(movieRepository.save(movie)).thenReturn(movie);
+    void testMovieCreateShouldSaveMovieWhenMovieIsNotExisting() throws AlreadyExists {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.empty());
 
-        //When
-        String actual = testMovieServiceImplementation.movieCreate(movie.getMovieName(), movie.getMovieGenre(),
-                movie.getWatchTime());
+        // When
+        underTest.movieCreate(movie.getMovieName(), movie.getMovieGenre(), movie.getWatchTime());
 
-        //Then
-        assertEquals("The movie created successfully", actual);
-        verify(movieRepository).save(movie);
+        // Then
+        verify(movieRepository).save(any(Movie.class));
     }
 
     @Test
-    void testMovieCreateShouldNotStoreTheGivenMovieWhenTheInputMovieIsExisting() {
-        // Given
+    void testMovieCreateShouldStoreTheGivenMovieWhenTheInputMovieIsExisting() {
+        //Given
         when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
 
+        // When/Then
+        assertThrows(AlreadyExists.class, () -> underTest.movieCreate(movie.getMovieName(),
+                movie.getMovieGenre(), movie.getWatchTime()));
+        verify(movieRepository, never()).save(any(Movie.class));
+    }
+
+    @Test
+    void testMovieUpdateShouldUpdateTheGivenMovieWhenTheStoredMovieIsExisting() throws DoesNotExists {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(movieRepository.save(movie)).thenReturn(movie);
+
         // When
-        String actual = testMovieServiceImplementation.movieCreate(
-                movie.getMovieName(), movie.getMovieGenre(), movie.getWatchTime());
+        underTest.movieUpdate(movie.getMovieName(), movieUpdated.getMovieGenre(), movieUpdated.getWatchTime());
 
         // Then
-        assertEquals("The movie is already existed", actual);
-        verify(movieRepository, never()).save(movie);
+        verify(movieRepository).save(movie);
     }
 
     @Test
@@ -56,28 +72,24 @@ public class MovieServiceImplementationTest {
         // Given
         when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.empty());
 
-        // When
-        String actual = testMovieServiceImplementation.movieUpdate(movie.getMovieName(),
-                "Drama", 120);
-
-        // Then
-        assertEquals("The movie does not exists", actual);
+        // When/Then
+        assertThrows(DoesNotExists.class, () -> underTest.movieUpdate(movie.getMovieName(),
+                movieUpdated.getMovieGenre(), movieUpdated.getWatchTime()));
         verify(movieRepository, never()).save(movie);
     }
 
     @Test
-    void testMovieUpdateShouldUpdateTheGivenMovieWhenTheStoredMovieIsExisting() {
+    void testMovieDeleteShouldDeleteTheGivenMovieWhenTheStoredMovieIsExisting() throws DoesNotExists {
         // Given
         when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
-        when(movieRepository.save(movie)).thenReturn(movie);
+        doNothing().when(movieRepository).delete(movie);
 
         // When
-        String actual = testMovieServiceImplementation.movieUpdate(movie.getMovieName(),
-                "Drama", 120);
+        underTest.movieDelete(movie.getMovieName());
 
         // Then
-        assertEquals("The movie was updated successfully", actual);
-        verify(movieRepository).save(movie);
+        verify(movieRepository, never()).save(movie);
+        verify(movieRepository).delete(movie);
     }
 
     @Test
@@ -85,41 +97,26 @@ public class MovieServiceImplementationTest {
         // Given
         when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.empty());
 
-        // When
-        String actual = testMovieServiceImplementation.movieDelete(movie.getMovieName());
-
-        // Then
-        assertEquals("The movie does not exists", actual);
+        // When/Then
+        assertThrows(DoesNotExists.class, () -> underTest.movieDelete(movie.getMovieName()));
         verify(movieRepository, never()).save(movie);
         verify(movieRepository, never()).delete(movie);
     }
 
     @Test
-    void testMovieDeleteShouldDeleteTheGivenMovieWhenTheStoredMovieIsExisting() {
+    void testMovieListShouldReturnMovieListWhenAMovieIsSaved() {
         // Given
-        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
-        doNothing().when(movieRepository).delete(movie);
+        when(movieRepository.findAll()).thenReturn(Collections.singletonList(movie));
 
         // When
-        String actual = testMovieServiceImplementation.movieDelete(movie.getMovieName());
+        List<MovieDto> actual = underTest.movieList();
 
         // Then
-        assertEquals("The movie was deleted successfully", actual);
-        verify(movieRepository, never()).save(movie);
-        verify(movieRepository).delete(movie);
-    }
-
-    @Test
-    void testMovieListShouldReturnMoviesListWhenAMovieIsSaved() {
-        // Given
-        List<Movie> movieList = Collections.singletonList(movie);
-        when(movieRepository.findAll()).thenReturn(movieList);
-
-        // When
-        String actual = testMovieServiceImplementation.movieList();
-
-        // Then
-        assertEquals("Terminator (Action, 108 minutes)", actual);
+        verify(movieRepository).findAll();
+        assertEquals(1, actual.size());
+        assertEquals(movie.getMovieName(), actual.get(0).getMovieName());
+        assertEquals(movie.getMovieGenre(), actual.get(0).getMovieGenre());
+        assertEquals(movie.getWatchTime(), actual.get(0).getWatchTime());
     }
 
     @Test
@@ -127,9 +124,9 @@ public class MovieServiceImplementationTest {
         // Given
 
         // When
-        String actual = testMovieServiceImplementation.movieList();
+        List<MovieDto> actual = underTest.movieList();
 
         // Then
-        assertEquals("There are no movies at the moment", actual);
+        assertEquals(emptyList(), actual);
     }
 }

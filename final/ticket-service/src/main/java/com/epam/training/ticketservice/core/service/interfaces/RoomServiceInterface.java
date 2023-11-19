@@ -1,11 +1,17 @@
 package com.epam.training.ticketservice.core.service.interfaces;
 
+import com.epam.training.ticketservice.core.dto.RoomDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
+
+import java.util.List;
+
 public interface RoomServiceInterface {
-    String roomCreate(String roomName, int chairRow, int chairCol);
+    void roomCreate(String roomName, int chairRow, int chairCol) throws AlreadyExists;
 
-    String roomUpdate(String roomName, int chairRow, int chairCol);
+    void roomUpdate(String roomName, int chairRow, int chairCol) throws DoesNotExists;
 
-    String roomDelete(String roomName);
+    void roomDelete(String roomName) throws DoesNotExists;
 
-    String roomList();
+    List<RoomDto> roomList();
 }

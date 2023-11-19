@@ -1,5 +1,8 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.MovieDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Movie;
 import com.epam.training.ticketservice.core.repository.MovieRepository;
 import com.epam.training.ticketservice.core.service.interfaces.MovieServiceInterface;
@@ -7,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -15,52 +17,39 @@ public class MovieServiceImplementation implements MovieServiceInterface {
     private final MovieRepository movieRepository;
 
     @Override
-    public String movieCreate(String movieName, String movieGenre, int watchTime) {
+    public void movieCreate(String movieName, String movieGenre, int watchTime) throws AlreadyExists {
         if (movieRepository.findByMovieName(movieName).isPresent()) {
-            return "The movie is already existed";
+            throw new AlreadyExists("The movie is already existed");
         } else {
             Movie movie = new Movie(movieName, movieGenre, watchTime);
             movieRepository.save(movie);
-            return "The movie created successfully";
         }
     }
 
     @Override
-    public String movieUpdate(String movieName, String movieGenre, int watchTime) {
+    public void movieUpdate(String movieName, String movieGenre, int watchTime) throws DoesNotExists {
         if (movieRepository.findByMovieName(movieName).isPresent()) {
             Movie movie = movieRepository.findByMovieName(movieName).get();
             movie.setMovieGenre(movieGenre);
             movie.setWatchTime(watchTime);
             movieRepository.save(movie);
-            return "The movie was updated successfully";
         } else {
-            return "The movie does not exists";
+            throw new DoesNotExists("The movie does not exists");
         }
     }
 
     @Override
-    public String movieDelete(String movieName) {
+    public void movieDelete(String movieName) throws DoesNotExists {
         if (movieRepository.findByMovieName(movieName).isPresent()) {
             Movie movie = movieRepository.findByMovieName(movieName).get();
             movieRepository.delete(movie);
-            return "The movie was deleted successfully";
         } else {
-            return "The movie does not exists";
+            throw new DoesNotExists("The movie does not exists");
         }
     }
 
     @Override
-    public String movieList() {
-        List<Movie> movies = movieRepository.findAll();
-        if (!movies.isEmpty()) {
-            StringBuilder moviesReturned = new StringBuilder();
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Movie movie : movies) {
-                joiner.add(movie.toString());
-            }
-            return moviesReturned.append(joiner).toString();
-        } else {
-            return "There are no movies at the moment";
-        }
+    public List<MovieDto> movieList() {
+        return movieRepository.findAll().stream().map(MovieDto::new).toList();
     }
 }

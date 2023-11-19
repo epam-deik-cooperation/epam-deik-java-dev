@@ -20,13 +20,13 @@ public class User {
     @GeneratedValue
     private Integer id;
     @Column(unique = true)
-    private String name;
+    private String userName;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String name, String password, Role role) {
-        this.name = name;
+    public User(String userName, String password, Role role) {
+        this.userName = userName;
         this.password = password;
         this.role = role;
     }

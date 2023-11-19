@@ -17,22 +17,14 @@ public class Room {
     private Integer id;
 
     @Column(unique = true)
-    String roomName;
+    private String roomName;
 
-    int chairRow;
-    int chairCol;
+    private int chairRow;
+    private int chairCol;
 
     public Room(String roomName, int chairRow, int chairCol) {
         this.roomName = roomName;
         this.chairRow = chairRow;
         this.chairCol = chairCol;
-    }
-
-    @Override
-    public String toString() {
-        return "Room " + roomName
-                + " with " + (chairRow * chairCol)
-                + " seats, " + chairRow
-                + " rows and " + chairCol + " columns";
     }
 }

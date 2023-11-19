@@ -1,11 +1,17 @@
 package com.epam.training.ticketservice.core.service.interfaces;
 
+import com.epam.training.ticketservice.core.dto.MovieDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
+
+import java.util.List;
+
 public interface MovieServiceInterface {
-    String movieCreate(String movieName, String movieGenre, int watchTime);
+    void movieCreate(String movieName, String movieGenre, int watchTime) throws AlreadyExists;
 
-    String movieUpdate(String movieName, String movieGenre, int watchTime);
+    void movieUpdate(String movieName, String movieGenre, int watchTime) throws DoesNotExists;
 
-    String movieDelete(String movieName);
+    void movieDelete(String movieName) throws DoesNotExists;
 
-    String movieList();
+    List<MovieDto> movieList();
 }

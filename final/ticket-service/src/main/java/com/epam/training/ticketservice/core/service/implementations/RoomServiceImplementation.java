@@ -1,5 +1,8 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
+import com.epam.training.ticketservice.core.dto.RoomDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
+import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Room;
 import com.epam.training.ticketservice.core.repository.RoomRepository;
 import com.epam.training.ticketservice.core.service.interfaces.RoomServiceInterface;
@@ -7,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -15,52 +17,39 @@ public class RoomServiceImplementation implements RoomServiceInterface {
     private final RoomRepository roomRepository;
 
     @Override
-    public String roomCreate(String roomName, int chairRow, int chairCol) {
+    public void roomCreate(String roomName, int chairRow, int chairCol) throws AlreadyExists {
         if (roomRepository.findByRoomName(roomName).isPresent()) {
-            return "The room is already existed";
+            throw new AlreadyExists("The room is already existed");
         } else {
             Room room = new Room(roomName, chairRow, chairCol);
             roomRepository.save(room);
-            return "The room created successfully";
         }
     }
 
     @Override
-    public String roomUpdate(String roomName, int chairRow, int chairCol) {
+    public void roomUpdate(String roomName, int chairRow, int chairCol) throws DoesNotExists {
         if (roomRepository.findByRoomName(roomName).isPresent()) {
             Room room = roomRepository.findByRoomName(roomName).get();
             room.setChairRow(chairRow);
             room.setChairCol(chairCol);
             roomRepository.save(room);
-            return "The room was updated successfully";
         } else {
-            return "The room does not exists";
+            throw new DoesNotExists("The room does not exists");
         }
     }
 
     @Override
-    public String roomDelete(String roomName) {
+    public void roomDelete(String roomName) throws DoesNotExists {
         if (roomRepository.findByRoomName(roomName).isPresent()) {
             Room room = roomRepository.findByRoomName(roomName).get();
             roomRepository.delete(room);
-            return "The room was deleted successfully";
         } else {
-            return "The room does not exists";
+            throw new DoesNotExists("The room does not exists");
         }
     }
 
     @Override
-    public String roomList() {
-        List<Room> rooms = roomRepository.findAll();
-        if (!rooms.isEmpty()) {
-            StringBuilder roomsReturned = new StringBuilder();
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Room room : rooms) {
-                joiner.add(room.toString());
-            }
-            return  roomsReturned.append(joiner).toString();
-        } else {
-            return "There are no rooms at the moment";
-        }
+    public List<RoomDto> roomList() {
+        return roomRepository.findAll().stream().map(RoomDto::new).toList();
     }
 }
