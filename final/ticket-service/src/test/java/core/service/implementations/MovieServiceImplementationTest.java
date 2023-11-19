@@ -1,11 +1,9 @@
 package core.service.implementations;
 
 import com.epam.training.ticketservice.core.dto.MovieDto;
-import com.epam.training.ticketservice.core.dto.RoomDto;
 import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
 import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Movie;
-import com.epam.training.ticketservice.core.model.Room;
 import com.epam.training.ticketservice.core.repository.MovieRepository;
 import com.epam.training.ticketservice.core.service.implementations.MovieServiceImplementation;
 import com.epam.training.ticketservice.core.service.interfaces.MovieServiceInterface;

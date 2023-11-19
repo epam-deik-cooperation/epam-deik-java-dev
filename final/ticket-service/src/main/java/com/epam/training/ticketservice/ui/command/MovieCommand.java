@@ -23,22 +23,34 @@ public class MovieCommand {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create movie", value = "Creates a movie")
-    public String createMovie(String movieName, String genre, int length) throws AlreadyExists {
-        movieServiceInterface.movieCreate(movieName, genre, length);
+    public String createMovie(String movieName, String genre, int length) {
+        try {
+            movieServiceInterface.movieCreate(movieName, genre, length);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The movie was created successfully";
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "update movie", value = "Updates an existing movie")
-    public String movieUpdater(String movieName, String genre, int length) throws DoesNotExists {
-        movieServiceInterface.movieUpdate(movieName, genre, length);
+    public String movieUpdater(String movieName, String genre, int length) {
+        try {
+            movieServiceInterface.movieUpdate(movieName, genre, length);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The movie was deleted successfully";
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete movie", value = "Deletes an existing movie")
     public String movieDeleter(String movieName) throws DoesNotExists {
-        movieServiceInterface.movieDelete(movieName);
+        try {
+            movieServiceInterface.movieDelete(movieName);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The movie was updated successfully";
     }
 

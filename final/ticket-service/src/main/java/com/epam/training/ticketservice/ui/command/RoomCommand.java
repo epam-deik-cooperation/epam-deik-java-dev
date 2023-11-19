@@ -23,22 +23,34 @@ public class RoomCommand {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create room", value = "Creates a room")
-    public String createRoom(String roomName, int chairRow, int chairCol) throws AlreadyExists {
-        roomServiceInterface.roomCreate(roomName, chairRow, chairCol);
+    public String createRoom(String roomName, int chairRow, int chairCol) {
+        try {
+            roomServiceInterface.roomCreate(roomName, chairRow, chairCol);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The room created successfully";
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "update room", value = "Updates an existing room")
-    public String updateRoom(String roomName, int chairRow, int chairCol) throws DoesNotExists {
-        roomServiceInterface.roomUpdate(roomName, chairRow, chairCol);
+    public String updateRoom(String roomName, int chairRow, int chairCol) {
+        try {
+            roomServiceInterface.roomUpdate(roomName, chairRow, chairCol);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The room was updated successfully";
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete room", value = "Deletes an existing room")
-    public String deleteRoom(String roomName) throws DoesNotExists {
-        roomServiceInterface.roomDelete(roomName);
+    public String deleteRoom(String roomName) {
+        try {
+            roomServiceInterface.roomDelete(roomName);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "The room was deleted successfully";
     }
 
