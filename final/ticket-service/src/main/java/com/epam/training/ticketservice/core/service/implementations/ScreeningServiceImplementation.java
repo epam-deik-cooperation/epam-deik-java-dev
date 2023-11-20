@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
 import com.epam.training.ticketservice.core.dto.ScreeningDto;
-import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
 import com.epam.training.ticketservice.core.exceptions.BreakPeriod;
 import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.exceptions.Overlap;
@@ -26,49 +25,6 @@ public class ScreeningServiceImplementation implements ScreeningServiceInterface
     private final MovieRepository movieRepository;
     private final RoomRepository roomRepository;
 
-    private void checkMovieAndRoomExistence(Optional<Movie> movie, Optional<Room> room) throws DoesNotExists {
-        if (movie.isEmpty() && room.isEmpty()) {
-            throw new DoesNotExists("The given movie and room do not exist");
-        } else if (room.isEmpty()) {
-            throw new DoesNotExists("The given room does not exist");
-        } else if (movie.isEmpty()) {
-            throw new DoesNotExists("The given movie does not exist");
-        }
-    }
-
-    private void canCreateScreening(Screening returnScreening) throws Overlap, BreakPeriod {
-        List<Screening> screeningList = screeningRepository.findScreeningByRoom(returnScreening.getRoom())
-                .stream().toList();
-        if (screeningList.isEmpty()) {
-            return;
-        }
-
-        for (Screening iterator : screeningList) {
-            LocalDateTime screeningStart = returnScreening.getScreeningDate();
-            LocalDateTime screeningEnd = returnScreening.getScreeningDate()
-                    .plusMinutes(returnScreening.getMovie().getWatchTime());
-            LocalDateTime screeningBreakPeriod = returnScreening.getScreeningDate()
-                    .plusMinutes(returnScreening.getMovie().getWatchTime() + 10);
-
-            LocalDateTime iteratorStart = iterator.getScreeningDate();
-            LocalDateTime iteratorEnd = iterator.getScreeningDate()
-                    .plusMinutes(iterator.getMovie().getWatchTime());
-            LocalDateTime iteratorBreakPeriod = iterator.getScreeningDate()
-                    .plusMinutes(iterator.getMovie().getWatchTime() + 10);
-
-            if (screeningStart.isAfter(iteratorStart) && screeningStart.isBefore(iteratorEnd)
-                    || screeningEnd.isAfter(iteratorStart) && screeningEnd.isBefore(iteratorEnd)
-                    || screeningStart.isAfter(iteratorStart) && screeningEnd.isBefore(iteratorEnd)
-                    || (screeningEnd.isEqual(iteratorEnd) || screeningStart.isEqual(iteratorStart))
-                    || (screeningEnd.isEqual(iteratorStart)) || (screeningStart.isEqual(iteratorEnd))) {
-                throw new Overlap("There is an overlapping screening");
-            } else if (screeningEnd.isBefore(iteratorStart) && screeningBreakPeriod.isAfter(iteratorStart)
-                    || screeningStart.isAfter(iteratorEnd) && screeningStart.isBefore(iteratorBreakPeriod)) {
-                throw new BreakPeriod("This would start in the break period after another screening in this room");
-            }
-        }
-    }
-
     @Override
     public void createScreening(String movieName, String roomName, LocalDateTime screeningDate)
             throws DoesNotExists, Overlap, BreakPeriod {
@@ -78,6 +34,60 @@ public class ScreeningServiceImplementation implements ScreeningServiceInterface
         Screening returnScreening = new Screening(movie.get(), room.get(), screeningDate);
         canCreateScreening(returnScreening);
         screeningRepository.save(returnScreening);
+    }
+
+    private void canCreateScreening(Screening returnScreening) throws Overlap, BreakPeriod {
+        Optional<Screening> screeningList = screeningRepository.findScreeningByRoom(returnScreening.getRoom());
+
+        if (screeningList.isEmpty()) {
+            return;
+        }
+
+        for (Screening iterator : screeningList.stream().toList()) {
+            LocalDateTime screeningStart = returnScreening.getScreeningDate();
+            LocalDateTime screeningEnd = screeningStart.plusMinutes(returnScreening.getMovie().getWatchTime());
+            LocalDateTime screeningBreakPeriod = screeningEnd.plusMinutes(10);
+
+            LocalDateTime iteratorStart = iterator.getScreeningDate();
+            LocalDateTime iteratorEnd = iteratorStart.plusMinutes(iterator.getMovie().getWatchTime());
+            LocalDateTime iteratorBreakPeriod = iteratorEnd.plusMinutes(10);
+
+            boolean isScreeningBetweenIterators = isBetween(screeningStart, iteratorStart, iteratorEnd)
+                    || isBetween(screeningEnd, iteratorStart, iteratorEnd)
+                    || isInside(iteratorStart, iteratorEnd, screeningStart, screeningEnd);
+            boolean isScreeningBeforeIteratorBreak = isBefore(screeningEnd, iteratorStart)
+                    && isAfter(screeningBreakPeriod, iteratorStart);
+            boolean isScreeningAfterIteratorEnd = isAfter(screeningStart, iteratorEnd)
+                    && isBefore(screeningStart, iteratorBreakPeriod);
+
+            if (isScreeningBetweenIterators || isEqual(screeningStart, iteratorStart)
+                    || isEqual(screeningEnd, iteratorEnd)) {
+                throw new Overlap("There is an overlapping screening");
+            } else if (isScreeningBeforeIteratorBreak || isScreeningAfterIteratorEnd) {
+                throw new BreakPeriod("This would start in the break period after another screening in this room");
+            }
+        }
+    }
+
+    private static boolean isBetween(LocalDateTime dateTime, LocalDateTime start, LocalDateTime end) {
+        return dateTime.isAfter(start) && dateTime.isBefore(end);
+    }
+
+    private static boolean isInside(LocalDateTime start, LocalDateTime end,
+                                    LocalDateTime innerStart, LocalDateTime innerEnd) {
+        return innerStart.isAfter(start) && innerEnd.isBefore(end);
+    }
+
+    private static boolean isEqual(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return dateTime1.isEqual(dateTime2);
+    }
+
+    private static boolean isBefore(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return dateTime1.isBefore(dateTime2);
+    }
+
+    private static boolean isAfter(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return dateTime1.isAfter(dateTime2);
     }
 
     @Override
@@ -92,6 +102,16 @@ public class ScreeningServiceImplementation implements ScreeningServiceInterface
             screeningRepository.delete(screening);
         } else {
             throw new DoesNotExists("The given screening does not exists");
+        }
+    }
+
+    private void checkMovieAndRoomExistence(Optional<Movie> movie, Optional<Room> room) throws DoesNotExists {
+        if (movie.isEmpty() && room.isEmpty()) {
+            throw new DoesNotExists("The given movie and room do not exist");
+        } else if (room.isEmpty()) {
+            throw new DoesNotExists("The given room does not exist");
+        } else if (movie.isEmpty()) {
+            throw new DoesNotExists("The given movie does not exist");
         }
     }
 

@@ -27,8 +27,8 @@ import static org.mockito.Mockito.never;
 public class MovieServiceImplementationTest {
     private final MovieRepository movieRepository = mock(MovieRepository.class);
     private final MovieServiceInterface underTest = new MovieServiceImplementation(movieRepository);
-    Movie movie = new Movie("Terminator", "Action", 108);
-    Movie movieUpdated = new Movie("Terminator", "Drama", 120);
+    private final Movie movie = new Movie("Terminator", "Action", 108);
+    private final Movie movieUpdated = new Movie("Terminator", "Drama", 120);
     @Test
     void testMovieCreateShouldSaveMovieWhenMovieIsNotExisting() throws AlreadyExists {
         // Given

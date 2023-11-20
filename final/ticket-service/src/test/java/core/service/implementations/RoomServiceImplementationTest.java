@@ -18,8 +18,8 @@ import static org.mockito.Mockito.*;
 public class RoomServiceImplementationTest {
     private final RoomRepository roomRepository = mock(RoomRepository.class);
     private final RoomServiceInterface underTest = new RoomServiceImplementation(roomRepository);
-    Room room = new Room("Apollo", 10, 10);
-    Room roomUpdated = new Room("Apollo", 8, 8);
+    private final Room room = new Room("Apollo", 10, 10);
+    private final Room roomUpdated = new Room("Apollo", 8, 8);
 
     @Test
     void testRoomCreateShouldSaveRoomWhenRoomDoesIsNotExisting() throws AlreadyExists {
