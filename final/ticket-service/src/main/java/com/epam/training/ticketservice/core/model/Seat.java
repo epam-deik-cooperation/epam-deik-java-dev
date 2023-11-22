@@ -14,4 +14,11 @@ public class Seat {
     public String toString() {
         return "(" + chairRowSeat + "," + chairColumnSeat + ")";
     }
+
+    public Seat() {}
+
+    public Seat(int chairRowSeat, int chairColumnSeat) {
+        this.chairRowSeat = chairRowSeat;
+        this.chairColumnSeat = chairColumnSeat;
+    }
 }
