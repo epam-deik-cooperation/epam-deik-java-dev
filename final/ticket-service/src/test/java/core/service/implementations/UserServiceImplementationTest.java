@@ -28,7 +28,7 @@ public class UserServiceImplementationTest {
         when(userRepository.findByUserName(admin.getUserName())).thenReturn(Optional.of(admin));
 
         // When
-        Optional<UserDto> actual = underTest.login(admin.getUserName(), admin.getPassword());
+        Optional<UserDto> actual = underTest.signInPrivileged(admin.getUserName(), admin.getPassword());
 
         // Then
         assertTrue(actual.isPresent());
@@ -44,7 +44,7 @@ public class UserServiceImplementationTest {
         when(userRepository.findByUserName("dummy")).thenReturn(Optional.empty());
 
         //When
-        Optional<UserDto> actual = underTest.login(dummy.getUserName(), dummy.getPassword());
+        Optional<UserDto> actual = underTest.signInPrivileged(dummy.getUserName(), dummy.getPassword());
 
         //Then
         assertEquals(excepted, actual);
@@ -57,7 +57,7 @@ public class UserServiceImplementationTest {
         when(userRepository.findByUserName("dummy")).thenReturn(Optional.of(dummy));
 
         // When
-        Optional<UserDto> actual = underTest.login(dummy.getUserName(), "wrong-password");
+        Optional<UserDto> actual = underTest.signInPrivileged(dummy.getUserName(), "wrong-password");
 
         // Then
         assertTrue(actual.isEmpty());
