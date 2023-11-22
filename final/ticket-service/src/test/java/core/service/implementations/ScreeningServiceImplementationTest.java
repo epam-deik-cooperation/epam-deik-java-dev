@@ -30,7 +30,7 @@ public class ScreeningServiceImplementationTest {
     private final ScreeningRepository screeningRepository = Mockito.mock(ScreeningRepository.class);
     private final ScreeningServiceInterface underTest = new ScreeningServiceImplementation(screeningRepository,
             movieRepository, roomRepository);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private final Movie movie = new Movie("Terminator", "Action", 108);
     private final Room room = new Room("Apollo", 10, 10);
     private final Screening screening = new Screening(movie,
