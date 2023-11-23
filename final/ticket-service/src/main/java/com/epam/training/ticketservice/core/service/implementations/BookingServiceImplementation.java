@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.core.service.implementations;
 
 import com.epam.training.ticketservice.core.dto.BookingDto;
-import com.epam.training.ticketservice.core.dto.RoomDto;
+import com.epam.training.ticketservice.core.exceptions.AlreadyExists;
 import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
 import com.epam.training.ticketservice.core.model.Booking;
 import com.epam.training.ticketservice.core.model.Movie;
@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
 
 @Service
@@ -34,9 +36,10 @@ public class BookingServiceImplementation implements BookingServiceInterface {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final UserServiceInterface userServiceInterface;
+
     @Override
     public String book(String movieName, String roomName, LocalDateTime screeningDate, String seats)
-            throws DoesNotExists {
+            throws DoesNotExists, AlreadyExists {
         Optional<Movie> movie = movieRepository.findByMovieName(movieName);
         Optional<Room> room = roomRepository.findByRoomName(roomName);
         checkMovieAndRoomExistence(movie, room);
@@ -48,12 +51,18 @@ public class BookingServiceImplementation implements BookingServiceInterface {
         String userName = userServiceInterface.describeAccount().get().userName();
         User user = userRepository.findByUserName(userName).get();
         List<Seat> seatList = seatListSeparator(seats);
-        List<Booking> bookingList = bookingRepository.findBookingByScreening(screening.get()).stream().toList();
+        List<Booking> bookingList = bookingRepository.findBookingsByScreening(screening.get());
 
         for (Seat seat : seatList) {
             if (!(isNumberBetween(0, seat.getChairRowSeat(), room.get().getChairRow())
                     && isNumberBetween(0, seat.getChairColumnSeat(), room.get().getChairCol()))) {
                 throw new DoesNotExists("Seat " + seat + " does not exist in this room");
+            }
+
+            for (Booking booking : bookingList) {
+                if (isSeatAlreadyTaken(booking, seat)) {
+                    throw new AlreadyExists("Seat " + seat + " is already taken");
+                }
             }
         }
 
@@ -84,7 +93,14 @@ public class BookingServiceImplementation implements BookingServiceInterface {
     }
 
     public static boolean isNumberBetween(int lowerBound, int number, int upperBound) {
-        return number > lowerBound && number < upperBound;
+        return number > lowerBound && number <= upperBound;
+    }
+
+    private boolean isSeatAlreadyTaken(Booking booking, Seat seat) {
+        Set<Seat> seatSet = new HashSet<>(booking.getSeatList());
+        int seatNumbers = seatSet.size();
+        seatSet.add(seat);
+        return seatNumbers == seatSet.size();
     }
 
     private String returnString(List<Seat> seatList, int price) {
@@ -94,5 +110,10 @@ public class BookingServiceImplementation implements BookingServiceInterface {
             joiner.add(seat.toString());
         }
         return "Seats booked: " + seatsReturned.append(joiner) + "; the price for this booking is " + price + " HUF";
+    }
+
+    @Override
+    public List<BookingDto> listBookings() {
+        return bookingRepository.findAll().stream().map(BookingDto::new).toList();
     }
 }

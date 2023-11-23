@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Getter
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class BookingDto {
 
     private final int price;
 
-    public BookingDto(Booking booking){
+    public BookingDto(Booking booking) {
         screeningDto = new ScreeningDto(booking.getScreening());
         userDto = new UserDto(booking.getUser().getUserName(), booking.getUser().getRole());
         seatList = booking.getSeatList();
@@ -28,7 +29,12 @@ public class BookingDto {
 
     @Override
     public String toString() {
-        return "Seats " + seatList
+        StringBuilder seatsReturned = new StringBuilder();
+        StringJoiner joiner = new StringJoiner(", ");
+        for (Seat seat : seatList) {
+            joiner.add(seat.toString());
+        }
+        return "Seats " + seatsReturned.append(joiner)
                 + " on " + screeningDto.getMovieDto().getMovieName()
                 + " in room " + screeningDto.getRoomDto().getRoomName()
                 + " starting at " + screeningDto.getScreeningDate().format(

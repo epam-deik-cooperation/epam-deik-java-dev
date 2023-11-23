@@ -15,7 +15,9 @@ public class Seat {
         return "(" + chairRowSeat + "," + chairColumnSeat + ")";
     }
 
-    public Seat() {}
+    public Seat() {
+
+    }
 
     public Seat(int chairRowSeat, int chairColumnSeat) {
         this.chairRowSeat = chairRowSeat;

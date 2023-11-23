@@ -1,7 +1,10 @@
 package com.epam.training.ticketservice.ui.command;
 
+import com.epam.training.ticketservice.core.dto.BookingDto;
+import com.epam.training.ticketservice.core.dto.MovieDto;
 import com.epam.training.ticketservice.core.dto.UserDto;
 import com.epam.training.ticketservice.core.model.User;
+import com.epam.training.ticketservice.core.service.interfaces.BookingServiceInterface;
 import com.epam.training.ticketservice.core.service.interfaces.UserServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.Availability;
@@ -9,13 +12,17 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 @ShellComponent
 @AllArgsConstructor
 public class AuthenticatorCommand {
 
     private final UserServiceInterface userServiceInterface;
+    private final BookingServiceInterface bookingServiceInterface;
 
     @ShellMethod(key = "sign out", value = "User logout")
     public String logout() {
@@ -58,7 +65,24 @@ public class AuthenticatorCommand {
             if (optionalUserDto.get().role().equals(User.Role.ADMIN)) {
                 return "Signed in with privileged account '" + optionalUserDto.get().userName() + "'";
             } else {
-                return "Signed in with account '" + optionalUserDto.get().userName() + "'";
+                String returnString = "Signed in with account '" + optionalUserDto.get().userName() + "'\n";
+                List<BookingDto> bookingDtoList = bookingServiceInterface.listBookings();
+                List<BookingDto> signedInUserBookingsDto = new ArrayList<>();
+                for (BookingDto bookingDto : bookingDtoList) {
+                    if (bookingDto.getUserDto().userName().equals(
+                            userServiceInterface.describeAccount().get().userName())) {
+                        signedInUserBookingsDto.add(bookingDto);
+                    }
+                }
+                if (signedInUserBookingsDto.isEmpty()) {
+                    return returnString + "You have not booked any tickets yet";
+                }
+                StringBuilder bookingsReturned = new StringBuilder();
+                StringJoiner joiner = new StringJoiner("\n");
+                for (BookingDto bookingDto : signedInUserBookingsDto) {
+                    joiner.add(bookingDto.toString());
+                }
+                return returnString + "Your previous bookings are\n" + bookingsReturned.append(joiner);
             }
         } else {
             return "You are not signed in";
