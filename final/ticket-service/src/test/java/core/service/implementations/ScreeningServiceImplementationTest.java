@@ -1,7 +1,9 @@
 package core.service.implementations;
 
 import com.epam.training.ticketservice.core.dto.ScreeningDto;
+import com.epam.training.ticketservice.core.exceptions.BreakPeriod;
 import com.epam.training.ticketservice.core.exceptions.DoesNotExists;
+import com.epam.training.ticketservice.core.exceptions.Overlap;
 import com.epam.training.ticketservice.core.model.Movie;
 import com.epam.training.ticketservice.core.model.Room;
 import com.epam.training.ticketservice.core.model.Screening;
@@ -32,9 +34,106 @@ public class ScreeningServiceImplementationTest {
             movieRepository, roomRepository);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private final Movie movie = new Movie("Terminator", "Action", 108);
-    private final Room room = new Room("Apollo", 10, 10);
+    private final Room room = new Room("Pedersoli", 10, 10);
     private final Screening screening = new Screening(movie,
             room, LocalDateTime.parse("2023-11-20 10:00", formatter));
+    private final Screening anotherScreening = new Screening(movie,
+            room, LocalDateTime.parse("2023-11-20 20:00", formatter));
+    private final Screening overlapingScreening1 = new Screening(movie,
+            room, LocalDateTime.parse("2023-11-20 10:30", formatter));
+    private final Screening overlapingScreening2 = new Screening(movie,
+            room, LocalDateTime.parse("2023-11-20 09:30", formatter));
+    private final Screening breakScreening = new Screening(movie,
+            room, LocalDateTime.parse("2023-11-20 11:50", formatter));
+
+    @Test
+    void testCreateScreeningShouldCreateScreeningWhenAScreeningIsValid() throws DoesNotExists, Overlap, BreakPeriod {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(screeningRepository.findScreeningByMovieAndRoomAndScreeningDate(screening.getMovie(), screening.getRoom(),
+                screening.getScreeningDate())).thenReturn(Optional.of(screening));
+
+        // When
+        underTest.createScreening(screening.getMovie().getMovieName(),
+                screening.getRoom().getRoomName(), screening.getScreeningDate());
+
+        // Then
+        verify(screeningRepository).save(screening);
+    }
+
+    @Test
+    void testCreateScreeningShouldCreateScreeningWhenAnotherScreeningExists()
+            throws DoesNotExists, Overlap, BreakPeriod {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(screeningRepository.findScreeningByMovieAndRoomAndScreeningDate(
+                screening.getMovie(), screening.getRoom(), screening.getScreeningDate()))
+                .thenReturn(Optional.empty());
+        when(screeningRepository.findScreeningByRoom(room)).thenReturn(Optional.of(anotherScreening));
+
+        // When
+        underTest.createScreening(screening.getMovie().getMovieName(),
+                screening.getRoom().getRoomName(), screening.getScreeningDate());
+
+        // Then
+        verify(screeningRepository).save(screening);
+    }
+
+    @Test
+    void testCreateScreeningShouldThrowOverlapWhenAnotherScreeningExistsInThisDateUpper() {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(screeningRepository.findScreeningByMovieAndRoomAndScreeningDate(
+                screening.getMovie(), screening.getRoom(), screening.getScreeningDate()))
+                .thenReturn(Optional.empty());
+        when(screeningRepository.findScreeningByRoom(room)).thenReturn(Optional.of(overlapingScreening1));
+
+        // When
+        assertThrows(Overlap.class, () -> underTest.createScreening(screening.getMovie().getMovieName(),
+                screening.getRoom().getRoomName(), screening.getScreeningDate()));
+
+        // Then
+        verify(screeningRepository, never()).save(screening);
+    }
+
+    @Test
+    void testCreateScreeningShouldThrowOverlapWhenAnotherScreeningExistsInThisDateLower() {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(screeningRepository.findScreeningByMovieAndRoomAndScreeningDate(
+                screening.getMovie(), screening.getRoom(), screening.getScreeningDate()))
+                .thenReturn(Optional.empty());
+        when(screeningRepository.findScreeningByRoom(room)).thenReturn(Optional.of(overlapingScreening2));
+
+        // When
+        assertThrows(Overlap.class, () -> underTest.createScreening(screening.getMovie().getMovieName(),
+                screening.getRoom().getRoomName(), screening.getScreeningDate()));
+
+        // Then
+        verify(screeningRepository, never()).save(screening);
+    }
+
+    @Test
+    void testCreateScreeningShouldThrowOverlapWhenThereIsBreakUpper() {
+        // Given
+        when(movieRepository.findByMovieName(movie.getMovieName())).thenReturn(Optional.of(movie));
+        when(roomRepository.findByRoomName(room.getRoomName())).thenReturn(Optional.of(room));
+        when(screeningRepository.findScreeningByMovieAndRoomAndScreeningDate(
+                screening.getMovie(), screening.getRoom(), screening.getScreeningDate()))
+                .thenReturn(Optional.empty());
+        when(screeningRepository.findScreeningByRoom(room)).thenReturn(Optional.of(breakScreening));
+
+        // When
+        assertThrows(BreakPeriod.class, () -> underTest.createScreening(screening.getMovie().getMovieName(),
+                screening.getRoom().getRoomName(), screening.getScreeningDate()));
+
+        // Then
+        verify(screeningRepository, never()).save(screening);
+    }
 
     @Test
     void testDeleteScreeningShouldDeleteScreeningWhenAScreeningIsSaved() throws DoesNotExists {

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @ShellComponent
 @AllArgsConstructor
@@ -65,24 +66,19 @@ public class AuthenticatorCommand {
             if (optionalUserDto.get().role().equals(User.Role.ADMIN)) {
                 return "Signed in with privileged account '" + optionalUserDto.get().userName() + "'";
             } else {
-                String returnString = "Signed in with account '" + optionalUserDto.get().userName() + "'\n";
-                List<BookingDto> bookingDtoList = bookingServiceInterface.listBookings();
-                List<BookingDto> signedInUserBookingsDto = new ArrayList<>();
-                for (BookingDto bookingDto : bookingDtoList) {
-                    if (bookingDto.getUserDto().userName().equals(
-                            userServiceInterface.describeAccount().get().userName())) {
-                        signedInUserBookingsDto.add(bookingDto);
-                    }
-                }
+                String userName = optionalUserDto.get().userName();
+                List<BookingDto> signedInUserBookingsDto = bookingServiceInterface.listBookings().stream()
+                        .filter(bookingDto -> bookingDto.getUserDto().userName().equals(userName)).toList();
+
                 if (signedInUserBookingsDto.isEmpty()) {
-                    return returnString + "You have not booked any tickets yet";
+                    return "Signed in with account '" + userName + "'\nYou have not booked any tickets yet";
                 }
-                StringBuilder bookingsReturned = new StringBuilder();
-                StringJoiner joiner = new StringJoiner("\n");
-                for (BookingDto bookingDto : signedInUserBookingsDto) {
-                    joiner.add(bookingDto.toString());
-                }
-                return returnString + "Your previous bookings are\n" + bookingsReturned.append(joiner);
+
+                String bookingsReturned = signedInUserBookingsDto.stream()
+                        .map(BookingDto::toString)
+                        .collect(Collectors.joining("\n"));
+
+                return "Signed in with account '" + userName + "'\nYour previous bookings are\n" + bookingsReturned;
             }
         } else {
             return "You are not signed in";
