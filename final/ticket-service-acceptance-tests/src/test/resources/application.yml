@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+  shell:
+    command:
+      clear:
+        enabled: false
+      version:
+        enabled: false
+      script:
+        enabled: false
+      history:
+        enabled: false
