@@ -16,7 +16,12 @@ public class Screening {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate startTime;
-    private int filmTitle;
+    private String filmTitle;
     private int roomName;
 
+    public Screening(LocalDate startTime, String filmTitle, int roomName) {
+        this.startTime = startTime;
+        this.filmTitle = filmTitle;
+        this.roomName = roomName;
+    }
 }
