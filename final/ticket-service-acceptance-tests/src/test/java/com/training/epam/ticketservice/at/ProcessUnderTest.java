@@ -68,7 +68,11 @@ public class ProcessUnderTest implements AutoCloseable {
     private Void readOutputUntil(String expectedOutput) throws IOException {
         String actualString = "";
         do {
-            actualString += (char) output.read();
+            int c = output.read();
+            if (c == -1) {
+                throw new IOException("Reached EOF before receiving '" + expectedOutput + "'");
+            }
+            actualString += (char) c;
             if (actualString.length() > expectedOutput.length()) {
                 actualString = actualString.substring(1);
             }
