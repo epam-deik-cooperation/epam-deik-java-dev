@@ -1,6 +1,5 @@
 package com.epam.training.money.bank;
 
-import com.epam.training.money.impl.Money;
 import com.epam.training.money.model.CurrencyPair;
 
 import java.util.Currency;
@@ -25,8 +24,10 @@ public class StaticBank implements Bank {
 
     @Override
     public Optional<Double> getExchangeRate(CurrencyPair currencyPair) {
-        return Optional.ofNullable(
-           exchangeRates.get(currencyPair)
+        return (currencyPair.from().equals(currencyPair.to()))
+                ? Optional.of(1D)
+                : Optional.ofNullable(
+                exchangeRates.get(currencyPair)
         );
     }
 }

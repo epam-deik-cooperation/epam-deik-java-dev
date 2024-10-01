@@ -1,51 +1,32 @@
 package com.epam.training.money.impl;
 
 import com.epam.training.money.bank.Bank;
-import com.epam.training.money.bank.StaticBank;
 import com.epam.training.money.model.CurrencyPair;
 
 import java.util.Currency;
 
-public class Money {
+public record Money(double value, Currency currency) {
 
-    private double value;
-    private final Currency currency;
-    private final Bank staticBank = new StaticBank();
-
-    public Money(double value, Currency currency) {
-        this.value = value;
-        this.currency = currency;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public Money add(Money moneyToAdd) {
+    public Money add(Money moneyToAdd, Bank bank) {
         if (isNotTheSameCurrency(moneyToAdd)) {
-            moneyToAdd = exchangeMoney(moneyToAdd);
+            moneyToAdd = exchangeMoney(moneyToAdd, bank);
         }
-        this.value += moneyToAdd.value;
-        return this;
+        return new Money(this.value + moneyToAdd.value, this.currency);
     }
 
-    public Integer compareTo(Money moneyToCompare) {
+    public Integer compareTo(Money moneyToCompare, Bank bank) {
         if (isNotTheSameCurrency(moneyToCompare)) {
-            moneyToCompare = exchangeMoney(moneyToCompare);
+            moneyToCompare = exchangeMoney(moneyToCompare, bank);
         }
         return Double.compare(this.value, moneyToCompare.value);
     }
 
     private boolean isNotTheSameCurrency(Money money) {
-        return !this.currency.equals(money.getCurrency());
+        return !this.currency.equals(money.currency);
     }
 
-    private Money exchangeMoney(Money money) {
-        Double exchangeRate = staticBank.getExchangeRate(
+    private Money exchangeMoney(Money money, Bank bank) {
+        Double exchangeRate = bank.getExchangeRate(
                         new CurrencyPair(money.currency, this.currency))
                 .orElseThrow(() -> new UnsupportedOperationException("Can not exchange!"));
         return new Money(money.value * exchangeRate, this.currency);
