@@ -1,66 +1,57 @@
 package com.epam.training.money.bank;
 
-import com.epam.training.money.model.CurrencyPair;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.epam.training.money.model.CurrencyPair;
 import java.util.Currency;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class StaticBankTest {
 
-    private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
-    private static final Currency USD_CURRENCY = Currency.getInstance("USD");
-    private static final Currency GBP_CURRENCY = Currency.getInstance("GBP");
+  private static final Currency USD_CURRENCY = Currency.getInstance("USD");
+  private static final Currency HUF_CURRENCY = Currency.getInstance("HUF");
+  private static final CurrencyPair USD_HUF_CURRENCY_PAIR = new CurrencyPair(USD_CURRENCY,
+      HUF_CURRENCY);
+  private final Bank underTest = new StaticBank();
 
-    private Bank underTest;
+  @Test
+  void testGetExchangeRateShouldReturnUsdHufExchangeRateWhenItExists() {
+    // Given
+    Optional<Double> expected = Optional.of(249.3);
+    // When
+    Optional<Double> actual = underTest.getExchangeRate(USD_HUF_CURRENCY_PAIR);
+    // Then
+    assertEquals(expected, actual);
+  }
 
-    @BeforeEach
-    void setUp() {
-        underTest = new StaticBank();
-    }
+  @Test
+  void testGetExchangeRateShouldReturnOneWhenCurrenciesAreTheSame() {
+    // Given
+    Optional<Double> expected = Optional.of(1D);
+    CurrencyPair samePair = new CurrencyPair(USD_CURRENCY, USD_CURRENCY);
+    // When
+    Optional<Double> actual = underTest.getExchangeRate(samePair);
+    // Then
+    assertEquals(expected, actual);
+  }
 
-    @AfterEach
-    void tearDown() {
-        // CleanUp
-    }
+  @Test
+  void testGetExchangeRateShouldReturnOptionalEmptyWhenExchangeRateDoesNotExist() {
+    // Given
+    Optional<Double> expected = Optional.empty();
+    Currency eurCurrency = Currency.getInstance("EUR");
+    CurrencyPair notExistPair = new CurrencyPair(USD_CURRENCY, eurCurrency);
+    // When
+    Optional<Double> actual = underTest.getExchangeRate(notExistPair);
+    // Then
+    assertEquals(expected, actual);
+  }
 
-    @Test
-    void testGetExchangeRateShouldReturnOneWhenProvidedSameCurrencies() {
-        // Given
-
-        // When
-        Optional<Double> actual = underTest.getExchangeRate(new CurrencyPair(HUF_CURRENCY, HUF_CURRENCY));
-
-        // Then
-        assertTrue(actual.isPresent());
-        assertEquals(1D, actual.get());
-    }
-
-    @Test
-    void testGetExchangeRateShouldReturnExchangeValueWhenProvidedDifferentCurrencies() {
-        // Given
-
-        // When
-        Optional<Double> actual = underTest.getExchangeRate(new CurrencyPair(HUF_CURRENCY, USD_CURRENCY));
-
-        // Then
-        assertTrue(actual.isPresent());
-        assertEquals(0.0034, actual.get());
-    }
-
-    @Test
-    void testGetExchangeRateShouldReturnExchangeValueWhenProvidedNotHandledCurrencies() {
-        // Given
-
-        // When
-        Optional<Double> actual = underTest.getExchangeRate(new CurrencyPair(HUF_CURRENCY, GBP_CURRENCY));
-
-        // Then
-        assertFalse(actual.isPresent());
-    }
+  @Test
+  void testGetExchangeRateShouldThrowExceptionWhenCurrencyPairIsNull() {
+    assertThrows(NullPointerException.class, () -> underTest.getExchangeRate(null));
+  }
 
 }
