@@ -26,6 +26,14 @@ public class Cart {
     }
   }
 
+  public boolean isEmpty() {
+    return products.isEmpty();
+  }
+
+  public void clear() {
+    products.clear();
+  }
+
   public Money getAggregatedNetPrice() {
     Money aggregatedPrice = new Money(0, Currency.getInstance("HUF"));
     for (Map.Entry<Product, Integer> entry : products.entrySet()) {
