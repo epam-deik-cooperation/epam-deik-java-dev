@@ -21,9 +21,9 @@ class CartTest {
   @Test
   void testAddProductShouldNotStoreTheProductWhenItIsNull() {
     // Given - When
-    underTest.add(null);
+    underTest.add(null, 1);
     // Then
-    assertTrue(underTest.getProductList().isEmpty());
+    assertTrue(underTest.getProducts().isEmpty());
     verifyNoInteractions(mockBank);
   }
 
@@ -32,10 +32,10 @@ class CartTest {
     // Given
     Product product = new Product("productName", new Money(10, HUF_CURRENCY));
     // When
-    underTest.add(product);
+    underTest.add(product, 1);
     // Then
-    assertFalse(underTest.getProductList().isEmpty());
-    assertTrue(underTest.getProductList().contains(product));
+    assertFalse(underTest.getProducts().isEmpty());
+    assertTrue(underTest.getProducts().containsKey(product));
     verifyNoInteractions(mockBank);
   }
 
@@ -54,11 +54,11 @@ class CartTest {
   void testGetAggregatedNetPriceShouldReturnCorrectPriceWhenOneItemInTheCart() {
     // Given
     Product product = new Product("productName", new Money(10, HUF_CURRENCY));
-    underTest.add(product);
+    underTest.add(product, 10);
     // When
     Money result = underTest.getAggregatedNetPrice();
     // Then
-    assertEquals(10, result.value());
+    assertEquals(100, result.value());
     assertEquals(HUF_CURRENCY, result.currency());
     verifyNoInteractions(mockBank);
   }
