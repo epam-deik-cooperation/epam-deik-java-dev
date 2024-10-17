@@ -2,8 +2,10 @@ package com.epam.training.money.command;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 public abstract class AbstractCommand {
 
   private final String user;
