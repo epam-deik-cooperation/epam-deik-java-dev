@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/epam-deik-java-dev.iml" filepath="$PROJECT_DIR$/.idea/epam-deik-java-dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/money/money.iml" filepath="$PROJECT_DIR$/money/money.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taxi/taxi.iml" filepath="$PROJECT_DIR$/taxi/taxi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/final/ticket-service/ticket-service.iml" filepath="$PROJECT_DIR$/final/ticket-service/ticket-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/final/ticket-service-acceptance-tests/ticket-service-acceptance-tests.iml" filepath="$PROJECT_DIR$/final/ticket-service-acceptance-tests/ticket-service-acceptance-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/final/ticket-service-parent.iml" filepath="$PROJECT_DIR$/final/ticket-service-parent.iml" />
+    </modules>
+  </component>
+</project>
